@@ -41,3 +41,4 @@ yarn-error.log
 bundles/
 
 example/ios/libs
+lib/ios/FoxitPDF.xcodeproj/project.xcworkspace/xcshareddata
