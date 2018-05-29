@@ -1,3 +1,6 @@
 rootProject.name = 'Example'
 
 include ':app'
+
+include ':react-native-foxit-pdf'
+project(':react-native-foxit-pdf').projectDir = new File(settingsDir, '../node_modules/react-native-foxit-pdf/lib/android')
