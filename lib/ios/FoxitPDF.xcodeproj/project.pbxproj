@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		DF17C80C20AA1619009AA30D /* FoxitRDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DF17C80B20AA1619009AA30D /* FoxitRDK.framework */; };
 		DF17C84320AA1738009AA30D /* libFoxitRDKUIExtensions.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DF17C84220AA1738009AA30D /* libFoxitRDKUIExtensions.a */; };
-		DF4A929D20A475AB00EF8795 /* RNTPDF.m in Sources */ = {isa = PBXBuildFile; fileRef = DF4A929B20A475AB00EF8795 /* RNTPDF.m */; };
 		DF4A929E20A475AB00EF8795 /* PDFManager.m in Sources */ = {isa = PBXBuildFile; fileRef = DF4A929C20A475AB00EF8795 /* PDFManager.m */; };
 /* End PBXBuildFile section */
 
@@ -29,8 +28,6 @@
 		DF17C80B20AA1619009AA30D /* FoxitRDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FoxitRDK.framework; sourceTree = "<group>"; };
 		DF17C84220AA1738009AA30D /* libFoxitRDKUIExtensions.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libFoxitRDKUIExtensions.a; sourceTree = "<group>"; };
 		DF4A928220A471D800EF8795 /* libFoxitPDF.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libFoxitPDF.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		DF4A929A20A475AA00EF8795 /* RNTPDF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNTPDF.h; sourceTree = "<group>"; };
-		DF4A929B20A475AB00EF8795 /* RNTPDF.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNTPDF.m; sourceTree = "<group>"; };
 		DF4A929C20A475AB00EF8795 /* PDFManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PDFManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -69,8 +66,6 @@
 			isa = PBXGroup;
 			children = (
 				DF4A929C20A475AB00EF8795 /* PDFManager.m */,
-				DF4A929A20A475AA00EF8795 /* RNTPDF.h */,
-				DF4A929B20A475AB00EF8795 /* RNTPDF.m */,
 			);
 			path = FoxitPDF;
 			sourceTree = "<group>";
@@ -132,7 +127,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				DF4A929E20A475AB00EF8795 /* PDFManager.m in Sources */,
-				DF4A929D20A475AB00EF8795 /* RNTPDF.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
