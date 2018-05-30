@@ -43,7 +43,9 @@ RCT_EXPORT_METHOD(openPDF:(NSString *)src
                   panelConfig:(NSDictionary *)panelConfig
                   viewSettingsConfig:(NSDictionary *)viewSettingsConfig
                   viewMoreConfig:(NSDictionary *)viewMoreConfig) {
-    pdfViewCtrl = [[FSPDFViewCtrl alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        self->pdfViewCtrl = [[FSPDFViewCtrl alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    });
     [pdfViewCtrl registerDocEventListener:self];
     
     //    [pdfViewCtrl openDoc:pdfPath password:nil completion:nil];
@@ -93,9 +95,11 @@ RCT_EXPORT_METHOD(openPDF:(NSString *)src
     // Set the document to view control.
     [pdfViewCtrl setDoc:pdfdoc];
     
-    [[[UIApplication sharedApplication].delegate window].rootViewController presentViewController:rootViewController animated:YES completion:^{
-        
-    }];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[[UIApplication sharedApplication].delegate window].rootViewController presentViewController:self->rootViewController animated:YES completion:^{
+            
+        }];
+    });
 }
 
 //panelConfig
@@ -368,7 +372,7 @@ RCT_EXPORT_METHOD(openPDF:(NSString *)src
     [pdfViewCtrl addConstraints:topToolbarVerticalConstraints];
     [UIView animateWithDuration:0.3
                      animations:^{
-                         [pdfViewCtrl layoutIfNeeded];
+                         [self->pdfViewCtrl layoutIfNeeded];
                      }];
 }
 
