@@ -1,8 +1,18 @@
 package com.example;
 
+import android.os.Bundle;
+import android.os.PersistableBundle;
+import android.support.annotation.Nullable;
+
 import com.facebook.react.ReactActivity;
+import com.foxit.sdk.common.Library;
+import com.foxit.sdk.common.PDFException;
 
 public class MainActivity extends ReactActivity {
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
+        super.onCreate(savedInstanceState, persistentState);
+    }
 
     /**
      * Returns the name of the main component registered from JavaScript.

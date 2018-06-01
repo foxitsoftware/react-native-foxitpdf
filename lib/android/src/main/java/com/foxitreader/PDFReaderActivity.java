@@ -101,6 +101,12 @@ public class PDFReaderActivity extends FragmentActivity {
 
         mPDFReader = (PDFReader) uiExtensionsManager.getPDFReader();
         mPDFReader.onCreate(this, viewCtrl, null);
+        mPDFReader.setOnFinishListener(new PDFReader.OnFinishListener() {
+            @Override
+            public void onFinish() {
+                finish();
+            }
+        });
         AppTheme.setThemeFullScreen(this);
         AppTheme.setThemeNeedMenuKey(this);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
