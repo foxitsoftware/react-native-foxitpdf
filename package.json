@@ -1,5 +1,5 @@
 {
-  "name": "react-native-foxit-pdf",
+  "name": "react-native-foxit",
   "description": "React Native Foxit PDF view for iOS + Android",
   "main": "index.js",
   "author": "Andrew",
@@ -7,7 +7,7 @@
   "scripts": {},
   "repository": {
     "type": "git",
-    "url": "https://github.com/andrew9032/react-native-foxit-pdf"
+    "url": "https://github.com/andrew9032/react-native-foxit"
   },
   "rnpm": {
     "android": {

@@ -13,12 +13,12 @@ import {
   NativeModules,
   TouchableOpacity,
 } from 'react-native';
-import FoxitPDFView from 'react-native-foxit-pdf';
+import FoxitPDF from 'react-native-foxit';
 
 type Props = {};
 export default class App extends Component<Props> {
   onPress() {
-    FoxitPDFView.openPDF(require('./sample.pdf'));
+    FoxitPDF.openPDF(require('./sample.pdf'));
   }
 
   render() {
