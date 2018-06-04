@@ -28,7 +28,8 @@ public class ReactPDFManager extends ReactContextBaseJavaModule {
         super(reactContext);
         if (isLibraryInited == false) {
             try {
-                ApplicationInfo ai = reactContext.getPackageManager().getApplicationInfo(reactContext.getPackageName(), PackageManager.GET_META_DATA);
+                ApplicationInfo ai = reactContext.getPackageManager().getApplicationInfo(reactContext.getPackageName(),
+                        PackageManager.GET_META_DATA);
                 Bundle bundle = ai.metaData;
                 String sn = bundle.getString("foxit_sn");
                 String key = bundle.getString("foxit_key");
@@ -39,9 +40,10 @@ public class ReactPDFManager extends ReactContextBaseJavaModule {
                 } catch (PDFException e) {
                     Log.d("FoxitPDF", "Init fail");
                     if (e.getLastError() == PDFError.LICENSE_INVALID.getCode()) {
-                        //UIToast.getInstance(getApplicationContext()).show("The license is invalid!");
+                        // UIToast.getInstance(getApplicationContext()).show("The license is invalid!");
                     } else {
-                        //UIToast.getInstance(getApplicationContext()).show("Failed to initialize the library!");
+                        // UIToast.getInstance(getApplicationContext()).show("Failed to initialize the
+                        // library!");
                     }
                     return;
                 }
@@ -64,6 +66,7 @@ public class ReactPDFManager extends ReactContextBaseJavaModule {
             ReadableMap panelConfig, ReadableMap viewSettingsConfig, ReadableMap viewMoreConfig) {
         ReactApplicationContext mThemedReactContext = this.getReactApplicationContext();
         Intent pdf = new Intent(mThemedReactContext, PDFReaderActivity.class);
+        pdf.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         pdf.putExtra("src", src);
         mThemedReactContext.startActivity(pdf);
     }
