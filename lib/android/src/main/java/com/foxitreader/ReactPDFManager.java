@@ -68,6 +68,7 @@ public class ReactPDFManager extends ReactContextBaseJavaModule {
         Intent pdf = new Intent(mThemedReactContext, PDFReaderActivity.class);
         pdf.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         pdf.putExtra("src", src);
+        pdf.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
         mThemedReactContext.startActivity(pdf);
     }
 }
