@@ -44,7 +44,7 @@ RCT_EXPORT_METHOD(openPDF:(NSString *)src
                   viewSettingsConfig:(NSDictionary *)viewSettingsConfig
                   viewMoreConfig:(NSDictionary *)viewMoreConfig) {
     
-    dispatch_sync(dispatch_get_main_queue(), ^{
+    dispatch_async(dispatch_get_main_queue(), ^{
         self.pdfViewCtrl = [[FSPDFViewCtrl alloc] initWithFrame:[UIScreen mainScreen].bounds];
     
         [self.pdfViewCtrl registerDocEventListener:self];
@@ -69,36 +69,34 @@ RCT_EXPORT_METHOD(openPDF:(NSString *)src
         } else {
             self.extensionsManager = [[UIExtensionsManager alloc] initWithPDFViewControl:self.pdfViewCtrl];
         }
-    });
     
-    self.extensionsManager.delegate = self;
-    
+        self.extensionsManager.delegate = self;
+        
 
-    [self.extensionsManager enableBottomToolbar:enableBottomToolbar];
-    [self.extensionsManager enableTopToolbar:enableTopToolbar];
-    
-    [self setPanelConfig:panelConfig];
-    [self setViewMoreConfig:viewMoreConfig];
-    [self setViewSettingsConfig:viewSettingsConfig];
-    [self setTopToolbarConfig:topToolbarConfig];
-    [self setBottomToolbarConfig:bottomToolbarConfig];
-    
-    self.pdfViewCtrl.extensionsManager = self.extensionsManager;
-    [self wrapTopToolbar];
-    topToolbarVerticalConstraints = @[];
-    
-    NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:src]];
-    FSPDFDoc *pdfdoc  = [[FSPDFDoc alloc] initWithMemory:data];
-    [pdfdoc load:nil];
-    //FSPDFDoc* pdfdoc = [[FSPDFDoc alloc] initWithHandler:(nonnull id<FSFileReadCallback>)];
-    // Load the unencrypted document content.
-    //if(e_errSuccess != [pdfdoc load:nil]) {
-    //  return; }
-    
-    // Set the document to view control.
-    [self.pdfViewCtrl setDoc:pdfdoc];
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.extensionsManager enableBottomToolbar:enableBottomToolbar];
+        [self.extensionsManager enableTopToolbar:enableTopToolbar];
+        
+        [self setPanelConfig:panelConfig];
+        [self setViewMoreConfig:viewMoreConfig];
+        [self setViewSettingsConfig:viewSettingsConfig];
+        [self setTopToolbarConfig:topToolbarConfig];
+        [self setBottomToolbarConfig:bottomToolbarConfig];
+        
+        self.pdfViewCtrl.extensionsManager = self.extensionsManager;
+        [self wrapTopToolbar];
+        self->topToolbarVerticalConstraints = @[];
+        
+        NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:src]];
+        FSPDFDoc *pdfdoc  = [[FSPDFDoc alloc] initWithMemory:data];
+        [pdfdoc load:nil];
+        //FSPDFDoc* pdfdoc = [[FSPDFDoc alloc] initWithHandler:(nonnull id<FSFileReadCallback>)];
+        // Load the unencrypted document content.
+        //if(e_errSuccess != [pdfdoc load:nil]) {
+        //  return; }
+        
+        // Set the document to view control.
+        [self.pdfViewCtrl setDoc:pdfdoc];
+        
         [[[UIApplication sharedApplication].delegate window].rootViewController presentViewController:self.rootViewController animated:YES completion:^{
             
         }];

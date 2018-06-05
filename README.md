@@ -30,8 +30,8 @@ react-native link react-native-foxit
 5.  At the end of `didFinishLaunchingWithOptions` function, add the following lines.
 
 ```objc
-NSString *sn = @"xxx"
-NSString *key = @"xxx"
+NSString *sn = @"xxx";
+NSString *key = @"xxx";
 FSErrorCode eRet = [FSLibrary init:sn key:key];
 if (e_errSuccess != eRet) {
     return NO;
