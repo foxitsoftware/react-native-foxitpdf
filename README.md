@@ -71,7 +71,7 @@ dependencies {
 }
 ```
 
-4.  Add sn, key, and `PDFReaderActivity` inside `application` element in `AndroidManifest.xml`. Be sure to add `android:allowBackup` in `tools:replace` for `application` element.
+4.  Add sn, key, and `PDFReaderActivity` inside `application` element in `AndroidManifest.xml`. Be sure to add `android:allowBackup` in `tools:replace` for `application` element and `xmlns:tools="http://schemas.android.com/tools"` in root `manifest` element.
 
 ```xml
 <application
