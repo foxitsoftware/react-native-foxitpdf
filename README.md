@@ -41,7 +41,7 @@ if (e_errSuccess != eRet) {
 ### Android
 
 1.  Unzip Foxit Android sdk and copy libs folder into Android folder.
-2.  Add the following into project-level build.gradle file
+2.  Add the following into project-level build.gradle file(android/build.gradle).
 
 ```gradle
 allprojects {
@@ -54,7 +54,7 @@ allprojects {
 }
 ```
 
-3.  Add the following into module-level gradle file.
+3.  Add the following into module-level gradle file(android/app/build.gradle).
 
 ```gradle
 dependencies {
@@ -71,7 +71,7 @@ dependencies {
 }
 ```
 
-4.  Add sn, key, and `PDFReaderActivity` inside `application` element in `AndroidManifest.xml`
+4.  Add sn, key, and `PDFReaderActivity` inside `application` element in `AndroidManifest.xml`. Be sure to add `android:allowBackup` in `tools:replace` for `application` element.
 
 ```xml
 <application
