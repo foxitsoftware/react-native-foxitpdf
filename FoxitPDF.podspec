@@ -8,9 +8,9 @@ Pod::Spec.new do |s|
   s.summary        = package['description']
   s.description    = package['description']
   s.author         = package['author']
-  s.homepage       = "https://github.com/andrew9032/react-native-foxit#readme"
+  s.homepage       = "https://github.com/foxitsoftware/react-native-foxitpdf#readme"
   s.license        = "MIT"
-  s.source         = { :git => 'https://github.com/andrew9032/react-native-foxit' }
+  s.source         = { :git => 'https://github.com/foxitsoftware/react-native-foxitpdf' }
   s.platform       = :ios, '10.0'
   s.source_files  = "lib/ios/FoxitPDF/*.{h,m}"
   s.dependency 'React/Core'

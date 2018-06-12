@@ -1,4 +1,4 @@
-# react-native-foxit [![npm version](https://img.shields.io/npm/v/react-native-foxit.svg?style=flat)](https://www.npmjs.com/package/react-native-foxit)
+# react-native-foxitpdf [![npm version](https://img.shields.io/npm/v/react-native-foxitpdf.svg?style=flat)](https://www.npmjs.com/package/react-native-foxitpdf)
 
 Foxit PDF components for iOS + Android
 
@@ -7,13 +7,13 @@ Foxit PDF components for iOS + Android
 First, download the library from npm:
 
 ```
-npm install react-native-foxit --save
+npm install react-native-foxitpdf --save
 ```
 
 Link automatically
 
 ```
-react-native link react-native-foxit
+react-native link react-native-foxitpdf
 ```
 
 ### iOS
@@ -48,7 +48,7 @@ allprojects {
     repositories {
         ...
         flatDir {
-            dirs project(':react-native-foxit').file("$rootDir/libs")
+            dirs project(':react-native-foxitpdf').file("$rootDir/libs")
         }
     }
 }
@@ -59,7 +59,7 @@ allprojects {
 ```gradle
 dependencies {
     ...
-    compile project(':react-native-foxit') {
+    compile project(':react-native-foxitpdf') {
         android {
             sourceSets {
                 main {
@@ -91,13 +91,13 @@ dependencies {
 ## General Usage
 
 ```js
-import FoxitPDF from 'react-native-foxit';
+import FoxitPDF from 'react-native-foxitpdf';
 ```
 
 or
 
 ```js
-var FoxitPDF = require('react-native-foxit');
+var FoxitPDF = require('react-native-foxitpdf');
 ```
 
 Open PDF Reader
@@ -114,7 +114,7 @@ FoxitPDF.openPDF(require('./sample.pdf'));
      you may not use this file except in compliance with the License.
      You may obtain a copy of the License at
 
-        https://raw.githubusercontent.com/andrew9032/react-native-foxit/master/LICENSE
+        https://raw.githubusercontent.com/foxitsoftware/react-native-foxitpdf/master/LICENSE
 
      Unless required by applicable law or agreed to in writing, software
      distributed under the License is distributed on an "AS IS" BASIS,

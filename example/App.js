@@ -13,7 +13,7 @@ import {
   NativeModules,
   TouchableOpacity,
 } from 'react-native';
-import FoxitPDF from 'react-native-foxit';
+import FoxitPDF from 'react-native-foxitpdf';
 
 type Props = {};
 export default class App extends Component<Props> {

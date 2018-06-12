@@ -1203,7 +1203,7 @@
 		ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBlob.xcodeproj; path = "../node_modules/react-native/Libraries/Blob/RCTBlob.xcodeproj"; sourceTree = "<group>"; };
 		DF17C80B20AA1619009AA30D /* FoxitRDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FoxitRDK.framework; sourceTree = "<group>"; };
 		DF47E56A20B2CA5900EE333C /* FoxitRDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FoxitRDK.framework; path = libs/FoxitRDK.framework; sourceTree = "<group>"; };
-		DF47E5A720B2CE2A00EE333C /* FoxitPDF.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FoxitPDF.xcodeproj; path = "../node_modules/react-native-foxit/lib/ios/FoxitPDF.xcodeproj"; sourceTree = "<group>"; };
+		DF47E5A720B2CE2A00EE333C /* FoxitPDF.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FoxitPDF.xcodeproj; path = "../node_modules/react-native-foxitpdf/lib/ios/FoxitPDF.xcodeproj"; sourceTree = "<group>"; };
 		DFBABF2B20BEB7A900445F7D /* check.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = check.pdf; sourceTree = "<group>"; };
 		DFBABF2C20BEB7A900445F7D /* circle.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = circle.pdf; sourceTree = "<group>"; };
 		DFBABF2D20BEB7A900445F7D /* comment.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = comment.pdf; sourceTree = "<group>"; };
