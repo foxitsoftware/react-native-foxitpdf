@@ -18,7 +18,7 @@ react-native link react-native-foxitpdf
 
 ### iOS
 
-1.  Unzip Foxit iOS sdk and copy libs folder into iOS folder.
+1.  Unzip Foxit iOS sdk and copy libs folder into iOS folder.  (Please use FoxitRDK 6.0 )
 2.  Add dynamic framework "FoxitRDK.framework" and also in Xcode’s Embedded Binaries
 3.  Add the Resource files that are needed for the built-in UI implementations to the pdfreader project. Right-click the project, and select Add Files to "your project"… to add the Resource files. Find and choose the folder "libs/uiextensions_src/uiextensions/Resource".
 4.  Add following line into AppDelegate.m
@@ -32,8 +32,8 @@ react-native link react-native-foxitpdf
 ```objc
 NSString *sn = @"xxx";
 NSString *key = @"xxx";
-FSErrorCode eRet = [FSLibrary init:sn key:key];
-if (e_errSuccess != eRet) {
+FSErrorCode eRet = [FSLibrary initialize:sn key:key];
+if (FSErrSuccess != eRet) {
     return NO;
 }
 ```
@@ -103,7 +103,7 @@ var FoxitPDF = require('react-native-foxitpdf');
 Open PDF Reader
 
 ```js
-FoxitPDF.openPDF(require('./sample.pdf'));
+FoxitPDF.openPDF('sample.pdf');
 ```
 
 ## License
