@@ -86,21 +86,62 @@ RCT_EXPORT_METHOD(openPDF:(NSString *)src
         [self wrapTopToolbar];
         self->topToolbarVerticalConstraints = @[];
         
-        NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:src]];
-        FSPDFDoc *pdfdoc  = [[FSPDFDoc alloc] initWithMemory:data];
-        [pdfdoc load:nil];
-        //FSPDFDoc* pdfdoc = [[FSPDFDoc alloc] initWithHandler:(nonnull id<FSFileReadCallback>)];
-        // Load the unencrypted document content.
-        //if(e_errSuccess != [pdfdoc load:nil]) {
-        //  return; }
+        NSURL *targetURL = nil;
+        if (targetURL == nil) {
+            targetURL = [self fileFromDocumentsDirectoryURL:src];
+        }
         
-        // Set the document to view control.
-        [self.pdfViewCtrl setDoc:pdfdoc];
-        
-        [[[UIApplication sharedApplication].delegate window].rootViewController presentViewController:self.rootViewController animated:YES completion:^{
+        if (targetURL == nil) {
+            [self showError:@"file not found in Document directory!"];
+        }else{
+            FSPDFDoc *pdfdoc  = [[FSPDFDoc alloc] initWithPath: targetURL.path];
+            [pdfdoc load:nil];
+            //FSPDFDoc* pdfdoc = [[FSPDFDoc alloc] initWithHandler:(nonnull id<FSFileReadCallback>)];
+            // Load the unencrypted document content.
+            //if(e_errSuccess != [pdfdoc load:nil]) {
+            //  return; }
             
-        }];
+            // Set the document to view control.
+            [self.pdfViewCtrl setDoc:pdfdoc];
+            
+            [[[UIApplication sharedApplication].delegate window].rootViewController presentViewController:self.rootViewController animated:YES completion:^{
+                
+            }];
+        }
     });
+}
+
+-(void)showError:(NSString *)errMsg {
+    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Error message"
+                                                                   message:errMsg
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
+                                                          handler:^(UIAlertAction * action) {
+                                                              //响应事件
+                                                              NSLog(@"action = %@", action);
+                                                          }];
+    
+    [alert addAction:defaultAction];
+    
+    UIViewController *rootController = UIApplication.sharedApplication.delegate.window.rootViewController;
+    [rootController presentViewController:alert animated:YES completion:nil];
+    
+}
+
+- (NSURL *)fileFromDocumentsDirectoryURL:(NSString *) filename {
+    if (filename.length == 0 ) {
+        return nil;
+    }
+    NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
+    if (documentsDirectory == nil) {
+        return nil;
+    }
+    NSString *filePath = [documentsDirectory stringByAppendingPathComponent: filename];
+    if(![[NSFileManager defaultManager] fileExistsAtPath: filePath]) {
+        return nil;
+    }
+    return [NSURL fileURLWithPath:filePath];
 }
 
 //panelConfig
@@ -414,3 +455,4 @@ RCT_EXPORT_METHOD(openPDF:(NSString *)src
 }
 
 @end
+

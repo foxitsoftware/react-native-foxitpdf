@@ -17,12 +17,6 @@ export default class FoxitPDF {
     viewSettingsConfig,
     viewMoreConfig
   ) {
-    const source = resolveAssetSource(src) || {};
-
-    let uri = source.uri || '';
-    if (uri && uri.match(/^\//)) {
-      uri = `file://${uri}`;
-    }
 
     if (arguments.length < 4) {
       enableTopToolbar = true;
@@ -31,7 +25,7 @@ export default class FoxitPDF {
       enableBottomToolbar = true;
     }
     PDFManager.openPDF(
-      uri,
+      src,
       password,
       extensionConfig,
       enableTopToolbar,
