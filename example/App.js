@@ -18,7 +18,7 @@ import FoxitPDF from 'react-native-foxitpdf';
 type Props = {};
 export default class App extends Component<Props> {
   onPress() {
-    FoxitPDF.openPDF(require('./sample.pdf'));
+    FoxitPDF.openPDF('filepath');
   }
 
   render() {
