@@ -106,6 +106,10 @@ Open PDF Reader
 FoxitPDF.openPDF('sample.pdf');
 ```
 
+the parameter is filepath
+in iOS you need put a pdf filepath under app Document
+in Android you need put a real pdf filepath.  example FoxitPDF.openPDF('/sdcard/0/download/xxx.pdf')
+
 ## License
 
      Copyright (c) 2018 Foxit Corporation
