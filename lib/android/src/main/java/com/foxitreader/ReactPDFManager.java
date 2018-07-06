@@ -10,9 +10,9 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
+import com.foxit.sdk.common.Constants;
 import com.foxit.sdk.common.Library;
-import com.foxit.sdk.common.PDFError;
-import com.foxit.sdk.common.PDFException;
+import com.foxit.uiextensions.utils.UIToast;
 
 public class ReactPDFManager extends ReactContextBaseJavaModule {
 
@@ -33,18 +33,11 @@ public class ReactPDFManager extends ReactContextBaseJavaModule {
                 Bundle bundle = ai.metaData;
                 String sn = bundle.getString("foxit_sn");
                 String key = bundle.getString("foxit_key");
-                try {
-                    Library.init(sn, key);
-                    Log.d("FoxitPDF", "Init Success");
-                    isLibraryInited = true;
-                } catch (PDFException e) {
-                    Log.d("FoxitPDF", "Init fail");
-                    if (e.getLastError() == PDFError.LICENSE_INVALID.getCode()) {
-                        // UIToast.getInstance(getApplicationContext()).show("The license is invalid!");
-                    } else {
-                        // UIToast.getInstance(getApplicationContext()).show("Failed to initialize the
-                        // library!");
-                    }
+
+                int errorCode = Library.initialize(sn, key);
+                if (errorCode != Constants.e_ErrSuccess) {
+                    String errorMsg = (errorCode == Constants.e_ErrInvalidLicense) ? "The license is invalid!" : "Failed to initialize the library!";
+                    UIToast.getInstance(reactContext).show(errorMsg);
                     return;
                 }
             } catch (PackageManager.NameNotFoundException e) {
@@ -62,11 +55,12 @@ public class ReactPDFManager extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void openPDF(String src, String password, ReadableMap extensionConfig, Boolean enableTopToolbar,
-            Boolean enableBottomToolbar, ReadableMap topToolbarConfig, ReadableMap bottomToolbarConfig,
-            ReadableMap panelConfig, ReadableMap viewSettingsConfig, ReadableMap viewMoreConfig) {
+                        Boolean enableBottomToolbar, ReadableMap topToolbarConfig, ReadableMap bottomToolbarConfig,
+                        ReadableMap panelConfig, ReadableMap viewSettingsConfig, ReadableMap viewMoreConfig) {
         ReactApplicationContext mThemedReactContext = this.getReactApplicationContext();
         Intent pdf = new Intent(mThemedReactContext, PDFReaderActivity.class);
         pdf.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        Log.i("FoxitPDF", "src:" + src);
         pdf.putExtra("src", src);
         mThemedReactContext.startActivity(pdf);
     }

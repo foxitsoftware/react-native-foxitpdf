@@ -40,7 +40,7 @@ if (FSErrSuccess != eRet) {
 
 ### Android
 
-1.  Unzip Foxit Android sdk and copy libs folder into Android folder.
+1.  Unzip Foxit Android sdk and copy libs folder into Android folder(Please use FoxitRDK 6.0 ).
 2.  Add the following into project-level build.gradle file(android/build.gradle).
 
 ```gradle
@@ -71,7 +71,25 @@ dependencies {
 }
 ```
 
-4.  Add sn, key, and `PDFReaderActivity` inside `application` element in `AndroidManifest.xml`. Be sure to add `android:allowBackup` in `tools:replace` for `application` element and `xmlns:tools="http://schemas.android.com/tools"` in root `manifest` element.
+4.  
+- Add `uses-permission` outside `application` element in `AndroidManifest.xml`.
+```xml
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools"
+          package="your package name">
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.RUN_INSTRUMENTATION"/>
+    <uses-permission android:name="android.permission.CAMERA" />
+    
+    <application .../>
+</manifest>
+```
+
+- Add sn, key, `FloatWindowService`, and `PDFReaderActivity` inside `application` element in `AndroidManifest.xml`. 
 
 ```xml
 <application
@@ -83,11 +101,29 @@ dependencies {
     <meta-data
         android:name="foxit_key"
         android:value="xxx"/>
-    <activity android:name="com.foxitreader.PDFReaderActivity"
-        android:configChanges="keyboard|keyboardHidden|orientation|screenSize" />
+    <activity
+        android:name="com.foxitreader.PDFReaderActivity"
+        android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+        android:screenOrientation="fullSensor"/>
+    <service android:name="com.foxit.uiextensions.modules.panzoom.floatwindow.service.FloatWindowService"/>
 ...
 ```
+- Be sure to add `android:allowBackup` in `tools:replace` for `application` element and `xmlns:tools="http://schemas.android.com/tools"` in root `manifest` element.
 
+```xml
+<manifest
+    ...
+    xmlns:tools="http://schemas.android.com/tools">
+    ...
+  
+    <application
+        ...
+        tools:replace="android:allowBackup,icon,theme,label,name">
+        ...
+    </application>
+    ...
+</manifest>          
+```
 ## General Usage
 
 ```js

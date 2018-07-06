@@ -28,5 +28,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.0.1'
     compile 'com.facebook.react:react-native:+'
     compile(name: 'FoxitRDKUIExtensions', ext: 'aar')
+    compile 'com.edmodo:cropper:1.0.1'
     // From node_modules
 }

@@ -1,119 +1,132 @@
 package com.foxitreader;
 
+import android.Manifest;
 import android.content.Intent;
-import android.os.StrictMode;
-import android.support.v4.app.FragmentActivity;
+import android.content.pm.PackageManager;
+import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.ViewGroup;
+import android.os.StrictMode;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.ContextCompat;
+import android.view.KeyEvent;
 import android.view.WindowManager;
 
 import com.foxit.sdk.PDFViewCtrl;
-import com.foxit.sdk.common.PDFException;
-import com.foxit.sdk.pdf.PDFDoc;
 import com.foxit.uiextensions.UIExtensionsManager;
-import com.foxit.uiextensions.pdfreader.impl.PDFReader;
 import com.foxit.uiextensions.utils.AppTheme;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
-import java.nio.charset.Charset;
 
 public class PDFReaderActivity extends FragmentActivity {
-    public PDFReader mPDFReader;
-    public PDFViewCtrl viewCtrl;
 
-    private byte[] downloadUrl(URL toDownload) {
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
-                .permitAll().build();
-        StrictMode.setThreadPolicy(policy);
+    private PDFViewCtrl pdfViewCtrl = null;
+    private UIExtensionsManager uiExtensionsManager = null;
 
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-
-        try {
-            byte[] chunk = new byte[4096];
-            int bytesRead;
-            InputStream stream = toDownload.openStream();
-
-            while ((bytesRead = stream.read(chunk)) > 0) {
-                outputStream.write(chunk, 0, bytesRead);
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-
-        return outputStream.toByteArray();
-    }
+    public static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static final String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Intent intent = getIntent();
-        String src = intent.getExtras().getString("src");
-
-        PDFDoc document;
-        viewCtrl = new PDFViewCtrl(this.getApplicationContext());
-        viewCtrl.setVerticalScrollBarEnabled(true);
-        viewCtrl.setHorizontalScrollBarEnabled(true);
-
-//        String path = "/mnt/sdcard/input_files/Sample.pdf";
-
-        String UIExtensionsConfig = "{\n" +
-                " \"modules\": {\n" +
-                " \"readingbookmark\": true,\n" +
-                " \"outline\": true,\n" +
-                " \"annotations\": true,\n" +
-                " \"thumbnail\" : true,\n" +
-                " \"attachment\": true,\n" +
-                " \"signature\": true,\n" +
-                " \"search\": true,\n" +
-                " \"pageNavigation\": true,\n" +
-                " \"form\": true,\n" +
-                " \"selection\": true,\n" +
-                " \"encryption\" : true\n" +
-                " }\n"+ "}\n";
-        InputStream stream = new ByteArrayInputStream(UIExtensionsConfig.getBytes(Charset.forName("UTF-8")));
-        UIExtensionsManager.Config config = new UIExtensionsManager.Config(stream);
-
-        UIExtensionsManager uiExtensionsManager = new com.foxit.uiextensions.UIExtensionsManager(this.getApplicationContext(), null, viewCtrl, config);
-        viewCtrl.setUIExtensionsManager(uiExtensionsManager);
-        uiExtensionsManager.setAttachedActivity(this);
-
-        try {
-            byte[] bytes = downloadUrl(new URL(src));
-            document = new PDFDoc(bytes);
-            document.load(null);
-            viewCtrl.setDoc(document);
-
-        } catch (PDFException e) {
-            Log.d("error", e.getMessage());
-            e.printStackTrace();
-        } catch (java.net.MalformedURLException e) {
-            Log.d("error", e.getMessage());
-            e.printStackTrace();
-        }
-
-        mPDFReader = (PDFReader) uiExtensionsManager.getPDFReader();
-        mPDFReader.onCreate(this, viewCtrl, null);
-        mPDFReader.setOnFinishListener(new PDFReader.OnFinishListener() {
-            @Override
-            public void onFinish() {
-                finish();
-            }
-        });
         AppTheme.setThemeFullScreen(this);
         AppTheme.setThemeNeedMenuKey(this);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        setContentView(R.layout.activity_pdfreader);
 
-        addContentView(mPDFReader.getContentView(), new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT));
+        pdfViewCtrl = new PDFViewCtrl(this);
+        InputStream stream = getApplicationContext().getResources().openRawResource(R.raw.uiextensions_config);
+        UIExtensionsManager.Config config = new UIExtensionsManager.Config(stream);
+        uiExtensionsManager = new UIExtensionsManager(this.getApplicationContext(), pdfViewCtrl,config);
+        uiExtensionsManager.setAttachedActivity(this);
+        uiExtensionsManager.onCreate(this, pdfViewCtrl, savedInstanceState);
+        pdfViewCtrl.setUIExtensionsManager(uiExtensionsManager);
+
+        Intent intent = getIntent();
+        String filePath = intent.getExtras().getString("src");
+        uiExtensionsManager.openDocument(filePath, null);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            int permission = ContextCompat.checkSelfPermission(this.getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            if (permission != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, PERMISSIONS_STORAGE, REQUEST_EXTERNAL_STORAGE);
+            }
+        }
+
+        if (Build.VERSION.SDK_INT >= 24) {
+            StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+            StrictMode.setVmPolicy(builder.build());
+        }
+
+        setContentView(uiExtensionsManager.getContentView());
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == REQUEST_EXTERNAL_STORAGE && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+        } else {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
+    @Override
+    public void onStart() {
+        if (uiExtensionsManager != null) {
+            uiExtensionsManager.onStart(this);
+        }
+        super.onStart();
+    }
+
+    @Override
+    public void onStop() {
+        if (uiExtensionsManager != null) {
+            uiExtensionsManager.onStop(this);
+        }
+        super.onStop();
+    }
+
+    @Override
+    public void onPause() {
+        if (uiExtensionsManager != null) {
+            uiExtensionsManager.onPause(this);
+        }
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        if (uiExtensionsManager != null) {
+            uiExtensionsManager.onResume(this);
+        }
+        super.onResume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (uiExtensionsManager != null) {
+            uiExtensionsManager.onDestroy(this);
+        }
+        super.onDestroy();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if(uiExtensionsManager != null) {
+            uiExtensionsManager.onConfigurationChanged(this,newConfig);
+        }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (uiExtensionsManager!= null && uiExtensionsManager.onKeyDown(this, keyCode, event))
+            return true;
+        return super.onKeyDown(keyCode, event);
+    }
+
 }

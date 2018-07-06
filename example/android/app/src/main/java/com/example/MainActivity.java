@@ -5,8 +5,6 @@ import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 
 import com.facebook.react.ReactActivity;
-import com.foxit.sdk.common.Library;
-import com.foxit.sdk.common.PDFException;
 
 public class MainActivity extends ReactActivity {
     @Override

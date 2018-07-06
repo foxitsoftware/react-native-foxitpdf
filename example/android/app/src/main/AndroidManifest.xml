@@ -1,36 +1,46 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.example">
+          xmlns:tools="http://schemas.android.com/tools"
+          package="com.example">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.RUN_INSTRUMENTATION"/>
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:name=".MainApplication"
-        android:label="@string/app_name"
-        android:icon="@mipmap/ic_launcher"
         android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup,icon,theme,label,name">
         <meta-data
             android:name="foxit_sn"
-            android:value="osniRGGP1XjedZLxVQzIAa6qTsiyJKVBc0TNR7cVchqtHut/HHphcw=="/>
+            android:value="sS1No48GllWOhaww26EpDX+mGXcYdi5zUHFRsdMSGxodGTyLDgaYWA=="/>
         <meta-data
             android:name="foxit_key"
-            android:value="ezJvj98ntBh39DvoP0WUjY7NZTROhapeXws4euNAs+qWRogVCWd+2oEF87IxSi7IG1YfES7w6Y5jc8VbkBLSV4PzOyHjtvTn8DQ07cwln724y/13XHCQKeeTwclKvWccVF6o3/2+VmzWQucp54YTVjC7i9KEatRxEcNM/o3mTN1vCZiGGviNizgEYqKxIAjyN5oCrUDGQfFZ4xFIvNoTsqcm2+P4R2KNinAC5N3FepWuQ8BinuYUeBBRYrcm+rSoQ2zejZqRL3l6wsyo4spU0waryqxl0HDdD8X4ghP5FEtfzppxjFwdlfUTvLbE+jsFW3v+vSYjQo7eSRytGBjB68VfC6yioVz0NQKEwB9v6Wm5E2aMs5ucbpjlAT9DLJnzr+tckpyvRQvymKRYMvduV5KVj9PBxn8f4828/pRJCJhbJuE4lrHvEYjJpyvOccOOlBYdPvEAtfs3ZsHW0Vuda9BgGq/OfeBVlBV5Dw4OBplrEzC4Gl6/fDwdRH2qC3MvjQMDgxI10c6+JHd658RJjnufKtQA6uEIKo6xlLs0ItsxdIV8lEfpU0DFjULozw6qCcuSsOgIUEJMCZO6JbsfmulhfVKyqVU316+vM/3OyLp/2Sf+UWb5lXhx+u5CGzZknL0sIPVnJdt0O+tk7r0CO/bVJfuYlllcmooqyj9d2YbV4RQs1N9gWqSarkpzZAYFwexLXRNon1M8xfZvTBNo8qTiftulUieTGSVgZBvr8Xw4fdP4/w/fcssg0l5/WOqHHxilVqQLRW1n1MCxFir6a3+3L6eMT3/mpdfxce8MhYClZ79E8nDenRnmimfRku0KMo+Ci4CbYJRbKS/NU5qvLOQzvH4E6UoI9QOj9Hr3Vpft56oDiehurzsEttNspu+Dbznv70QJE7BddbaGaG5XW0OWcmoloL3l5sp4AUZOn1kEb8t5j8h3suqJxHQr5rmFfvtTbpzgazURp99qcvd7iV9z8pUDeiOiZ6J2af21CAQ1HCXkozqiwKgGzv19zsKccBM4gr9kJnpAkQlKQfQrBiSvcx3MnlM1ypd3/silNT22s/BmTjldZxgmhLCItC2TOmuv4LTFc7ftEnzG6AEye2aju+IrwfPxmvOT3Mluixlt6wODDI4+UJex+XWTVqLhdpHNvbiXydipcRoLWGSpByJd3ZXeBJb45j+Y/O0j5PcFvKtLhTQMEPgWtn6Ynu/kTBD1Mt0HAkyHGhExTmfBvyRt8d4="/>
-      <activity
-        android:name=".MainActivity"
-        android:label="@string/app_name"
-        android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-        android:windowSoftInputMode="adjustResize">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-      </activity>
-      <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
-        <activity android:name="com.foxitreader.PDFReaderActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize" />
+            android:value="ezKfjl3GtGh397voL2Xsb3l6739eBbVCXwu5VfNUsnrnlvx3zI41B75STKd59TXVpkxEbp+B3UEqUNj1KM66ujQN8Mgkr/mKJOJaqOuqngyfs4ccHXmAWTe4ajKpqKI0Y5clxoTqL8tfYrOQZN7SeznxuJdOMwrg2jDyDQc5ffNZSt8Z6nAjHlI4vjZHNrWeW9M+jFgIcaBMRE/hwgZwwQpr/74cdH/VV289PBrvsLtf+hIagpdc0l3tJJzQf00Q/0/PSPp35eeU+YrKuiXiBIm0sLahXrXBU6kdYOoZgteB9dMaH0v2Ev2EF4hzwtcwExvOI8UxUsC71UTl/KJhIiKs9PdM2fZ4AaseldOQvaHs9dGVwsI2LajSXI21IKT3vwOnMHT10V95hnStG/maORwMHDfLjlAyJepfMlP2aU5x7hTFwRKF9bJRgelGeTzn0c3zJM/GhG5YccdzRPtJZvre4RD9oOYw+vrR6/TKoZtX6Nlu5y/FPg2xlA73kLdaaEqulHtDdec25ki/h9ahvyUP30bIMJKaG5F+SPTCemor1Oy4mtaWNhjPY0cVu807luylcfAd70yu/3neiDUc1JlI424i/OLxRkBGJInLdBMgEeU6gY34Rh5QBfWdKq3lHzKsZnHqL7+MDPu16Os3JX+G4rBWVpRMOKxgGTfnp2bkChAUlzL0tX+/iLjWPyADJwpo3AtVyCckdyyQLgvWr93+6nN34YurHHKqYUTQ0oBeRb0a2DYu3fNyAzDgPZ4lXbkbwtMtS4299A4lUnVJcA21ZBEqC0/mcu/eHHd1UdBBouaD6rkXQ53OzznjMCjibCYbNurh4X0toPxSrqbRU7/LBkzNIbUD+YH1AFAG6Uxi/arFjXBV0Wg0JKCZy1WBVeIfpTW/vtOxAaSsL4FX2930kqZhbIrbTBgOwlsDJO4d5LWFZNuCqjvI8U00ilJExKXAz0w5UTUGfLZraS85ur/zHRs6d8V+psFURmcaCpkLHOE8LrSfT+kat8N6GREjuZItoGs0NOkKYvj/lL963WcRWikieGBNP9Pl/hgpdIXew7nue6U9XGoTgdz2lLR6QtC4EFuVHheMP455C7pRlKJ+7gN9L9+LdoZ1c7LgthMGNg76WWkO129/xwSSDyE7l9z/HbWiAyAtYYYJe02Zl1sInDc30jFrpkXpOocoIa9qnh8EZN859NYJqkQiqJE9CIJ66DA0DNk8eNnaJaBNAzAv2eH+lwEXckM5Re5xjo+69QB0T2Fpx7nFR/cnSw=="/>
+
+        <activity
+            android:name=".MainActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:label="@string/app_name"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity android:name="com.facebook.react.devsupport.DevSettingsActivity"/>
+        <activity
+            android:name="com.foxitreader.PDFReaderActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:screenOrientation="fullSensor"/>
+
+        <service android:name="com.foxit.uiextensions.modules.panzoom.floatwindow.service.FloatWindowService"/>
     </application>
 
 </manifest>
