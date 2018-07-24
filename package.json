@@ -1,13 +1,13 @@
 {
-  "name": "react-native-foxitpdf",
+  "name": "@foxitsoftware/react-native-foxitpdf",
   "description": "React Native Foxit PDF view for iOS + Android",
   "main": "index.js",
-  "author": "Andrew",
-  "version": "0.0.3",
+  "author": "foxitsoftware",
+  "version": "0.0.4",
   "scripts": {},
   "repository": {
     "type": "git",
-    "url": "https://github.com/foxitsoftware/react-native-foxitpdf"
+    "url": "git+https://github.com/foxitsoftware/react-native-foxitpdf.git"
   },
   "rnpm": {
     "android": {
@@ -16,5 +16,19 @@
   },
   "peerDependencies": {
     "react-native": ">=0.40.0"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/foxitsoftware/react-native-foxitpdf/issues"
+  },
+  "homepage": "https://github.com/foxitsoftware/react-native-foxitpdf#readme",
+  "directories": {
+    "example": "example"
+  },
+  "license": "MIT",
+  "keywords": [
+    "react",
+    "native",
+    "pdf",
+    "pdfview"
+  ]
 }

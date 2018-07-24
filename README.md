@@ -7,7 +7,7 @@ Foxit PDF components for iOS + Android
 First, download the library from npm:
 
 ```
-npm install react-native-foxitpdf --save
+npm install @foxitsoftware/react-native-foxitpdf --save
 ```
 
 Link automatically
