@@ -13,7 +13,7 @@ npm install @foxitsoftware/react-native-foxitpdf --save
 Link automatically
 
 ```
-react-native link react-native-foxitpdf
+react-native link @foxitsoftware/react-native-foxitpdf
 ```
 
 ### iOS

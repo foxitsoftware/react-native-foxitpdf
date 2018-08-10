@@ -3,7 +3,7 @@
   "description": "React Native Foxit PDF view for iOS + Android",
   "main": "index.js",
   "author": "foxitsoftware",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "scripts": {},
   "repository": {
     "type": "git",
