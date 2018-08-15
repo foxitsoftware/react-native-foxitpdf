@@ -40,7 +40,7 @@ if (FSErrSuccess != eRet) {
 
 ### Android
 
-1.  Unzip Foxit Android sdk and copy libs folder into Android folder(Please use FoxitRDK 6.0 ).
+1.  Unzip Foxit android sdk and copy libs folder into android folder(Please use FoxitRDK 6.0 ).
 2.  Add the following into project-level build.gradle file(android/build.gradle).
 
 ```gradle
@@ -48,7 +48,7 @@ allprojects {
     repositories {
         ...
         flatDir {
-            dirs project(':react-native-foxitpdf').file("$rootDir/libs")
+            dirs project(':@foxitsoftware_react-native-foxitpdf').file("$rootDir/libs")
         }
     }
 }
@@ -57,15 +57,11 @@ allprojects {
 3.  Add the following into module-level gradle file(android/app/build.gradle).
 
 ```gradle
-dependencies {
+android  {
     ...
-    compile project(':react-native-foxitpdf') {
-        android {
-            sourceSets {
-                main {
-                    jniLibs.srcDirs = ['../libs']
-                }
-            }
+    sourceSets {
+        main {
+             jniLibs.srcDirs = ['../libs']
         }
     }
 }
@@ -127,13 +123,13 @@ dependencies {
 ## General Usage
 
 ```js
-import FoxitPDF from 'react-native-foxitpdf';
+import FoxitPDF from '@foxitsoftware/react-native-foxitpdf';
 ```
 
 or
 
 ```js
-var FoxitPDF = require('react-native-foxitpdf');
+var FoxitPDF = require('@foxitsoftware/react-native-foxitpdf');
 ```
 
 Open PDF Reader
