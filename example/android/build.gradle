@@ -17,7 +17,7 @@ allprojects {
         mavenLocal()
         jcenter()
         flatDir {
-            dirs project(':react-native-foxitpdf').file("$rootDir/libs")
+            dirs project(':@foxitsoftware_react-native-foxitpdf').file("$rootDir/libs")
         }
         maven {
             // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
