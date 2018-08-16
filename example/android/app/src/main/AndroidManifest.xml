@@ -39,8 +39,6 @@
             android:name="com.foxitreader.PDFReaderActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:screenOrientation="fullSensor"/>
-
-        <service android:name="com.foxit.uiextensions.modules.panzoom.floatwindow.service.FloatWindowService"/>
     </application>
 
 </manifest>

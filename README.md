@@ -40,7 +40,7 @@ if (FSErrSuccess != eRet) {
 
 ### Android
 
-1.  Unzip Foxit android sdk and copy libs folder into android folder(Please use FoxitRDK 6.0 ).
+1.  Unzip Foxit android sdk and copy libs folder into android folder(Please use `FoxitRDK 6.1` ).
 2.  Add the following into project-level build.gradle file(android/build.gradle).
 
 ```gradle
@@ -54,20 +54,7 @@ allprojects {
 }
 ```
 
-3.  Add the following into module-level gradle file(android/app/build.gradle).
-
-```gradle
-android  {
-    ...
-    sourceSets {
-        main {
-             jniLibs.srcDirs = ['../libs']
-        }
-    }
-}
-```
-
-4.  
+3. 
 - Add `uses-permission` outside `application` element in `AndroidManifest.xml`.
 ```xml
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
@@ -85,7 +72,7 @@ android  {
 </manifest>
 ```
 
-- Add sn, key, `FloatWindowService`, and `PDFReaderActivity` inside `application` element in `AndroidManifest.xml`. 
+- Add `sn`, `key`, and `PDFReaderActivity` inside `application` element in `AndroidManifest.xml`. 
 
 ```xml
 <application
@@ -101,7 +88,6 @@ android  {
         android:name="com.foxitreader.PDFReaderActivity"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
         android:screenOrientation="fullSensor"/>
-    <service android:name="com.foxit.uiextensions.modules.panzoom.floatwindow.service.FloatWindowService"/>
 ...
 ```
 - Be sure to add `android:allowBackup` in `tools:replace` for `application` element and `xmlns:tools="http://schemas.android.com/tools"` in root `manifest` element.
