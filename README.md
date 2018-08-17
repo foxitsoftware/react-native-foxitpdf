@@ -142,9 +142,9 @@ FoxitPDF.openPDF('sample.pdf');
 
 In the openPDF function parameter, add the path to the file you wish to open.
 
-iOS: Add the name of the PDF file, but make sure it is located under app Document folder
-Android: Add the file path location of the PDF inside your project.  
+If you are using iOS version: Add the name of the PDF file, but make sure it is located under app Document folder
 
+If you are using Android version: Add the file path location of the PDF inside your project.  
 For example, if the file is in your sdcard folder: FoxitPDF.openPDF('/sdcard/0/download/xxx.pdf')
 
 ## License
