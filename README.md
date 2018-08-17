@@ -18,8 +18,8 @@ react-native link @foxitsoftware/react-native-foxitpdf
 
 ### iOS
 
-1.  Unzip Foxit iOS sdk and copy libs folder into iOS folder.  (Please use FoxitRDK 6.0 )
-2.  Add dynamic framework "FoxitRDK.framework" and also in Xcode’s Embedded Binaries
+1.  Unzip Foxit PDF SDK for iOS and copy libs folder into the component ios folder.  (Please use Foxit PDF SDK for iOS 6.0 )
+2.  Add dynamic framework "FoxitRDK.framework" to framework folder and also to Xcode’s Embedded Binaries
 3.  Add the Resource files that are needed for the built-in UI implementations to the pdfreader project. Right-click the project, and select Add Files to "your project"… to add the Resource files. Find and choose the folder "libs/uiextensions_src/uiextensions/Resource".
 4.  Add following line into AppDelegate.m
 
@@ -27,7 +27,7 @@ react-native link @foxitsoftware/react-native-foxitpdf
 #import "FoxitRDK/FSPDFObjC.h"
 ```
 
-5.  At the end of `didFinishLaunchingWithOptions` function, add the following lines.
+5.  At the end of `didFinishLaunchingWithOptions` function, add the following lines:
 
 ```objc
 NSString *sn = @"xxx";
@@ -40,8 +40,8 @@ if (FSErrSuccess != eRet) {
 
 ### Android
 
-1.  Unzip Foxit android sdk and copy libs folder into android folder(Please use FoxitRDK 6.0 ).
-2.  Add the following into project-level build.gradle file(android/build.gradle).
+1.  Unzip Foxit PDF SDK for Android and copy libs folder into android folder(Please use Foxit PDF SDK for Android 6.0 ).
+2.  Add the following code into the project-level build.gradle file (android/build.gradle).
 
 ```gradle
 allprojects {
@@ -54,7 +54,7 @@ allprojects {
 }
 ```
 
-3.  Add the following into module-level gradle file(android/app/build.gradle).
+3.  Add the following code into the module-level build.gradle file (android/app/build.gradle).
 
 ```gradle
 android  {
@@ -68,7 +68,7 @@ android  {
 ```
 
 4.  
-- Add `uses-permission` outside `application` element in `AndroidManifest.xml`.
+- Add `uses-permission` tag outside `application` tags in `AndroidManifest.xml`.
 ```xml
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools"
@@ -85,7 +85,7 @@ android  {
 </manifest>
 ```
 
-- Add sn, key, `FloatWindowService`, and `PDFReaderActivity` inside `application` element in `AndroidManifest.xml`. 
+- Add sn, key, `FloatWindowService`, and `PDFReaderActivity` inside `application` tags in `AndroidManifest.xml`. You may find your sn and key in Foxit PDF SDK for Android download package folder.
 
 ```xml
 <application
@@ -104,7 +104,7 @@ android  {
     <service android:name="com.foxit.uiextensions.modules.panzoom.floatwindow.service.FloatWindowService"/>
 ...
 ```
-- Be sure to add `android:allowBackup` in `tools:replace` for `application` element and `xmlns:tools="http://schemas.android.com/tools"` in root `manifest` element.
+- Make sure you've added `android:allowBackup` in `tools:replace` inside `application` tags and `xmlns:tools="http://schemas.android.com/tools"` in root `manifest` element.
 
 ```xml
 <manifest
@@ -122,6 +122,8 @@ android  {
 ```
 ## General Usage
 
+In your App.js file, you can import the component using the following code:
+
 ```js
 import FoxitPDF from '@foxitsoftware/react-native-foxitpdf';
 ```
@@ -132,15 +134,18 @@ or
 var FoxitPDF = require('@foxitsoftware/react-native-foxitpdf');
 ```
 
-Open PDF Reader
+Once the component is initialized, call the function below to open the PDF Reader:
 
 ```js
 FoxitPDF.openPDF('sample.pdf');
 ```
 
-the parameter is filepath
-in iOS you need put a pdf filepath under app Document
-in Android you need put a real pdf filepath.  example FoxitPDF.openPDF('/sdcard/0/download/xxx.pdf')
+In the openPDF function parameter, add the path to the file you wish to open.
+
+iOS: Add the name of the PDF file, but make sure it is located under app Document folder
+Android: Add the file path location of the PDF inside your project.  
+
+For example, if the file is in your sdcard folder: FoxitPDF.openPDF('/sdcard/0/download/xxx.pdf')
 
 ## License
 
