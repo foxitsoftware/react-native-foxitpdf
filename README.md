@@ -1,16 +1,16 @@
 # react-native-foxitpdf [![npm version](https://img.shields.io/npm/v/react-native-foxitpdf.svg?style=flat)](https://www.npmjs.com/package/react-native-foxitpdf)
 
-Foxit PDF components for iOS + Android
+react-native-foxit pdf is Foxit's first React Native PDF component for iOS and Android. It uses Foxit PDF SDK for Android/iOS technology to view, render and edit PDFs easily. 
 
 ## Installation
 
-First, download the library from npm:
+First, download the library from npm and install inside your current project folder
 
 ```
 npm install @foxitsoftware/react-native-foxitpdf --save
 ```
 
-Link automatically
+Link the project to the library automatically
 
 ```
 react-native link @foxitsoftware/react-native-foxitpdf
