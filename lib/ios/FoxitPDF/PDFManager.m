@@ -7,10 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <FoxitRDK/FSPDFViewControl.h>
 #import <React/RCTBridgeModule.h>
 #import <React/RCTViewManager.h>
-#import "uiextensions/UIExtensionsManager.h"
+#import <FoxitRDK/FSPDFViewControl.h>
+#import <uiextensionsDynamic/uiextensionsDynamic.h>
 
 @interface RNTPDFManager : NSObject <RCTBridgeModule, UIExtensionsManagerDelegate, IDocEventListener>
 @property (nonatomic, strong) FSPDFViewCtrl* pdfViewCtrl;

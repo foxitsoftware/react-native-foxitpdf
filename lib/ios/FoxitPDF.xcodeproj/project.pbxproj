@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4AF6F338212EC4EE005185AD /* uiextensionsDynamic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AF6F337212EC4EE005185AD /* uiextensionsDynamic.framework */; };
 		DF17C80C20AA1619009AA30D /* FoxitRDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DF17C80B20AA1619009AA30D /* FoxitRDK.framework */; };
-		DF17C84320AA1738009AA30D /* libFoxitRDKUIExtensions.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DF17C84220AA1738009AA30D /* libFoxitRDKUIExtensions.a */; };
 		DF4A929E20A475AB00EF8795 /* PDFManager.m in Sources */ = {isa = PBXBuildFile; fileRef = DF4A929C20A475AB00EF8795 /* PDFManager.m */; };
 /* End PBXBuildFile section */
 
@@ -25,8 +25,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4AF6F337212EC4EE005185AD /* uiextensionsDynamic.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = uiextensionsDynamic.framework; sourceTree = "<group>"; };
 		DF17C80B20AA1619009AA30D /* FoxitRDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FoxitRDK.framework; sourceTree = "<group>"; };
-		DF17C84220AA1738009AA30D /* libFoxitRDKUIExtensions.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libFoxitRDKUIExtensions.a; sourceTree = "<group>"; };
 		DF4A928220A471D800EF8795 /* libFoxitPDF.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libFoxitPDF.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DF4A929C20A475AB00EF8795 /* PDFManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PDFManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -36,8 +36,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DF17C84320AA1738009AA30D /* libFoxitRDKUIExtensions.a in Frameworks */,
 				DF17C80C20AA1619009AA30D /* FoxitRDK.framework in Frameworks */,
+				4AF6F338212EC4EE005185AD /* uiextensionsDynamic.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -47,8 +47,8 @@
 		DF4A927920A471D800EF8795 = {
 			isa = PBXGroup;
 			children = (
-				DF17C84220AA1738009AA30D /* libFoxitRDKUIExtensions.a */,
 				DF17C80B20AA1619009AA30D /* FoxitRDK.framework */,
+				4AF6F337212EC4EE005185AD /* uiextensionsDynamic.framework */,
 				DF4A928420A471D800EF8795 /* FoxitPDF */,
 				DF4A928320A471D800EF8795 /* Products */,
 			);
@@ -250,17 +250,15 @@
 				CODE_SIGN_STYLE = Automatic;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/../../../../ios/libs",
+					"$(PROJECT_DIR)/../../../../../ios/libs",
+					"$(PROJECT_DIR)",
 				);
 				HEADER_SEARCH_PATHS = (
-					"$(SRCROOT)/../../react-native/React/**",
-					"$(PROJECT_DIR)/../../../../ios/libs/uiextensions_src",
+					"$(SRCROOT)/../../../react-native/React/**",
+					"$(PROJECT_DIR)/../../../../../ios/libs/uiextensions_src",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/../../../../ios/libs",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -274,17 +272,15 @@
 				CODE_SIGN_STYLE = Automatic;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/../../../../ios/libs",
+					"$(PROJECT_DIR)/../../../../../ios/libs",
+					"$(PROJECT_DIR)",
 				);
 				HEADER_SEARCH_PATHS = (
-					"$(SRCROOT)/../../react-native/React/**",
-					"$(PROJECT_DIR)/../../../../ios/libs/uiextensions_src",
+					"$(SRCROOT)/../../../react-native/React/**",
+					"$(PROJECT_DIR)/../../../../../ios/libs/uiextensions_src",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/../../../../ios/libs",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
