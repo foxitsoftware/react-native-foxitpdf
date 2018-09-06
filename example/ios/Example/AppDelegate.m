@@ -10,9 +10,41 @@
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 
-#import "FoxitRDK/FSPDFObjC.h"
+#import <FoxitRDK/FSPDFObjC.h>
 
+#define DOCUMENT_PATH [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0]
 @implementation AppDelegate
+
++ (void)initialize {
+  [self copyPDFFromResourceToDocuments:@"sample" overwrite:NO];
+}
+
++ (BOOL)copyPDFFromResourceToDocuments:(NSString *)filename overwrite:(BOOL)overwrite {
+  NSFileManager *fileManager = [NSFileManager defaultManager];
+  
+  NSString *fromPath = [[NSBundle mainBundle] pathForResource:filename ofType:@"pdf"];
+  if (!fromPath)
+    return NO;
+  
+  NSString *toPath = [DOCUMENT_PATH stringByAppendingPathComponent:[filename stringByAppendingString:@".pdf"]];
+  if ([fileManager fileExistsAtPath:toPath]) {
+    if (overwrite) {
+      if (![fileManager removeItemAtPath:toPath error:nil]) {
+        return NO;
+      }
+    } else {
+      return NO;
+    }
+  }
+  
+  NSError *error = nil;
+  if ([fileManager copyItemAtPath:fromPath toPath:toPath error:&error]) {
+    return YES;
+  } else {
+    NSLog(@"Fail to copy %@. %@", filename, [error localizedDescription]);
+    return NO;
+  }
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -32,13 +64,26 @@
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
   
-  NSString* sn = @"osniRGGP1XjedZLxVQzIAa6qTsiyJKVBc0TNR7cVchqtHut/HHphcw==";
-  NSString* key = @"ezJvj98ntBh39DvoP0WUjY7NZTROhapeXws4euNAs+qWRogVCWd+2oEF87IxSi7IG1YfES7w6Y5jc8VbkBLSV4PzOyHjtvTn8DQ07cwln724y/13XHCQKeeTwclKvWccVF6o3/2+VmzWQucp54YTVjC7i9KEatRxEcNM/o3mTN1vCZiGGviNizgEYqKxIAjyN5oCrUDGQfFZ4xFIvNoTsqcm2+P4R2KNinAC5N3FepWuQ8BinuYUeBBRYrcm+rSoQ2zejZqRL3l6wsyo4spU0waryqxl0HDdD8X4ghP5FEtfzppxjFwdlfUTvLbE+jsFW3v+vSYjQo7eSRytGBjB68VfC6yioVz0NQKEwB9v6Wm5E2aMs5ucbpjlAT9DLJnzr+tckpyvRQvymKRYMvduV5KVj9PBxn8f4828/pRJCJhbJuE4lrHvEYjJpyvOccOOlBYdPvEAtfs3ZsHW0Vuda9BgGq/OfeBVlBV5Dw4OBplrEzC4Gl6/fDwdRH2qC3MvjQMDgxI10c6+JHd658RJjnufKtQA6uEIKo6xlLs0ItsxdIV8lEfpU0DFjULozw6qCcuSsOgIUEJMCZO6JbsfmulhfVKyqVU316+vM/3OyLp/2Sf+UWb5lXhx+u5CGzZknL0sIPVnJdt0O+tk7r0CO/bVJfuYlllcmooqyj9d2YbV4RQs1N9gWqSarkpzZAYFwexLXRNon1M8xfZvTBNo8qTiftulUieTGSVgZBvr8Xw4fdP4/w/fcssg0l5/WOqHHxilVqQLRW1n1MCxFir6a3+3L6eMT3/mpdfxce8MhYClZ79E8nDenRnmimfRku0KMo+Ci4CbYJRbKS/NU5qvLOQzvH4E6UoI9QOj9Hr3Vpft56oDiehurzsEttNspu+Dbznv70QJE7BddbaGaG5XW0OWcmoloL3l5sp4AUZOn1kEb8t5j8h3suqJxHQr5rmFfvtTbpzgazURp99qcvd7iV9z8pUDeiOiZ6J2af21CAQ1HCXkozqiwKgGzv19zsKccBM4gr9kJnpAkQlKQfQrBiSvcx3MnlM1ypd3/silNT22s/BmTjldZxgmhLCItC2TOmuv4LTFc7ftEnzG6AEye2aju+IrwfPxmvOT3Mluixlt6wODDI4+UJex+XWTVqLhdpHNvbiXydipcRoLWGSpByJd3ZXeBJb45j+Y/O0j5PcFvKtLhTQMEPgWtn6Ynu/kTBD1Mt0HAkyHGhExTmfBvyRt8d4=";
-  FSErrorCode eRet = [FSLibrary init:sn key:key];
-  if (e_errSuccess != eRet) {
-    return NO; }
-  
+  NSString *sn = @"VQv/htdRKu1rjhk90MTKF+/aCs9he3raJNE2HZ6uxJ0wKcGVsU6+GQ==";
+  NSString *key = @"ezKXj1/GvGh39zvoP2Xsb3F6ZiHkO0GJfoWNMeLhSZ63JJ3dieBQl2mCL24l19hVo9Zxkh3xQ4cP5rcm840iAyOxewEnt45P6moo5+QVRwdFHCkwPXmKaPdQZJFMsVc/D5ob5a2o1MeaPrm+4q9DbwQfa6RWD14GSs/cBjlvKNEbS/UBxbEzbVaYXzdQPxWY8/GaIh5Zrnvve3FHuus56p76lRyKgrV/mY1KlcUAU+dFhRNY39WIsXu/OlACBPgC+s0SHZrH8491AwX+bf3AvpZfIlPHXUH9v6dwptxNmsn+WuleSNrMboCjR1Rf8JHSCvOefKQXWyYrJaziZfTnfX4SnjJS3dD9kVInt4wVQEfn4OmCErUJ2KcLsdceKTUbGKTPiRyzIYp0jKtaZxKQXutUrynOPepJbg82XCyb21kwF4nlrTcKRNCzXb1OuHMR3wFaheyPMX0NII2HgLDXZmDQz9BRXn/leilW8uPKq80xCFqi23/wgh3XQVp/rR55OOJrjeIElWupI93KernRAwjXHcjznQa7eT2j9Bh68VKfzD5WveuQvIcXfprdNYXUfQEYQdc0YdotWM5cO0qsf/+pYlC01LEhHCy5v6YbIwceN0j3awucrcZCLVspA8phyZnq9B2KV0nJQZPaVIUTeNjxOXACFLmxeqbtDw17IlgMc5aFEbLTv/vsg/atXlwtftwvS9UQxkSk6LjL1Htmz8dT94t/tCbdZTR0OwbDPS8UifWRmk/FdEuIFTMl/sOV8cWlKm013CmM0MBURbggNrovO+8gKvG+iq85BR36S7+YFh2r4bv1zuv9KYNTp2Fu1zXTRmvcAJ6/bMS9gibpjtcYc3vE/BFhyRZx2Rl5povNBSLMuVXp8QuOPGuPNKCYve2ysTBSzXNVTD+oyK2qlaLykUNBaj5ip3xf/gCASwSA1RmMBoXANxVv+9FLOmuuMrMkMfItX10ygvy5H9XmZ5Rsrw1hp9o6+gdtSp87pArFjzkKHWERakrHf3iOySoVXyCJRI7UL0PpM1HWYw0Lz7qA47qN+eJlfzcF+8LXppMoTzhk+u9pdApg0mTjh1C8ClEVQqID+kXLPEuoQIkOhLn0ddvAQTzC41tStW7PG23X3ZD4RsoJ7HPM9p0tcgiqGpgjxp3cO7KbhWcgrT1A6dgDBvssTryLW19W5h41jg2Upaj3Ic7F1t0t9qvA2bM=";
+  FSErrorCode eRet = [FSLibrary initialize:sn key:key];
+  if (FSErrSuccess != eRet) {
+    [self showError:@"Check your sn or key"];
+    return NO;
+  }
   return YES;
 }
 
+-(void)showError:(NSString *)errMsg {
+  UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Error message"
+                                                                 message:errMsg
+                                                          preferredStyle:UIAlertControllerStyleAlert];
+  UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
+                                                        handler:^(UIAlertAction * action) {
+                                                        }];
+  [alert addAction:defaultAction];
+  UIViewController *rootController = UIApplication.sharedApplication.delegate.window.rootViewController;
+  [rootController presentViewController:alert animated:YES completion:nil];
+  
+}
 @end

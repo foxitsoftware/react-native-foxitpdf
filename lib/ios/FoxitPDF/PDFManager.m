@@ -43,7 +43,7 @@ RCT_EXPORT_METHOD(openPDF:(NSString *)src
                   panelConfig:(NSDictionary *)panelConfig
                   viewSettingsConfig:(NSDictionary *)viewSettingsConfig
                   viewMoreConfig:(NSDictionary *)viewMoreConfig) {
-    
+
     dispatch_async(dispatch_get_main_queue(), ^{
         self.pdfViewCtrl = [[FSPDFViewCtrl alloc] initWithFrame:[UIScreen mainScreen].bounds];
     
@@ -95,17 +95,17 @@ RCT_EXPORT_METHOD(openPDF:(NSString *)src
             [self showError:@"file not found in Document directory!"];
         }else{
             FSPDFDoc *pdfdoc  = [[FSPDFDoc alloc] initWithPath: targetURL.path];
-            [pdfdoc load:nil];
-            //FSPDFDoc* pdfdoc = [[FSPDFDoc alloc] initWithHandler:(nonnull id<FSFileReadCallback>)];
-            // Load the unencrypted document content.
-            //if(e_errSuccess != [pdfdoc load:nil]) {
-            //  return; }
+            [pdfdoc load:password];
+//            FSPDFDoc* pdfdoc = [[FSPDFDoc alloc] initWithHandler:(nonnull id<FSFileReadCallback>)];
+//             Load the unencrypted document content.
+//            if(e_errSuccess != [pdfdoc load:nil]) {
+//              return; }
             
             // Set the document to view control.
             [self.pdfViewCtrl setDoc:pdfdoc];
             
             [[[UIApplication sharedApplication].delegate window].rootViewController presentViewController:self.rootViewController animated:YES completion:^{
-                
+
             }];
         }
     });

@@ -12,6 +12,10 @@
 		00C302E81ABCBA2D00DB3ED1 /* libRCTImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302C01ABCB91800DB3ED1 /* libRCTImage.a */; };
 		00C302E91ABCBA2D00DB3ED1 /* libRCTNetwork.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302DC1ABCB9D200DB3ED1 /* libRCTNetwork.a */; };
 		00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302E41ABCB9EE00DB3ED1 /* libRCTVibration.a */; };
+		101F3581213FC536009AE925 /* uiextensionsDynamic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 101F355B213FC536009AE925 /* uiextensionsDynamic.framework */; };
+		101F3582213FC536009AE925 /* uiextensionsDynamic.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 101F355B213FC536009AE925 /* uiextensionsDynamic.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		103103FD2140C7750008B43E /* libFoxitPDF.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 101F35C5213FD0B1009AE925 /* libFoxitPDF.a */; };
+		1031042A214117D80008B43E /* sample.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 10310429214117D70008B43E /* sample.pdf */; };
 		133E29F31AD74F7200F7D852 /* libRCTLinking.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 78C398B91ACF4ADC00677621 /* libRCTLinking.a */; };
 		139105C61AF99C1200B5F7CC /* libRCTSettings.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 139105C11AF99BAD00B5F7CC /* libRCTSettings.a */; };
 		139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 139FDEF41B06529B00C62182 /* libRCTWebSocket.a */; };
@@ -23,7 +27,6 @@
 		5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
-		DF47E5AD20B2CE4E00EE333C /* libFoxitPDF.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DF47E5AC20B2CE2A00EE333C /* libFoxitPDF.a */; };
 		DF47ECF720B2F3D500EE333C /* FoxitRDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DF47E56A20B2CA5900EE333C /* FoxitRDK.framework */; };
 		DF47ECF820B2F3D500EE333C /* FoxitRDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DF47E56A20B2CA5900EE333C /* FoxitRDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		DFBAC2C420BEB7AB00445F7D /* check.pdf in Resources */ = {isa = PBXBuildFile; fileRef = DFBABF2B20BEB7A900445F7D /* check.pdf */; };
@@ -929,6 +932,13 @@
 			remoteGlobalIDString = 832C81801AAF6DEF007FA2F7;
 			remoteInfo = RCTVibration;
 		};
+		101F35C4213FD0B1009AE925 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 05A1936A2F3B4B5480FEA326 /* FoxitPDF.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = DF4A928220A471D800EF8795;
+			remoteInfo = FoxitPDF;
+		};
 		139105C01AF99BAD00B5F7CC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 139105B61AF99BAD00B5F7CC /* RCTSettings.xcodeproj */;
@@ -1153,13 +1163,6 @@
 			remoteGlobalIDString = 358F4ED71D1E81A9004DF814;
 			remoteInfo = RCTBlob;
 		};
-		DF47E5AB20B2CE2A00EE333C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = DF47E5A720B2CE2A00EE333C /* FoxitPDF.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = DF4A928220A471D800EF8795;
-			remoteInfo = FoxitPDF;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -1169,6 +1172,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				101F3582213FC536009AE925 /* uiextensionsDynamic.framework in Embed Frameworks */,
 				DF47ECF820B2F3D500EE333C /* FoxitRDK.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -1185,6 +1189,9 @@
 		00C302DF1ABCB9EE00DB3ED1 /* RCTVibration.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTVibration.xcodeproj; path = "../node_modules/react-native/Libraries/Vibration/RCTVibration.xcodeproj"; sourceTree = "<group>"; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* ExampleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ExampleTests.m; sourceTree = "<group>"; };
+		05A1936A2F3B4B5480FEA326 /* FoxitPDF.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = FoxitPDF.xcodeproj; path = "../node_modules/@foxitsoftware/react-native-foxitpdf/lib/ios/FoxitPDF.xcodeproj"; sourceTree = "<group>"; };
+		101F355B213FC536009AE925 /* uiextensionsDynamic.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = uiextensionsDynamic.framework; path = libs/uiextensionsDynamic.framework; sourceTree = "<group>"; };
+		10310429214117D70008B43E /* sample.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = sample.pdf; path = ../../../../../sample.pdf; sourceTree = "<group>"; };
 		139105B61AF99BAD00B5F7CC /* RCTSettings.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTSettings.xcodeproj; path = "../node_modules/react-native/Libraries/Settings/RCTSettings.xcodeproj"; sourceTree = "<group>"; };
 		139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTWebSocket.xcodeproj; path = "../node_modules/react-native/Libraries/WebSocket/RCTWebSocket.xcodeproj"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1198,12 +1205,10 @@
 		2D16E6891FA4F8E400B85C8A /* libReact.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReact.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
+		7AE98E1AE64F40FDA2AB4705 /* FoxitPDF.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = FoxitPDF.xcodeproj; path = "../node_modules/@foxitsoftware/react-native-foxitpdf/lib/ios/FoxitPDF.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
-		89717E2AD75F47C99291710D /* libFoxitPDF.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libFoxitPDF.a; sourceTree = "<group>"; };
 		ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBlob.xcodeproj; path = "../node_modules/react-native/Libraries/Blob/RCTBlob.xcodeproj"; sourceTree = "<group>"; };
-		DF17C80B20AA1619009AA30D /* FoxitRDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FoxitRDK.framework; sourceTree = "<group>"; };
 		DF47E56A20B2CA5900EE333C /* FoxitRDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FoxitRDK.framework; path = libs/FoxitRDK.framework; sourceTree = "<group>"; };
-		DF47E5A720B2CE2A00EE333C /* FoxitPDF.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FoxitPDF.xcodeproj; path = "../node_modules/react-native-foxitpdf/lib/ios/FoxitPDF.xcodeproj"; sourceTree = "<group>"; };
 		DFBABF2B20BEB7A900445F7D /* check.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = check.pdf; sourceTree = "<group>"; };
 		DFBABF2C20BEB7A900445F7D /* circle.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = circle.pdf; sourceTree = "<group>"; };
 		DFBABF2D20BEB7A900445F7D /* comment.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = comment.pdf; sourceTree = "<group>"; };
@@ -2076,6 +2081,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				103103FD2140C7750008B43E /* libFoxitPDF.a in Frameworks */,
 				DF47ECF720B2F3D500EE333C /* FoxitRDK.framework in Frameworks */,
 				ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */,
 				5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */,
@@ -2088,9 +2094,9 @@
 				00C302E91ABCBA2D00DB3ED1 /* libRCTNetwork.a in Frameworks */,
 				139105C61AF99C1200B5F7CC /* libRCTSettings.a in Frameworks */,
 				832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */,
+				101F3581213FC536009AE925 /* uiextensionsDynamic.framework in Frameworks */,
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
-				DF47E5AD20B2CE4E00EE333C /* libFoxitPDF.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2154,6 +2160,14 @@
 				00E356F11AD99517003FC87E /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		101F35C1213FD0B1009AE925 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				101F35C5213FD0B1009AE925 /* libFoxitPDF.a */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		139105B71AF99BAD00B5F7CC /* Products */ = {
@@ -2242,7 +2256,6 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				DF47E5A720B2CE2A00EE333C /* FoxitPDF.xcodeproj */,
 				5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */,
 				146833FF1AC3E56700842450 /* React.xcodeproj */,
 				00C302A71ABCB8CE00DB3ED1 /* RCTActionSheet.xcodeproj */,
@@ -2255,6 +2268,8 @@
 				832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */,
 				00C302DF1ABCB9EE00DB3ED1 /* RCTVibration.xcodeproj */,
 				139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */,
+				05A1936A2F3B4B5480FEA326 /* FoxitPDF.xcodeproj */,
+				7AE98E1AE64F40FDA2AB4705 /* FoxitPDF.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -2271,14 +2286,14 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				DFBABF2820BEB7A800445F7D /* Resource */,
 				DF47E56A20B2CA5900EE333C /* FoxitRDK.framework */,
+				101F355B213FC536009AE925 /* uiextensionsDynamic.framework */,
+				DFBABF2820BEB7A800445F7D /* Resource */,
 				13B07FAE1A68108700A75B9A /* Example */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* ExampleTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
-				DF17C6CE20AA0BA7009AA30D /* Recovered References */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -2302,26 +2317,10 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		DF17C6CE20AA0BA7009AA30D /* Recovered References */ = {
-			isa = PBXGroup;
-			children = (
-				89717E2AD75F47C99291710D /* libFoxitPDF.a */,
-				DF17C80B20AA1619009AA30D /* FoxitRDK.framework */,
-			);
-			name = "Recovered References";
-			sourceTree = "<group>";
-		};
-		DF47E5A820B2CE2A00EE333C /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				DF47E5AC20B2CE2A00EE333C /* libFoxitPDF.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		DFBABF2820BEB7A800445F7D /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				10310429214117D70008B43E /* sample.pdf */,
 				DFBABF2920BEB7A800445F7D /* AnnotationIcons */,
 				DFBABF5820BEB7A900445F7D /* CropViewController.xib */,
 				DFBABF5920BEB7A900445F7D /* EncryptOptionViewController.xib */,
@@ -3700,8 +3699,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = DF47E5A820B2CE2A00EE333C /* Products */;
-					ProjectRef = DF47E5A720B2CE2A00EE333C /* FoxitPDF.xcodeproj */;
+					ProductGroup = 101F35C1213FD0B1009AE925 /* Products */;
+					ProjectRef = 05A1936A2F3B4B5480FEA326 /* FoxitPDF.xcodeproj */;
 				},
 				{
 					ProductGroup = 00C302A81ABCB8CE00DB3ED1 /* Products */;
@@ -3793,6 +3792,13 @@
 			fileType = archive.ar;
 			path = libRCTVibration.a;
 			remoteRef = 00C302E31ABCB9EE00DB3ED1 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		101F35C5213FD0B1009AE925 /* libFoxitPDF.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libFoxitPDF.a;
+			remoteRef = 101F35C4213FD0B1009AE925 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		139105C11AF99BAD00B5F7CC /* libRCTSettings.a */ = {
@@ -4019,13 +4025,6 @@
 			remoteRef = ADBDB9261DFEBF0700ED6528 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		DF47E5AC20B2CE2A00EE333C /* libFoxitPDF.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libFoxitPDF.a;
-			remoteRef = DF47E5AB20B2CE2A00EE333C /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -4053,6 +4052,7 @@
 				DFBAC52E20BEB7AB00445F7D /* annot_stamp_dynamic@3x.png in Resources */,
 				DFBAC50520BEB7AB00445F7D /* sign_edit@2x.png in Resources */,
 				DFBAC46420BEB7AB00445F7D /* thumb_delete@2x.png in Resources */,
+				1031042A214117D80008B43E /* sample.pdf in Resources */,
 				DFBAC54920BEB7AB00445F7D /* Key@3x.png in Resources */,
 				DFBAC35F20BEB7AB00445F7D /* list_pdf.png in Resources */,
 				DFBAC3AA20BEB7AB00445F7D /* property_rotation_background_highlighted.png in Resources */,
