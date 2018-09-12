@@ -29,6 +29,14 @@
     NSArray *topToolbarVerticalConstraints;
 }
 
+- (instancetype)init{
+    self = [super init];
+    if (self) {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationDidChange) name:UIDeviceOrientationDidChangeNotification object:nil];
+    }
+    return self;
+}
+
 RCT_EXPORT_MODULE(PDFManager)
 
 @synthesize bridge = _bridge;
@@ -445,6 +453,13 @@ RCT_EXPORT_METHOD(openPDF:(NSString *)src
 
 - (void)onDocClosed:(FSPDFDoc *)document error:(int)error {
     [self.rootViewController dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark - rotate event
+
+- (void)orientationDidChange{
+    UIDeviceOrientation currentOri = [[UIDevice currentDevice] orientation];
+    [self.extensionsManager didRotateFromInterfaceOrientation:(UIInterfaceOrientation)currentOri];
 }
 
 @end
