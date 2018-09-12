@@ -94,16 +94,9 @@ RCT_EXPORT_METHOD(openPDF:(NSString *)src
         if (targetURL == nil) {
             [self showError:@"file not found in Document directory!"];
         }else{
+            [self.pdfViewCtrl openDoc:targetURL.path password:password completion:^(FSErrorCode error) {}];
             FSPDFDoc *pdfdoc  = [[FSPDFDoc alloc] initWithPath: targetURL.path];
             [pdfdoc load:password];
-//            FSPDFDoc* pdfdoc = [[FSPDFDoc alloc] initWithHandler:(nonnull id<FSFileReadCallback>)];
-//             Load the unencrypted document content.
-//            if(e_errSuccess != [pdfdoc load:nil]) {
-//              return; }
-            
-            // Set the document to view control.
-            [self.pdfViewCtrl setDoc:pdfdoc];
-            
             [[[UIApplication sharedApplication].delegate window].rootViewController presentViewController:self.rootViewController animated:YES completion:^{
 
             }];
