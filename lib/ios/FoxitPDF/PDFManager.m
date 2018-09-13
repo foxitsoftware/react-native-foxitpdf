@@ -386,6 +386,25 @@ RCT_EXPORT_METHOD(openPDF:(NSString *)src
 }
 
 // MARK: - UIExtensionsManagerDelegate
+#pragma mark - UIExtensionsManagerDelegate
+-(BOOL)uiextensionsManager:(UIExtensionsManager *)uiextensionsManager openNewDocAtPath:(NSString *)path{
+    FSPDFDoc *doc = [[FSPDFDoc alloc] initWithPath:path];
+    if (FSErrSuccess == [doc load:nil]) {
+        //        __weak typeof(self) weakSelf = self;
+        [self.pdfViewCtrl openDoc:path
+                         password:nil
+                       completion:^(FSErrorCode error) {
+                           
+                       }];
+        [[[UIApplication sharedApplication].delegate window].rootViewController presentViewController:self.rootViewController animated:YES completion:^{
+            
+        }];
+        return YES;
+    }else{
+        return NO;
+    }
+}
+
 - (void)uiextensionsManager:(UIExtensionsManager *)uiextensionsManager setTopToolBarHidden:(BOOL)hidden {
     UIToolbar *topToolbar = self.extensionsManager.topToolbar;
     UIView *topToolbarWrapper = topToolbar.superview;
