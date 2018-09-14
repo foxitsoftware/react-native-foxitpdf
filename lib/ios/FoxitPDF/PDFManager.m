@@ -37,6 +37,10 @@
     return self;
 }
 
+- (void)dealloc{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
+}
+
 RCT_EXPORT_MODULE(PDFManager)
 
 @synthesize bridge = _bridge;
@@ -103,8 +107,6 @@ RCT_EXPORT_METHOD(openPDF:(NSString *)src
             [self showError:@"file not found in Document directory!"];
         }else{
             [self.pdfViewCtrl openDoc:targetURL.path password:password completion:^(FSErrorCode error) {}];
-            FSPDFDoc *pdfdoc  = [[FSPDFDoc alloc] initWithPath: targetURL.path];
-            [pdfdoc load:password];
             [[[UIApplication sharedApplication].delegate window].rootViewController presentViewController:self.rootViewController animated:YES completion:^{
 
             }];
