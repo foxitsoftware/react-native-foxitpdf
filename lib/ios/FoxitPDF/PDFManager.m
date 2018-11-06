@@ -7,10 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <FoxitRDK/FSPDFViewControl.h>
 #import <React/RCTBridgeModule.h>
 #import <React/RCTViewManager.h>
-#import "uiextensions/UIExtensionsManager.h"
+#import <FoxitRDK/FSPDFViewControl.h>
+#import <uiextensionsDynamic/uiextensionsDynamic.h>
 
 @interface RNTPDFManager : NSObject <RCTBridgeModule, UIExtensionsManagerDelegate, IDocEventListener>
 @property (nonatomic, strong) FSPDFViewCtrl* pdfViewCtrl;
@@ -29,6 +29,18 @@
     NSArray *topToolbarVerticalConstraints;
 }
 
+- (instancetype)init{
+    self = [super init];
+    if (self) {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationDidChange) name:UIDeviceOrientationDidChangeNotification object:nil];
+    }
+    return self;
+}
+
+- (void)dealloc{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
+}
+
 RCT_EXPORT_MODULE(PDFManager)
 
 @synthesize bridge = _bridge;
@@ -43,7 +55,7 @@ RCT_EXPORT_METHOD(openPDF:(NSString *)src
                   panelConfig:(NSDictionary *)panelConfig
                   viewSettingsConfig:(NSDictionary *)viewSettingsConfig
                   viewMoreConfig:(NSDictionary *)viewMoreConfig) {
-    
+
     dispatch_async(dispatch_get_main_queue(), ^{
         self.pdfViewCtrl = [[FSPDFViewCtrl alloc] initWithFrame:[UIScreen mainScreen].bounds];
     
@@ -94,18 +106,9 @@ RCT_EXPORT_METHOD(openPDF:(NSString *)src
         if (targetURL == nil) {
             [self showError:@"file not found in Document directory!"];
         }else{
-            FSPDFDoc *pdfdoc  = [[FSPDFDoc alloc] initWithPath: targetURL.path];
-            [pdfdoc load:nil];
-            //FSPDFDoc* pdfdoc = [[FSPDFDoc alloc] initWithHandler:(nonnull id<FSFileReadCallback>)];
-            // Load the unencrypted document content.
-            //if(e_errSuccess != [pdfdoc load:nil]) {
-            //  return; }
-            
-            // Set the document to view control.
-            [self.pdfViewCtrl setDoc:pdfdoc];
-            
+            [self.pdfViewCtrl openDoc:targetURL.path password:password completion:^(FSErrorCode error) {}];
             [[[UIApplication sharedApplication].delegate window].rootViewController presentViewController:self.rootViewController animated:YES completion:^{
-                
+
             }];
         }
     });
@@ -385,6 +388,25 @@ RCT_EXPORT_METHOD(openPDF:(NSString *)src
 }
 
 // MARK: - UIExtensionsManagerDelegate
+#pragma mark - UIExtensionsManagerDelegate
+-(BOOL)uiextensionsManager:(UIExtensionsManager *)uiextensionsManager openNewDocAtPath:(NSString *)path{
+    FSPDFDoc *doc = [[FSPDFDoc alloc] initWithPath:path];
+    if (FSErrSuccess == [doc load:nil]) {
+        //        __weak typeof(self) weakSelf = self;
+        [self.pdfViewCtrl openDoc:path
+                         password:nil
+                       completion:^(FSErrorCode error) {
+                           
+                       }];
+        [[[UIApplication sharedApplication].delegate window].rootViewController presentViewController:self.rootViewController animated:YES completion:^{
+            
+        }];
+        return YES;
+    }else{
+        return NO;
+    }
+}
+
 - (void)uiextensionsManager:(UIExtensionsManager *)uiextensionsManager setTopToolBarHidden:(BOOL)hidden {
     UIToolbar *topToolbar = self.extensionsManager.topToolbar;
     UIView *topToolbarWrapper = topToolbar.superview;
@@ -452,6 +474,13 @@ RCT_EXPORT_METHOD(openPDF:(NSString *)src
 
 - (void)onDocClosed:(FSPDFDoc *)document error:(int)error {
     [self.rootViewController dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark - rotate event
+
+- (void)orientationDidChange{
+    UIDeviceOrientation currentOri = [[UIDevice currentDevice] orientation];
+    [self.extensionsManager didRotateFromInterfaceOrientation:(UIInterfaceOrientation)currentOri];
 }
 
 @end

@@ -16,6 +16,7 @@ import android.view.WindowManager;
 
 import com.foxit.sdk.PDFViewCtrl;
 import com.foxit.uiextensions.UIExtensionsManager;
+import com.foxit.uiextensions.modules.connectpdf.account.AccountModule;
 import com.foxit.uiextensions.utils.AppTheme;
 
 import java.io.InputStream;
@@ -45,6 +46,7 @@ public class PDFReaderActivity extends FragmentActivity {
         uiExtensionsManager.setAttachedActivity(this);
         uiExtensionsManager.onCreate(this, pdfViewCtrl, savedInstanceState);
         pdfViewCtrl.setUIExtensionsManager(uiExtensionsManager);
+        AccountModule.getInstance().onCreate(this, savedInstanceState);
 
         Intent intent = getIntent();
         String filePath = intent.getExtras().getString("src");
@@ -111,6 +113,7 @@ public class PDFReaderActivity extends FragmentActivity {
         if (uiExtensionsManager != null) {
             uiExtensionsManager.onDestroy(this);
         }
+        AccountModule.getInstance().onDestroy(this);
         super.onDestroy();
     }
 
