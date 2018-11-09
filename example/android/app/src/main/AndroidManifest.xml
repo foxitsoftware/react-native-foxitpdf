@@ -2,13 +2,15 @@
           xmlns:tools="http://schemas.android.com/tools"
           package="com.example">
 
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.RUN_INSTRUMENTATION"/>
-    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
 
     <application
         android:name=".MainApplication"
@@ -19,10 +21,10 @@
         tools:replace="android:allowBackup,icon,theme,label,name">
         <meta-data
             android:name="foxit_sn"
-            android:value="or9KRYCB3GAERv8tzQpHft7o6Gaq1rfYw29VdUmGSQpo5kTQAlwiFg=="/>
+            android:value="xxx"/>
         <meta-data
             android:name="foxit_key"
-            android:value="ezJvjt8ntBh39DvoP0WQjYrNZTRmhRa4R21gOPYEOpxzh55qIaPfyL1l3WcFH/0LP582Frv4Q3Ik8cIoAG5ihbTakSztENPVS0ZPLVrrMkDfpsss322MTaeQNzjxoB9ZgXqM5lRCaVHPv8jeIEpIKTcj2iVZEpcqF+M7bPGKGsADMBC3IgdBd9graMLwfIdRmbOaop5dUeL9PVHGnRJH8vjdgN794MhwrtaF4DqKMMSZ7VakOOdt+XxVvInv2soolY7soBzoHklfmMUqLS1w8V2+YK9QE4tx5vW406NbinNEeaaoyR2cuDWnxA/5oRhjBR2KKLKjhX3/V5zC3EOU/mFhkW3lnMOfgOUUnW6ioH7vTEcEjWL1cYxVhb8ZFLFR48trtgy9UDqZwQvaQhvycttPS902iujMBrMNQpSCDiurSoqJXqvMGvMjnPy/8TPTOxo0Z4Z1ScZ1JvlnukEGHreqkAkJVsXH2s6aJtXoqLwU9wXIM6MtxsHcg/ziLvfmDn3/1lvkfvMQqSbKJz9dpcz83gzFJ/svTI891y63CrvnBJA8W3H8HMd2YpEdd/LnTqYQPPIKGyUaH/TaNWylBEq6/NxUbeYfTjbOpbqbKgv+zUq0TZE4Xk4n+9KALKzvhzqZC4DIdh2m+voPlK9dDUu2qTOU70Wj9wOL5FXmLB/cTq+zoOLZdCIoqQF85VMUOOGkaEXoJihEMNYq/vHKxKKr12LcbY+VL2u4OwDXkdEEbt9Yo0FthxU0KJNh+BiF0tKyiywWjYliu+l/Nau3euhZ8FCKWLqKJdk8iSIeVOPRHNV+pVKc2x3WjdLyYwHrpLjpxqGxjHS1Wiz89hOHMRLfBJwVcSMFg1d1T//xlNIwXAHNl1bsmV4Kx44AFxosH7zPwsTFPF6qTs6MXwI1AD1zZT6tOv6xu3A7yo0CkWKZUfveLTz8xexjisBw6LbWEDDVfiESla00BEbClXjpOUnY7AUqAHqxP8y69zrPLhfGvpzhomS0Q0Q4M4aWQ4ZXV+HhPA3dM+OF/7pwcbCptoraN3RC8sAoC/tO6v8u/Jb2v5/79YzVMpXKI0QCl7Kx8jwLJvod3/jXivalfEQoJPp3ZboT77fGAXKylErdo12u2kleHxsy/tehmToIdmp77wNvuyEa88WO5m3Kemm9C584SEkUH0XhjcBlKaPuzmQfq2Mp3oVH746yM7BYP/cDaPbSR2QMmTKjdk578ijF2JLu/gSMGF6cTUnQxU6JF00d/Q=="/>
+            android:value="xxx"/>
 
         <activity
             android:name=".MainActivity"

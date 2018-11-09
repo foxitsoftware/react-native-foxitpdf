@@ -18,6 +18,7 @@ import com.foxit.sdk.PDFViewCtrl;
 import com.foxit.uiextensions.UIExtensionsManager;
 import com.foxit.uiextensions.modules.connectpdf.account.AccountModule;
 import com.foxit.uiextensions.utils.AppTheme;
+import com.foxit.uiextensions.utils.UIToast;
 
 import java.io.InputStream;
 
@@ -48,15 +49,17 @@ public class PDFReaderActivity extends FragmentActivity {
         pdfViewCtrl.setUIExtensionsManager(uiExtensionsManager);
         AccountModule.getInstance().onCreate(this, savedInstanceState);
 
-        Intent intent = getIntent();
-        String filePath = intent.getExtras().getString("src");
-        uiExtensionsManager.openDocument(filePath, null);
+
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             int permission = ContextCompat.checkSelfPermission(this.getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
             if (permission != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this, PERMISSIONS_STORAGE, REQUEST_EXTERNAL_STORAGE);
+            } else{
+                openDocument();
             }
+        } else {
+           openDocument();
         }
 
         if (Build.VERSION.SDK_INT >= 24) {
@@ -67,12 +70,20 @@ public class PDFReaderActivity extends FragmentActivity {
         setContentView(uiExtensionsManager.getContentView());
     }
 
+    private void openDocument(){
+        Intent intent = getIntent();
+        String filePath = intent.getExtras().getString("src");
+        uiExtensionsManager.openDocument(filePath, null);
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQUEST_EXTERNAL_STORAGE && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
+            openDocument();
         } else {
-            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+            UIToast.getInstance(getApplicationContext()).show(getString(R.string.permission_denied));
+            finish();
         }
     }
 
