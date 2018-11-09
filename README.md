@@ -40,8 +40,9 @@ if (FSErrSuccess != eRet) {
 
 ### Android
 
-1.  Unzip Foxit PDF SDK for Android and copy libs folder into android folder(Please use Foxit PDF SDK for Android 6.1 ).
-2.  Add the following code into the project-level build.gradle file (android/build.gradle).
+1. Download foxit_mobile_pdf_sdk_android_en.zip from [https://developers.foxitsoftware.com/pdf-sdk/android/] (Please use foxit_mobile_pdf_sdk_android_en.zip for version 6.2 )
+2.  Unzip `foxit_mobile_pdf_sdk_android_en.zip` and copy libs folder into the component android folder.
+3.  Add the following code into the project-level build.gradle file (android/build.gradle).
 
 ```gradle
 allprojects {
@@ -53,20 +54,22 @@ allprojects {
     }
 }
 ```
-3.  
+4.  
 - Add `uses-permission` tag outside `application` tags in `AndroidManifest.xml`.
 
 ```xml
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools"
           package="your package name">
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
-    <uses-permission android:name="android.permission.VIBRATE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.RUN_INSTRUMENTATION"/>
-    <uses-permission android:name="android.permission.CAMERA" />
+       <uses-permission android:name="android.permission.INTERNET"/>
+       <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+       <uses-permission android:name="android.permission.VIBRATE"/>
+       <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+       <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+       <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+       <uses-permission android:name="android.permission.RUN_INSTRUMENTATION"/>
+       <uses-permission android:name="android.permission.CAMERA"/>
+       <uses-permission android:name="android.permission.RECORD_AUDIO"/>
     
     <application .../>
 </manifest>
@@ -106,6 +109,8 @@ allprojects {
     ...
 </manifest>          
 ```
+5. Please update you Android Gradle plugin to `3.1.0+`, and update the version of Gradle to `4.4+`, you can refer to [https://developer.android.com/studio/releases/gradle-plugin].
+
 ## General Usage
 
 In your App.js file, you can import the component using the following code:
@@ -130,8 +135,7 @@ In the openPDF function parameter, add the path to the file you wish to open.
 
 If you are using iOS version: Add the name of the PDF file, but make sure it is located under app Document folder
 
-If you are using Android version: Add the file path location of the PDF inside your project.  
-For example, if the file is in your sdcard folder: FoxitPDF.openPDF('/sdcard/0/download/xxx.pdf')
+If you are using Android version: `Please enter the absolute path of the file,e.g., FoxitPDF.openPDF('/mnt/sdcard/xxx/xxx.pdf')`
 
 ## License
 
