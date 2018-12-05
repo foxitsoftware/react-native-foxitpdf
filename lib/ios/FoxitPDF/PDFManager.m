@@ -6,13 +6,12 @@
 //  Copyright © 2018 Facebook. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "PDFManager.h"
 #import <React/RCTBridgeModule.h>
 #import <React/RCTViewManager.h>
-#import <FoxitRDK/FSPDFViewControl.h>
-#import <uiextensionsDynamic/uiextensionsDynamic.h>
 
-@interface RNTPDFManager : NSObject <RCTBridgeModule, UIExtensionsManagerDelegate, IDocEventListener>
+static FSErrorCode errorCode;
+@interface RNTPDFManager () <RCTBridgeModule, UIExtensionsManagerDelegate, IDocEventListener>
 @property (nonatomic, strong) FSPDFViewCtrl* pdfViewCtrl;
 @property (nonatomic, strong) UIViewController* pdfViewController;
 @property (nonatomic, strong) UINavigationController* rootViewController;
@@ -27,6 +26,14 @@
     NSDictionary* _viewSettingsConfig;
     NSDictionary* _viewMoreConfig;
     NSArray *topToolbarVerticalConstraints;
+
+}
+
++ (FSErrorCode)initialize:(NSString *)sn
+                      key:(NSString *)key{
+    if (errorCode != FSErrSuccess) [FSLibrary destroy];
+    errorCode = [FSLibrary initialize:sn key:key];
+    return errorCode;
 }
 
 - (instancetype)init{
@@ -38,8 +45,10 @@
 }
 
 - (void)dealloc{
+    
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
 }
+
 
 RCT_EXPORT_MODULE(PDFManager)
 
@@ -57,6 +66,12 @@ RCT_EXPORT_METHOD(openPDF:(NSString *)src
                   viewMoreConfig:(NSDictionary *)viewMoreConfig) {
 
     dispatch_async(dispatch_get_main_queue(), ^{
+        
+        if (errorCode != FSErrSuccess) {
+            [self showError:@"Check your sn or key"];
+            return;
+        }
+        
         self.pdfViewCtrl = [[FSPDFViewCtrl alloc] initWithFrame:[UIScreen mainScreen].bounds];
     
         [self.pdfViewCtrl registerDocEventListener:self];
@@ -110,6 +125,11 @@ RCT_EXPORT_METHOD(openPDF:(NSString *)src
             [[[UIApplication sharedApplication].delegate window].rootViewController presentViewController:self.rootViewController animated:YES completion:^{
 
             }];
+            
+             __weak typeof(self) weakSelf = self;
+            self.extensionsManager.goBack = ^{
+                [weakSelf.rootViewController dismissViewControllerAnimated:YES completion:nil];
+            };
         }
     });
 }
@@ -473,7 +493,7 @@ RCT_EXPORT_METHOD(openPDF:(NSString *)src
 }
 
 - (void)onDocClosed:(FSPDFDoc *)document error:(int)error {
-    [self.rootViewController dismissViewControllerAnimated:YES completion:nil];
+    
 }
 
 #pragma mark - rotate event
