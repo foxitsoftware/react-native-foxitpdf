@@ -47,6 +47,7 @@ public class PDFReaderActivity extends FragmentActivity {
         uiExtensionsManager.setAttachedActivity(this);
         uiExtensionsManager.onCreate(this, pdfViewCtrl, savedInstanceState);
         pdfViewCtrl.setUIExtensionsManager(uiExtensionsManager);
+        pdfViewCtrl.setAttachedActivity(this);
         AccountModule.getInstance().onCreate(this, savedInstanceState);
 
 
@@ -141,6 +142,12 @@ public class PDFReaderActivity extends FragmentActivity {
         if (uiExtensionsManager!= null && uiExtensionsManager.onKeyDown(this, keyCode, event))
             return true;
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        uiExtensionsManager.handleActivityResult(this, requestCode, resultCode, data);
     }
 
 }

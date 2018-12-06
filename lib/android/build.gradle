@@ -7,28 +7,23 @@ android {
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 1
-        versionName "1.0"
+        versionCode 5
+        versionName "6.2.1"
        ndk {
            abiFilters "armeabi-v7a", "x86"
        }
         multiDexEnabled true
     }
-
-//    sourceSets {
-//        main {
-//            jniLibs.srcDirs = ['libs']
-//        }
-//    }
 }
 
 dependencies {
-    //compile fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:design:27.1.1'
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.facebook.react:react-native:+'
     implementation(name: 'FoxitRDK', ext: 'aar')
     implementation(name: 'FoxitRDKUIExtensions', ext: 'aar')
     implementation 'com.edmodo:cropper:1.0.1'
-    // From node_modules
+    implementation('com.microsoft.aad:adal:1.1.16') {}
+    implementation(name: 'RMSSDK-4.2-release', ext: 'aar')
+    implementation(name: 'rms-sdk-ui', ext: 'aar')
 }

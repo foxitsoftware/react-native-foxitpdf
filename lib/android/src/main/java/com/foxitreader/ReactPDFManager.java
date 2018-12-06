@@ -57,11 +57,11 @@ public class ReactPDFManager extends ReactContextBaseJavaModule {
     public void openPDF(String src, String password, ReadableMap extensionConfig, Boolean enableTopToolbar,
                         Boolean enableBottomToolbar, ReadableMap topToolbarConfig, ReadableMap bottomToolbarConfig,
                         ReadableMap panelConfig, ReadableMap viewSettingsConfig, ReadableMap viewMoreConfig) {
-        ReactApplicationContext mThemedReactContext = this.getReactApplicationContext();
-        Intent pdf = new Intent(mThemedReactContext, PDFReaderActivity.class);
+        ReactApplicationContext reactContext = this.getReactApplicationContext();
+        Intent pdf = new Intent(reactContext, PDFReaderActivity.class);
         pdf.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         Log.i("FoxitPDF", "src:" + src);
         pdf.putExtra("src", src);
-        mThemedReactContext.startActivity(pdf);
+        reactContext.startActivity(pdf);
     }
 }
