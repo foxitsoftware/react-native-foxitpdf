@@ -50,8 +50,6 @@ public class PDFReaderActivity extends FragmentActivity {
         pdfViewCtrl.setAttachedActivity(this);
         AccountModule.getInstance().onCreate(this, savedInstanceState);
 
-
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             int permission = ContextCompat.checkSelfPermission(this.getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
             if (permission != PackageManager.PERMISSION_GRANTED) {

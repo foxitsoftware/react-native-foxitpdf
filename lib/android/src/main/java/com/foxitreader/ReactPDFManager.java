@@ -5,6 +5,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -23,6 +24,7 @@ public class ReactPDFManager extends ReactContextBaseJavaModule {
     }
 
     private static boolean isLibraryInited = false;
+    private int mErrorCode;
 
     public ReactPDFManager(ReactApplicationContext reactContext) {
         super(reactContext);
@@ -34,12 +36,8 @@ public class ReactPDFManager extends ReactContextBaseJavaModule {
                 String sn = bundle.getString("foxit_sn");
                 String key = bundle.getString("foxit_key");
 
-                int errorCode = Library.initialize(sn, key);
-                if (errorCode != Constants.e_ErrSuccess) {
-                    String errorMsg = (errorCode == Constants.e_ErrInvalidLicense) ? "The license is invalid!" : "Failed to initialize the library!";
-                    UIToast.getInstance(reactContext).show(errorMsg);
-                    return;
-                }
+                mErrorCode= Library.initialize(sn, key);
+                isLibraryInited = true;
             } catch (PackageManager.NameNotFoundException e) {
                 Log.e("FoxitPDF", "Failed to load meta-data, NameNotFound: " + e.getMessage());
             } catch (NullPointerException e) {
@@ -58,6 +56,12 @@ public class ReactPDFManager extends ReactContextBaseJavaModule {
                         Boolean enableBottomToolbar, ReadableMap topToolbarConfig, ReadableMap bottomToolbarConfig,
                         ReadableMap panelConfig, ReadableMap viewSettingsConfig, ReadableMap viewMoreConfig) {
         ReactApplicationContext reactContext = this.getReactApplicationContext();
+        if (mErrorCode != Constants.e_ErrSuccess) {
+            String errorMsg = (mErrorCode == Constants.e_ErrInvalidLicense) ? "The license is invalid!" : "Failed to initialize the library!";
+            Toast.makeText(reactContext, errorMsg, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         Intent pdf = new Intent(reactContext, PDFReaderActivity.class);
         pdf.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         Log.i("FoxitPDF", "src:" + src);
