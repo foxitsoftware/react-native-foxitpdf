@@ -121,12 +121,23 @@ RCT_EXPORT_METHOD(openPDF:(NSString *)src
         if (targetURL == nil) {
             [self showError:@"file not found in Document directory!"];
         }else{
-            [self.pdfViewCtrl openDoc:targetURL.path password:password completion:^(FSErrorCode error) {}];
-            [[[UIApplication sharedApplication].delegate window].rootViewController presentViewController:self.rootViewController animated:YES completion:^{
-
+            __weak typeof(self) weakSelf = self;
+            [self.pdfViewCtrl openDoc:targetURL.path password:password completion:^(FSErrorCode error) {
+                if (error == FSErrSuccess) {
+                    [[[UIApplication sharedApplication].delegate window].rootViewController presentViewController:weakSelf.rootViewController animated:YES completion:^{
+                        
+                    }];
+                } else if (error == FSErrDeviceLimitation) {
+                    [weakSelf showError:@"Exceeded the limit on the number of devices allowed"];
+                } else if (error == FSErrCanNotGetUserToken) {
+                    [weakSelf showError:@"Please Sign in first"];
+                } else if (error == FSErrInvalidLicense) {
+                    [weakSelf showError:@"You are not authorized to use this add-on module， please contact us for upgrading your license. "];
+                } else {
+                    [weakSelf showError:@"Failed to open the document"];
+                }
             }];
             
-             __weak typeof(self) weakSelf = self;
             self.extensionsManager.goBack = ^{
                 [weakSelf.rootViewController dismissViewControllerAnimated:YES completion:nil];
             };
@@ -412,15 +423,27 @@ RCT_EXPORT_METHOD(openPDF:(NSString *)src
 -(BOOL)uiextensionsManager:(UIExtensionsManager *)uiextensionsManager openNewDocAtPath:(NSString *)path{
     FSPDFDoc *doc = [[FSPDFDoc alloc] initWithPath:path];
     if (FSErrSuccess == [doc load:nil]) {
-        //        __weak typeof(self) weakSelf = self;
+        __weak typeof(self) weakSelf = self;
         [self.pdfViewCtrl openDoc:path
                          password:nil
                        completion:^(FSErrorCode error) {
-                           
+                           if (error == FSErrSuccess) {
+                               if (weakSelf.rootViewController.presentingViewController) {
+                                    [weakSelf.rootViewController dismissViewControllerAnimated:NO completion:nil];
+                               }
+                               [[[UIApplication sharedApplication].delegate window].rootViewController presentViewController:weakSelf.rootViewController animated:NO completion:^{
+                                   
+                               }];
+                           } else if (error == FSErrDeviceLimitation) {
+                               [weakSelf showError:@"Exceeded the limit on the number of devices allowed"];
+                           } else if (error == FSErrCanNotGetUserToken) {
+                               [weakSelf showError:@"Please Sign in first"];
+                           } else if (error == FSErrInvalidLicense) {
+                               [weakSelf showError:@"You are not authorized to use this add-on module， please contact us for upgrading your license. "];
+                           } else {
+                               [weakSelf showError:@"Failed to open the document"];
+                           }
                        }];
-        [[[UIApplication sharedApplication].delegate window].rootViewController presentViewController:self.rootViewController animated:YES completion:^{
-            
-        }];
         return YES;
     }else{
         return NO;
