@@ -11,6 +11,7 @@
 #import <React/RCTViewManager.h>
 
 static FSErrorCode errorCode;
+static FSFileListViewController *fileListVC;
 @interface RNTPDFManager () <RCTBridgeModule, UIExtensionsManagerDelegate, IDocEventListener>
 @property (nonatomic, strong) FSPDFViewCtrl* pdfViewCtrl;
 @property (nonatomic, strong) UIViewController* pdfViewController;
@@ -33,6 +34,7 @@ static FSErrorCode errorCode;
                       key:(NSString *)key{
     if (errorCode != FSErrSuccess) [FSLibrary destroy];
     errorCode = [FSLibrary initialize:sn key:key];
+    if (!fileListVC) fileListVC = [[FSFileListViewController alloc] init];
     return errorCode;
 }
 
@@ -48,7 +50,6 @@ static FSErrorCode errorCode;
     
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
 }
-
 
 RCT_EXPORT_MODULE(PDFManager)
 
@@ -124,9 +125,11 @@ RCT_EXPORT_METHOD(openPDF:(NSString *)src
             __weak typeof(self) weakSelf = self;
             [self.pdfViewCtrl openDoc:targetURL.path password:password completion:^(FSErrorCode error) {
                 if (error == FSErrSuccess) {
-                    [[[UIApplication sharedApplication].delegate window].rootViewController presentViewController:weakSelf.rootViewController animated:YES completion:^{
-                        
-                    }];
+                    if (!weakSelf.rootViewController.presentingViewController) {
+                        [[[UIApplication sharedApplication].delegate window].rootViewController presentViewController:weakSelf.rootViewController animated:YES completion:^{
+                            
+                        }];
+                    }
                 } else if (error == FSErrDeviceLimitation) {
                     [weakSelf showError:@"Exceeded the limit on the number of devices allowed"];
                 } else if (error == FSErrCanNotGetUserToken) {
@@ -525,6 +528,4 @@ RCT_EXPORT_METHOD(openPDF:(NSString *)src
     UIDeviceOrientation currentOri = [[UIDevice currentDevice] orientation];
     [self.extensionsManager didRotateFromInterfaceOrientation:(UIInterfaceOrientation)currentOri];
 }
-
 @end
-
