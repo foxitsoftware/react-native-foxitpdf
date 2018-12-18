@@ -74,7 +74,7 @@ RCT_EXPORT_METHOD(openPDF:(NSString *)src
         }
         
         self.pdfViewCtrl = [[FSPDFViewCtrl alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    
+        [self.pdfViewCtrl setRMSAppClientId:@"972b6681-fa03-4b6b-817b-c8c10d38bd20" redirectURI:@"com.foxitsoftware.com.mobilepdf-for-ios://authorize"];
         [self.pdfViewCtrl registerDocEventListener:self];
         
         //    [pdfViewCtrl openDoc:pdfPath password:nil completion:nil];
@@ -179,6 +179,22 @@ RCT_EXPORT_METHOD(openPDF:(NSString *)src
         return nil;
     }
     return [NSURL fileURLWithPath:filePath];
+}
+
+- (FSClientInfo *)getClientInfo {
+    FSClientInfo *client_info = [[FSClientInfo alloc] init];
+    client_info.device_id = [[UIDevice currentDevice] identifierForVendor].UUIDString;
+    client_info.device_name = [UIDevice currentDevice].name;
+    client_info.device_model = [[UIDevice currentDevice] model];
+    client_info.mac_address = @"mac_address";
+    client_info.os = [NSString stringWithFormat:@"%@ %@",
+                      [[UIDevice currentDevice] systemName], [[UIDevice currentDevice] systemVersion]];
+    client_info.product_name = @"RDK";
+    client_info.product_vendor = @"Foxit";
+    client_info.product_version = @"5.2.0";
+    client_info.product_language = [[NSLocale preferredLanguages] objectAtIndex:0];
+    
+    return client_info;
 }
 
 //panelConfig
