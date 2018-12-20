@@ -78,11 +78,13 @@ public class PDFReaderActivity extends FragmentActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQUEST_EXTERNAL_STORAGE && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            openDocument();
-        } else {
-            UIToast.getInstance(getApplicationContext()).show(getString(R.string.permission_denied));
-            finish();
+        if (requestCode == REQUEST_EXTERNAL_STORAGE){
+            if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                openDocument();
+            } else {
+                UIToast.getInstance(getApplicationContext()).show(getString(R.string.permission_denied));
+                finish();
+            }
         }
     }
 
