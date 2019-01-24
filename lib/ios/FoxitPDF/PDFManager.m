@@ -37,6 +37,10 @@ static FSFileListViewController *fileListVC;
     if (!fileListVC) fileListVC = [[FSFileListViewController alloc] init];
     return errorCode;
 }
+    
++ (BOOL)requiresMainQueueSetup{
+    return YES;
+}
 
 - (instancetype)init{
     self = [super init];
