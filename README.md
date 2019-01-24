@@ -7,7 +7,7 @@ react-native-foxitpdf is Foxit's first React Native PDF component for iOS and An
 First, download the library from npm and install inside your current project folder
 
 ```
-npm install @foxitsoftware/react-native-foxitpdf --save
+npm install @foxitsoftware/react-native-foxitpdf
 ```
 
 Link the project to the library automatically
@@ -112,12 +112,6 @@ In your App.js file, you can import the component using the following code:
 
 ```js
 import FoxitPDF from '@foxitsoftware/react-native-foxitpdf';
-```
-
-or
-
-```js
-var FoxitPDF = require('@foxitsoftware/react-native-foxitpdf');
 ```
 
 Once the component is initialized, call the function below to open the PDF Reader:
