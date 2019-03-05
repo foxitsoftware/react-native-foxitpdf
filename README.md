@@ -40,69 +40,69 @@ if (FSErrSuccess != eRet) {
 
 ### Android
 
-1. Download foxit_mobile_pdf_sdk_android_en.zip from [https://developers.foxitsoftware.com/pdf-sdk/android/] (Please use foxit_mobile_pdf_sdk_android_en.zip for version 6.2.1 )
+1. Download foxit_mobile_pdf_sdk_android_en.zip from [https://developers.foxitsoftware.com/pdf-sdk/android/] (Please use Foxit PDF SDK for Android 6.3.0 )
 2. Unzip `foxit_mobile_pdf_sdk_android_en.zip` and copy libs folder into the component android folder.
-3. Add the following code into the project-level build.gradle file (android/build.gradle).
-    ```gradle
+3. In your root `android/build.gradle`:
+```diff
     allprojects {
         repositories {
-            ...
-            flatDir {
-                dirs project(':@foxitsoftware_react-native-foxitpdf').file("$rootDir/libs")
+            mavenLocal()
++           google()
+            jcenter()
+            maven {
+                // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
+                url "$rootDir/../node_modules/react-native/android"
             }
++            flatDir {
++               dirs project(':@foxitsoftware_react-native-foxitpdf').file("$rootDir/libs")
++           }
         }
     }
-    ```
-4. - Add `uses-permission` tag outside `application` tags in `AndroidManifest.xml`.
-    ```xml
-    <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              package="your package name">
-           <uses-permission android:name="android.permission.INTERNET"/>
-           <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
-           <uses-permission android:name="android.permission.VIBRATE"/>
-           <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-           <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-           <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-           <uses-permission android:name="android.permission.RUN_INSTRUMENTATION"/>
-           <uses-permission android:name="android.permission.CAMERA"/>
-           <uses-permission android:name="android.permission.RECORD_AUDIO"/>
-        
-        <application .../>
-    </manifest>
-    ```
-    - Add `sn`, `key`, and `PDFReaderActivity` inside `application` tags in `AndroidManifest.xml`. You may find your sn and key in Foxit PDF SDK for Android download package folder.
-    ```xml
-    <application
-        ...
-        tools:replace="android:allowBackup,icon,theme,label,name">
-        <meta-data
-            android:name="foxit_sn"
-            android:value="xxx"/>
-        <meta-data
-            android:name="foxit_key"
-            android:value="xxx"/>
-        <activity
-            android:name="com.foxitreader.PDFReaderActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-            android:screenOrientation="fullSensor"/>
-    ...
-    ```
-    - Make sure you've added `android:allowBackup` in `tools:replace` inside `application` tags and `xmlns:tools="http://schemas.android.com/tools"` in root `manifest` element.
-    ```xml
-    <manifest
-        ...
-        xmlns:tools="http://schemas.android.com/tools">
-        ...
-      
-        <application
-            ...
-            tools:replace="android:allowBackup,icon,theme,label,name">
-            ...
-        </application>
-        ...
-    </manifest>          
-    ```
+```  
+4. Add `uses-permission` ,`PDFReaderActivity` and `tools:replace` to your `android/app/src/main/AndroidManifest.xml`.
+```diff
+   <manifest xmlns:android="http://schemas.android.com/apk/res/android"
++             xmlns:tools="http://schemas.android.com/tools"
+              package="com.foxitreact">
+   
++      <uses-permission android:name="android.permission.INTERNET"/>
++      <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
++      <uses-permission android:name="android.permission.VIBRATE"/>
++      <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
++      <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
++      <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
++      <uses-permission android:name="android.permission.RUN_INSTRUMENTATION"/>
++      <uses-permission android:name="android.permission.CAMERA"/>
++      <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+   
+       <application
+           android:name=".MainApplication"
+           android:allowBackup="false"
+           android:icon="@mipmap/ic_launcher"
+           android:label="@string/app_name"
+           android:roundIcon="@mipmap/ic_launcher_round"
+           android:theme="@style/AppTheme"
++          tools:replace="android:allowBackup,icon,theme,label,name">
+           
++          <activity
++              android:name="com.foxitreader.PDFReaderActivity"
++              android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
++              android:screenOrientation="fullSensor"/>
+           <activity
+               android:name=".MainActivity"
+               android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+               android:label="@string/app_name"
+               android:windowSoftInputMode="adjustResize">
+               <intent-filter>
+                   <action android:name="android.intent.action.MAIN"/>
+                   <category android:name="android.intent.category.LAUNCHER"/>
+               </intent-filter>
+           </activity>
+           <activity android:name="com.facebook.react.devsupport.DevSettingsActivity"/>
+       </application>
+   </manifest>
+```
+
 5. Please update you Android Gradle plugin to `3.1.0+`, and update the version of Gradle to `4.4+`, you can refer to [https://developer.android.com/studio/releases/gradle-plugin].
 
 
@@ -110,21 +110,80 @@ if (FSErrSuccess != eRet) {
 
 In your App.js file, you can import the component using the following code:
 
+1.Import FoxitPDF
 ```js
 import FoxitPDF from '@foxitsoftware/react-native-foxitpdf';
 ```
-
-Once the component is initialized, call the function below to open the PDF Reader:
-
+2.Initialize the library.  The `foxit_sn` is `rdk_sn`, `foxit_key` is `rdk_key` and they can be found in the libs folder of Foxit PDF SDK.
 ```js
-FoxitPDF.openPDF('sample.pdf');
+FoxitPDF.initialize("foxit_sn","foxit_key");
+```
+3.Once the component is initialized, call the function below to open document:
+```js
+FoxitPDF.openDocument('sample.pdf');
 ```
 
-In the openPDF function parameter, add the path to the file you wish to open.
+In the openDocument function parameter, add the path to the file you wish to open.
 
 If you are using iOS version: Add the name of the PDF file, but make sure it is located under app Document folder
 
-If you are using Android version: `Please input the absolute path of the file in the devices, e.g., FoxitPDF.openPDF('/mnt/sdcard/xxx/xxx.pdf')`
+If you are using Android version: `Please input the absolute path of the file in the devices, e.g., FoxitPDF.openDocument('/mnt/sdcard/xxx/xxx.pdf')`
+
+In `App.js`:
+```javascript
+import React, { Component } from 'react';
+import {
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+  NativeModules,
+  TouchableOpacity,
+} from 'react-native';
+import FoxitPDF from '@foxitsoftware/react-native-foxitpdf';
+
+type Props = {};
+export default class App extends Component<Props> {
+
+  constructor(props) {
+     super(props);
+
+     FoxitPDF.initialize("foxit_sn","foxit_key");
+  }
+
+  onPress() {
+    FoxitPDF.openDocument('/sample.pdf');
+  }
+
+  render() {
+    return (
+      <View style={styles.container}>
+        <TouchableOpacity onPress={this.onPress}>
+          <Text>Open PDF</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F5FCFF',
+  },
+});
+```
+
+## API Reference
+**Initialize Foxit PDF SDK**
+
+	FoxitPDF.initialize(String, String); // foxit_sn and foxit_key
+
+**Open a pdf document**
+
+	FoxitPDF.openDocument(String, String) // path and password
 
 ## License
 
