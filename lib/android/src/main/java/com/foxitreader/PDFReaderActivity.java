@@ -11,11 +11,13 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.WindowManager;
 
 import com.foxit.sdk.PDFViewCtrl;
 import com.foxit.uiextensions.UIExtensionsManager;
+import com.foxit.uiextensions.config.Config;
 import com.foxit.uiextensions.modules.connectpdf.account.AccountModule;
 import com.foxit.uiextensions.utils.AppTheme;
 import com.foxit.uiextensions.utils.UIToast;
@@ -42,7 +44,7 @@ public class PDFReaderActivity extends FragmentActivity {
 
         pdfViewCtrl = new PDFViewCtrl(this);
         InputStream stream = getApplicationContext().getResources().openRawResource(R.raw.uiextensions_config);
-        UIExtensionsManager.Config config = new UIExtensionsManager.Config(stream);
+        Config config = new Config(stream);
         uiExtensionsManager = new UIExtensionsManager(this.getApplicationContext(), pdfViewCtrl,config);
         uiExtensionsManager.setAttachedActivity(this);
         uiExtensionsManager.onCreate(this, pdfViewCtrl, savedInstanceState);
@@ -71,8 +73,13 @@ public class PDFReaderActivity extends FragmentActivity {
 
     private void openDocument(){
         Intent intent = getIntent();
-        String filePath = intent.getExtras().getString("src");
-        uiExtensionsManager.openDocument(filePath, null);
+        String filePath = intent.getExtras().getString("path");
+        String password = intent.getExtras().getString("password");
+        byte[] bytes = null;
+        if (!TextUtils.isEmpty(password)){
+            bytes = password.getBytes();
+        }
+        uiExtensionsManager.openDocument(filePath, bytes);
     }
 
     @Override
@@ -82,7 +89,7 @@ public class PDFReaderActivity extends FragmentActivity {
             if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
                 openDocument();
             } else {
-                UIToast.getInstance(getApplicationContext()).show(getString(R.string.permission_denied));
+                UIToast.getInstance(getApplicationContext()).show(getString(R.string.fx_permission_denied));
                 finish();
             }
         }
