@@ -10,8 +10,10 @@
 #import <React/RCTBridgeModule.h>
 #import <React/RCTViewManager.h>
 
-static FSErrorCode errorCode;
+static FSErrorCode errorCode = FSErrUnknown;
 static FSFileListViewController *fileListVC;
+static NSString *initializeSN;
+static NSString *initializeKey;
 @interface RNTPDFManager () <RCTBridgeModule, UIExtensionsManagerDelegate, IDocEventListener>
 @property (nonatomic, strong) FSPDFViewCtrl* pdfViewCtrl;
 @property (nonatomic, strong) UIViewController* pdfViewController;
@@ -32,12 +34,20 @@ static FSFileListViewController *fileListVC;
 
 + (FSErrorCode)initialize:(NSString *)sn
                       key:(NSString *)key{
-    if (errorCode != FSErrSuccess) [FSLibrary destroy];
-    errorCode = [FSLibrary initialize:sn key:key];
-    if (!fileListVC) fileListVC = [[FSFileListViewController alloc] init];
+    if (![initializeSN isEqualToString:sn] || ![initializeKey isEqualToString:key]) {
+        if (errorCode == FSErrSuccess) [FSLibrary destroy];
+        errorCode = [FSLibrary initialize:sn key:key];
+        if (errorCode != FSErrSuccess) {
+            return errorCode;
+        }else{
+            initializeSN = sn;
+            initializeKey = key;
+        }
+        if (!fileListVC) fileListVC = [[FSFileListViewController alloc] init];
+    }
     return errorCode;
 }
-    
+
 + (BOOL)requiresMainQueueSetup{
     return YES;
 }
@@ -51,13 +61,40 @@ static FSFileListViewController *fileListVC;
 }
 
 - (void)dealloc{
-    
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
 }
 
 RCT_EXPORT_MODULE(PDFManager)
 
 @synthesize bridge = _bridge;
+
+RCT_EXPORT_METHOD(initialize:(NSString *)sn key:(NSString *)key){
+    if ([RNTPDFManager initialize:sn key:key] != FSErrSuccess ) {
+        [self showError:@"Check your sn or key"];
+    }
+}
+
+RCT_EXPORT_METHOD(openDocument:(NSString *)src
+                  password:(NSString *)password
+                  extensionConfig:(NSDictionary *)extensionConfig
+                  enableTopToolbar:(BOOL)enableTopToolbar
+                  enableBottomToolbar:(BOOL)enableBottomToolbar
+                  topToolbarConfig:(NSDictionary *)topToolbarConfig
+                  bottomToolbarConfig:(NSDictionary *)bottomToolbarConfig
+                  panelConfig:(NSDictionary *)panelConfig
+                  viewSettingsConfig:(NSDictionary *)viewSettingsConfig
+                  viewMoreConfig:(NSDictionary *)viewMoreConfig) {
+        [self openPDF:src
+             password:password
+      extensionConfig:extensionConfig
+     enableTopToolbar:enableTopToolbar
+  enableBottomToolbar:enableBottomToolbar
+     topToolbarConfig:topToolbarConfig
+  bottomToolbarConfig:bottomToolbarConfig
+          panelConfig:panelConfig
+   viewSettingsConfig:viewSettingsConfig
+       viewMoreConfig:viewMoreConfig];
+}
 
 RCT_EXPORT_METHOD(openPDF:(NSString *)src
                   password:(NSString *)password
