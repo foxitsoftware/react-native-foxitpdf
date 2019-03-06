@@ -37,8 +37,8 @@ export default class FoxitPDF {
        );
      }
 
-  static initialize(foxit_sn, foxit_key){
-       PDFManager.initialize(foxit_sn,foxit_key);
+  static initialize(SN, key){
+       PDFManager.initialize(SN, key);
   }
 
   static openDocument(
