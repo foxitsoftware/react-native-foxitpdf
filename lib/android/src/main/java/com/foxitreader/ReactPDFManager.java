@@ -17,7 +17,9 @@ public class ReactPDFManager extends ReactContextBaseJavaModule {
     private static final String REACT_CLASS = "PDFManager";
 
     private static boolean isLibraryInited = false;
-    private int mErrorCode;
+    private static int mErrorCode = Constants.e_ErrInvalidLicense;
+    private static String mLastSn;
+    private static String mLastKey;
 
     public ReactPDFManager(ReactApplicationContext reactContext) {
         super(reactContext);
@@ -30,13 +32,18 @@ public class ReactPDFManager extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void initialize(String foxit_sn, String foxit_key) {
-        if (isLibraryInited == false) {
-            try {
+        try {
+            if (isLibraryInited == false) {
                 mErrorCode = Library.initialize(foxit_sn, foxit_key);
                 isLibraryInited = true;
-            } catch (Exception e) {
-                Log.e("FoxitPDF", "Initialization library failed： " + e.getMessage());
+            } else if (!mLastSn.equals(foxit_sn) || !mLastKey.equals(foxit_key)) {
+                Library.release();
+                mErrorCode = Library.initialize(foxit_sn, foxit_key);
             }
+            mLastSn = foxit_sn;
+            mLastKey = foxit_key;
+        } catch (Exception e) {
+            Log.e("FoxitPDF", "Initialization library failed： " + e.getMessage());
         }
     }
 
@@ -75,7 +82,7 @@ public class ReactPDFManager extends ReactContextBaseJavaModule {
         Intent intent = new Intent(reactContext, PDFReaderActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra("path", path);
-        intent.putExtra("password",password);
+        intent.putExtra("password", password);
         reactContext.startActivity(intent);
     }
 
