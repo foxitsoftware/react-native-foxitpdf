@@ -48,8 +48,8 @@ if (FSErrSuccess != eRet) {
 
 ### Android
 
-1. Download foxit_mobile_pdf_sdk_android_en.zip from [https://developers.foxitsoftware.com/pdf-sdk/android/] (Please use Foxit PDF SDK for Android 6.3.0 )
-2. Unzip `foxit_mobile_pdf_sdk_android_en.zip` and copy libs folder into the component android folder.
+1. Download foxit_mobile_pdf_sdk_android_en.zip from [https://developers.foxitsoftware.com/pdf-sdk/android/] (Please use Foxit PDF SDK for Android 6.4.0 )
+2. Unzip `foxitpdfsdk_(version_no)_android.zip` and copy libs folder into the component android folder.
 3. In your root `android/build.gradle`:
 ```diff
     allprojects {
@@ -193,6 +193,10 @@ const styles = StyleSheet.create({
 
 	FoxitPDF.openDocument(String, String) // path and password
 ## Versions
+
+>[v6.4.0](https://github.com/foxitsoftware/react-native-foxitpdf/tree/release/6.4.0)
+
+>[v6.3.0](https://github.com/foxitsoftware/react-native-foxitpdf/tree/release/6.3)
 
 >[v6.2.1](https://github.com/foxitsoftware/react-native-foxitpdf/tree/release/6.2.1)
 
