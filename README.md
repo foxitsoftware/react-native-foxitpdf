@@ -3,8 +3,8 @@
 react-native-foxitpdf is Foxit's first React Native PDF component for iOS and Android. It uses Foxit PDF SDK for Android/iOS technology to view, render and edit PDFs easily. 
 
 - [Installation](#installation)
-- [iOS](#ios)
-- [Android](#android)
+- [Integration for iOS](#integration-for-ios)
+- [Integration for Android](#integration-for-android)
 - [General Usage](#general-usage)
 - [API Reference](#api-reference)
 - [Versions](#versions)
@@ -24,32 +24,32 @@ Link the project to the library automatically
 react-native link @foxitsoftware/react-native-foxitpdf
 ```
 
-### iOS
+## Integration for iOS
 
-1.  Unzip Foxit PDF SDK for iOS and copy libs folder into the component ios folder.  (Please use Foxit PDF SDK for iOS 6.3 )
-2.  Add dynamic framework "FoxitRDK.framework" and "uiextensionsDynamic.framework" to framework folder and also to Xcode’s Embedded Binaries
-3.  Add the Resource files that are needed for the built-in UI implementations to the pdfreader project. Right-click the project, and select Add Files to "your project"… to add the Resource files. Find and choose the folder "libs/uiextensions_src/uiextensions/Resource".
+1. Unzip Foxit PDF SDK for iOS and copy libs folder into the component’s ios folder.
+(`/xxx/platforms/ios/`)
+Please use foxitpdfsdk_(version_no)_ios.zip from https://developers.foxitsoftware.com/pdf-sdk/ios/
+
+2. Target -> General -> Embedded Binaries
+
+   Add dynamic framework "FoxitRDK.framework" and "uiextensionsDynamic.framework" to framework folder and Xcode’s Embedded Binaries
+
+3. Target -> General -> Linked Frameworks and Libraries ->  +  -> WebKit.framework
+  
 4.  Add following line into AppDelegate.m
 
 ```objc
 #import <FoxitPDF/PDFManager.h>
 ```
 
-5.  At the end of `didFinishLaunchingWithOptions` function, add the following lines:
 
-```objc
-NSString *sn = @"xxx";
-NSString *key = @"xxx";
-FSErrorCode eRet = [RNTPDFManager initialize:sn key:key];
-if (FSErrSuccess != eRet) {
-    return NO;
-}
-```
+## Integration for Android
 
-### Android
+1. Download foxit_mobile_pdf_sdk_android_en.zip from [https://developers.foxitsoftware.com/pdf-sdk/android/] (Please use Foxit PDF SDK for Android 6.4.0 )
 
-1. Download foxit_mobile_pdf_sdk_android_en.zip from [https://developers.foxitsoftware.com/pdf-sdk/android/] (Please use Foxit PDF SDK for Android 6.3.0 )
-2. Unzip `foxit_mobile_pdf_sdk_android_en.zip` and copy libs folder into the component android folder.
+2. Unzip `foxitpdfsdk_(version_no)_android.zip` and copy libs folder into the component android folder.
+/xxx/platforms/android/
+
 3. In your root `android/build.gradle`:
 ```diff
     allprojects {
@@ -67,6 +67,7 @@ if (FSErrSuccess != eRet) {
         }
     }
 ```  
+
 4. Add `uses-permission` ,`PDFReaderActivity` and `tools:replace` to your `android/app/src/main/AndroidManifest.xml`.
 ```diff
    <manifest xmlns:android="http://schemas.android.com/apk/res/android"
@@ -122,10 +123,12 @@ In your App.js file, you can import the component using the following code:
 ```js
 import FoxitPDF from '@foxitsoftware/react-native-foxitpdf';
 ```
+
 2.Initialize the library.  The `foxit_sn` is `rdk_sn`, `foxit_key` is `rdk_key` and they can be found in the libs folder of Foxit PDF SDK.
 ```js
 FoxitPDF.initialize("foxit_sn","foxit_key");
 ```
+
 3.Once the component is initialized, call the function below to open document:
 ```js
 FoxitPDF.openDocument('sample.pdf');
@@ -136,6 +139,8 @@ In the openDocument function parameter, add the path to the file you wish to ope
 If you are using iOS version: Add the name of the PDF file, but make sure it is located under app Document folder
 
 If you are using Android version: `Please input the absolute path of the file in the devices, e.g., FoxitPDF.openDocument('/mnt/sdcard/xxx/xxx.pdf')`
+
+
 
 In `App.js`:
 ```javascript
@@ -148,6 +153,7 @@ import {
   NativeModules,
   TouchableOpacity,
 } from 'react-native';
+
 import FoxitPDF from '@foxitsoftware/react-native-foxitpdf';
 
 type Props = {};
@@ -193,6 +199,10 @@ const styles = StyleSheet.create({
 
 	FoxitPDF.openDocument(String, String) // path and password
 ## Versions
+
+>[v6.4.0](https://github.com/foxitsoftware/react-native-foxitpdf/tree/release/6.4.0)
+
+>[v6.3.0](https://github.com/foxitsoftware/react-native-foxitpdf/tree/release/6.3)
 
 >[v6.2.1](https://github.com/foxitsoftware/react-native-foxitpdf/tree/release/6.2.1)
 
