@@ -14,10 +14,15 @@ static FSErrorCode errorCode = FSErrUnknown;
 static FSFileListViewController *fileListVC;
 static NSString *initializeSN;
 static NSString *initializeKey;
+
+@interface PDFNavigationController : UINavigationController
+@property (nonatomic, weak) UIExtensionsManager *extensionsManager;
+@end
+
 @interface RNTPDFManager () <RCTBridgeModule, UIExtensionsManagerDelegate, IDocEventListener>
 @property (nonatomic, strong) FSPDFViewCtrl* pdfViewCtrl;
-@property (nonatomic, strong) UIViewController* pdfViewController;
-@property (nonatomic, strong) UINavigationController* rootViewController;
+@property (nonatomic, strong) UIViewController *pdfViewController;
+@property (nonatomic, strong) PDFNavigationController* rootViewController;
 @property (nonatomic, strong) UIExtensionsManager* extensionsManager;
 @end
 
@@ -109,6 +114,7 @@ RCT_EXPORT_METHOD(openPDF:(NSString *)src
 
     dispatch_async(dispatch_get_main_queue(), ^{
         
+
         if (errorCode != FSErrSuccess) {
             [self showError:@"Check your sn or key"];
             return;
@@ -124,7 +130,7 @@ RCT_EXPORT_METHOD(openPDF:(NSString *)src
         self.pdfViewController.automaticallyAdjustsScrollViewInsets = NO;
         
         self.pdfViewController.view = self.pdfViewCtrl;
-        self.rootViewController = [[UINavigationController alloc] initWithRootViewController:self.pdfViewController];
+        self.rootViewController = [[PDFNavigationController alloc] initWithRootViewController:self.pdfViewController];
         self.rootViewController.navigationBarHidden = YES;
         
         if ( extensionConfig != NULL) {
@@ -138,6 +144,8 @@ RCT_EXPORT_METHOD(openPDF:(NSString *)src
         } else {
             self.extensionsManager = [[UIExtensionsManager alloc] initWithPDFViewControl:self.pdfViewCtrl];
         }
+
+        self.rootViewController.extensionsManager = self.extensionsManager;
     
         self.extensionsManager.delegate = self;
         
@@ -168,7 +176,7 @@ RCT_EXPORT_METHOD(openPDF:(NSString *)src
                 if (error == FSErrSuccess) {
                     if (!weakSelf.rootViewController.presentingViewController) {
                         [[[UIApplication sharedApplication].delegate window].rootViewController presentViewController:weakSelf.rootViewController animated:YES completion:^{
-                            
+
                         }];
                     }
                 } else if (error == FSErrDeviceLimitation) {
@@ -492,7 +500,7 @@ RCT_EXPORT_METHOD(openPDF:(NSString *)src
                                     [weakSelf.rootViewController dismissViewControllerAnimated:NO completion:nil];
                                }
                                [[[UIApplication sharedApplication].delegate window].rootViewController presentViewController:weakSelf.rootViewController animated:NO completion:^{
-                                   
+
                                }];
                            } else if (error == FSErrDeviceLimitation) {
                                [weakSelf showError:@"Exceeded the limit on the number of devices allowed"];
@@ -585,4 +593,20 @@ RCT_EXPORT_METHOD(openPDF:(NSString *)src
     UIDeviceOrientation currentOri = [[UIDevice currentDevice] orientation];
     [self.extensionsManager didRotateFromInterfaceOrientation:(UIInterfaceOrientation)currentOri];
 }
+
+@end
+
+@implementation PDFNavigationController
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+    return !self.extensionsManager.isScreenLocked;
+}
+
+- (BOOL)shouldAutorotate {
+    return !self.extensionsManager.isScreenLocked;
+}
+
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
+    return UIInterfaceOrientationMaskAll;
+}
+
 @end
