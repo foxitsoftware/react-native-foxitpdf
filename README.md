@@ -26,8 +26,10 @@ react-native link @foxitsoftware/react-native-foxitpdf
 
 ## Integration for iOS
 
-1. Unzip Foxit PDF SDK for iOS and copy libs folder into the component’s ios folder.
-(`/xxx/platforms/ios/`)
+1. Unzip Foxit PDF SDK for iOS and copy `libs` folder into the component’s `<PROJECT_ROOT>/ios` folder.
+```
+<PROJECT_ROOT>/ios/libs/<frameworks>
+```
 Please use foxitpdfsdk_(version_no)_ios.zip from https://developers.foxitsoftware.com/pdf-sdk/ios/
 
 2. Target -> General -> Embedded Binaries
