@@ -47,7 +47,7 @@ Please use foxitpdfsdk_(version_no)_ios.zip from https://developers.foxitsoftwar
 
 ## Integration for Android
 
-1. Download foxit_mobile_pdf_sdk_android_en.zip from [https://developers.foxitsoftware.com/pdf-sdk/android/] (Please use Foxit PDF SDK for Android 6.4.0 )
+1. Download foxit_mobile_pdf_sdk_android_en.zip from [https://developers.foxitsoftware.com/pdf-sdk/android/] (Please use Foxit PDF SDK for Android 7.0.0 )
 
 2. Unzip `foxitpdfsdk_(version_no)_android.zip` and copy libs folder into the component android folder.
 /xxx/platforms/android/
@@ -201,6 +201,7 @@ const styles = StyleSheet.create({
 
 	FoxitPDF.openDocument(String, String) // path and password
 ## Versions
+>[v7.0.0](https://github.com/foxitsoftware/react-native-foxitpdf/tree/release/7.0)
 
 >[v6.4.0](https://github.com/foxitsoftware/react-native-foxitpdf/tree/release/6.4.0)
 
