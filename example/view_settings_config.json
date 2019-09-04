@@ -1,0 +1,16 @@
+{
+    "single": true,
+    "continuous": true,
+    "doublePage": true,
+    "coverPage": true,
+    "thumbnail": true,
+    "reflow": true,
+    "cropPage": true,
+    "screenLock": true,
+    "brightness": true,
+    "nightMode": true,
+    "panZoom": true,
+    "fitPage": true,
+    "fitWidth": true,
+    "rotate": true
+}

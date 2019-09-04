@@ -1,0 +1,20 @@
+{
+    "groupFile": {
+        "fileInfo" : true,
+        "reduceFileSize"  : true,
+        "wirelessPrint" : true,
+        "crop"  : true
+    },
+    "groupProject": {
+        "password" : true
+    },
+    "groupComment": {
+        "importComment" : true,
+        "exportComment"  : true
+    },
+    "groupForm": {
+        "resetForm" : true,
+        "importForm" : true,
+        "exportForm"  : true
+    }
+}
