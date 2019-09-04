@@ -14,6 +14,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import FoxitPDF from '@foxitsoftware/react-native-foxitpdf';
+import uiextensions_config from './uiextensions_config.json';
 
 type Props = {};
 export default class App extends Component<Props> {
@@ -25,7 +26,7 @@ export default class App extends Component<Props> {
   }
 
   onPress() {
-    FoxitPDF.openPDF('/sample.pdf');
+    FoxitPDF.openPDF('/sample.pdf','',uiextensions_config);
   }
 
   render() {
