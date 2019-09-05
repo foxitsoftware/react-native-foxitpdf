@@ -272,6 +272,12 @@ RCT_EXPORT_METHOD(openPDF:(NSString *)src
         if (val != NULL) {
             [self.extensionsManager.panelController setPanelHidden:![val boolValue] type:FSPanelTypeAttachment];
         }
+        
+        val = [_panelConfig objectForKey:@"signature"] ;
+        
+        if (val != NULL) {
+            [self.extensionsManager.panelController setPanelHidden:![val boolValue] type:FSPanelTypeDigitalSignature];
+        }
     }
 }
 
@@ -304,7 +310,7 @@ RCT_EXPORT_METHOD(openPDF:(NSString *)src
             
         }
         
-        groupConfig = [_viewMoreConfig objectForKey:@"groupProject"] ;
+        groupConfig = [_viewMoreConfig objectForKey:@"groupProtect"] ;
         
         if (groupConfig != NULL) {
             [self.extensionsManager.more setMoreViewItemHiddenWithGroup:TAG_GROUP_PROTECT hidden:NO];
@@ -332,10 +338,16 @@ RCT_EXPORT_METHOD(openPDF:(NSString *)src
         
         if (groupConfig != NULL) {
             [self.extensionsManager.more setMoreViewItemHiddenWithGroup:TAG_GROUP_FORM hidden:NO];
-            id val = [groupConfig objectForKey:@"resetForm"];
+            id val = [groupConfig objectForKey:@"createForm"];
+            if (val) {
+                [self.extensionsManager.more setMoreViewItemHiddenWithGroup:TAG_GROUP_FORM andItemTag:TAG_ITEM_CREATEFORM hidden:![val boolValue]];
+            }
+            
+            val = [groupConfig objectForKey:@"resetForm"];
             if (val) {
                 [self.extensionsManager.more setMoreViewItemHiddenWithGroup:TAG_GROUP_FORM andItemTag:TAG_ITEM_RESETFORM hidden:![val boolValue]];
             }
+            
             val = [groupConfig objectForKey:@"importForm"];
             if (val) {
                 [self.extensionsManager.more setMoreViewItemHiddenWithGroup:TAG_GROUP_FORM andItemTag:TAG_ITEM_IMPORTFORM hidden:![val boolValue]];
@@ -365,7 +377,7 @@ RCT_EXPORT_METHOD(openPDF:(NSString *)src
             [self.extensionsManager.settingBar setItem:CONTINUOUS hidden:![val boolValue]];
         }
         
-        val = [_viewSettingsConfig objectForKey:@"doublePage"] ;
+        val = [_viewSettingsConfig objectForKey:@"facingPage"] ;
         if (val != NULL) {
             [self.extensionsManager.settingBar setItem:DOUBLEPAGE hidden:![val boolValue]];
         }
