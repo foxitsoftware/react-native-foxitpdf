@@ -1,7 +1,7 @@
 {
     "single": true,
     "continuous": true,
-    "doublePage": true,
+    "facingPage": true,
     "coverPage": true,
     "thumbnail": true,
     "reflow": true,

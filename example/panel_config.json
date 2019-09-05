@@ -2,5 +2,6 @@
     "readingBookmark": true,
     "outline": true,
     "annotation": true,
-    "attachments": true
+    "attachments": true,
+    "signature": true
 }
