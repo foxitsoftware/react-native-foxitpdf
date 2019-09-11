@@ -1,5 +1,4 @@
 rootProject.name = 'Example'
-include ':@foxitsoftware_react-native-foxitpdf'
-project(':@foxitsoftware_react-native-foxitpdf').projectDir = new File(rootProject.projectDir, '../node_modules/@foxitsoftware/react-native-foxitpdf/lib/android')
+apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings)
 include ':app'
 
