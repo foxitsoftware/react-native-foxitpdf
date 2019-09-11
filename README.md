@@ -18,12 +18,6 @@ First, download the library from npm and install inside your current project fol
 npm install @foxitsoftware/react-native-foxitpdf
 ```
 
-Link the project to the library automatically
-
-```
-react-native link @foxitsoftware/react-native-foxitpdf
-```
-
 ## Integration for iOS
 
 1. Unzip Foxit PDF SDK for iOS and copy `libs` folder into the component’s `<PROJECT_ROOT>/ios` folder.
@@ -68,6 +62,39 @@ Please use foxitpdfsdk_(version_no)_ios.zip from https://developers.foxitsoftwar
 +           }
         }
     }
+```  
+
+In your root `android/app/build.gradle`:
+```diff
+    ```
+    android {
+         ```
+         defaultConfig {
+             applicationId "xxx.xxx.xxx"
+             minSdkVersion rootProject.ext.minSdkVersion
+             targetSdkVersion rootProject.ext.targetSdkVersion
+             versionCode 1
+             versionName "1.0"
++            multiDexEnabled true
+         }
+         ```
+    }
+    
+    ```
+    dependencies {
+        implementation fileTree(dir: "libs", include: ["*.jar"])
+        implementation "com.facebook.react:react-native:+"  // From node_modules
++       implementation 'com.android.support:multidex:1.0.+'
+    
+        if (enableHermes) {
+          def hermesPath = "../../node_modules/hermesvm/android/";
+          debugImplementation files(hermesPath + "hermes-debug.aar")
+          releaseImplementation files(hermesPath + "hermes-release.aar")
+        } else {
+          implementation jscFlavor
+        }
+    }
+    ```
 ```  
 
 4. Add `uses-permission` ,`PDFReaderActivity` and `tools:replace` to your `android/app/src/main/AndroidManifest.xml`.
