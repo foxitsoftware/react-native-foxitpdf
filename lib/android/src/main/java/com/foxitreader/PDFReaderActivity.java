@@ -24,16 +24,14 @@ import com.foxit.uiextensions.controls.toolbar.IBarsHandler;
 import com.foxit.uiextensions.controls.toolbar.ToolbarItemConfig;
 import com.foxit.uiextensions.modules.connectpdf.account.AccountModule;
 import com.foxit.uiextensions.utils.AppTheme;
+import com.foxit.uiextensions.utils.JsonUtil;
 import com.foxit.uiextensions.utils.UIToast;
-import com.foxitreader.config.BottomToolbarConfig;
-import com.foxitreader.config.PanelConfig;
-import com.foxitreader.config.TopToolbarConfig;
-import com.foxitreader.config.ViewMoreConfig;
-import com.foxitreader.config.ViewSettingsConfig;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -60,11 +58,18 @@ public class PDFReaderActivity extends FragmentActivity {
 
         // extensionsConfig
         String extetnisonsConfig = getIntent().getStringExtra(Config.class.getName());
+        String ui_config = null;
         InputStream stream;
         if (!TextUtils.isEmpty(extetnisonsConfig)) {
             try {
-                stream = new ByteArrayInputStream(extetnisonsConfig.getBytes("UTF-8"));
-            } catch (UnsupportedEncodingException e) {
+                JSONObject jsonObject = new JSONObject(extetnisonsConfig);
+                if (jsonObject.has("NativeMap") && jsonObject.get("NativeMap") instanceof JSONObject) {
+                    ui_config = jsonObject.getJSONObject("NativeMap").toString();
+                    stream = new ByteArrayInputStream(ui_config.getBytes("UTF-8"));
+                } else {
+                    stream = getApplicationContext().getResources().openRawResource(R.raw.uiextensions_config);
+                }
+            } catch (Exception e) {
                 stream = getApplicationContext().getResources().openRawResource(R.raw.uiextensions_config);
             }
         } else {
@@ -79,11 +84,9 @@ public class PDFReaderActivity extends FragmentActivity {
         pdfViewCtrl.setAttachedActivity(this);
         AccountModule.getInstance().onCreate(this, savedInstanceState);
 
-        initTopBarConfig();
-        initBottomBarConfig();
-        initPanelConfig();
-        initViewMoreConfig();
-        initViewSettingsConfig();
+        if (!TextUtils.isEmpty(ui_config)) {
+            initConfig(ui_config);
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             int permission = ContextCompat.checkSelfPermission(this.getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
@@ -115,161 +118,229 @@ public class PDFReaderActivity extends FragmentActivity {
         uiExtensionsManager.openDocument(filePath, bytes);
     }
 
-    private void initTopBarConfig() {
-        boolean enableTopBar = getIntent().getBooleanExtra("enableTopToolbar", true);
-        uiExtensionsManager.enableTopToolbar(enableTopBar);
-
-        TopToolbarConfig config = (TopToolbarConfig) getIntent().getSerializableExtra(TopToolbarConfig.TAG);
-        if (null != config) {
-            IBarsHandler barsHandler = uiExtensionsManager.getBarManager();
-
-            if (!config.back)
-                barsHandler.setVisibility(IBarsHandler.BarName.TOP_BAR, BaseBar.TB_Position.Position_LT,
-                        ToolbarItemConfig.ITEM_TOPBAR_BACK, getVisibility(config.back));
-            if (!config.bookmark)
-                barsHandler.setVisibility(IBarsHandler.BarName.TOP_BAR, BaseBar.TB_Position.Position_RB,
-                        ToolbarItemConfig.ITEM_TOPBAR_READINGMARK, getVisibility(config.bookmark));
-            if (!config.search)
-                barsHandler.setVisibility(IBarsHandler.BarName.TOP_BAR, BaseBar.TB_Position.Position_RB,
-                        ToolbarItemConfig.ITEM_TOPBAR_SEARCH, getVisibility(config.search));
-            if (!config.more)
-                barsHandler.setVisibility(IBarsHandler.BarName.TOP_BAR, BaseBar.TB_Position.Position_RB,
-                        ToolbarItemConfig.ITEM_TOPBAR_MORE, getVisibility(config.more));
+    private void initConfig(String config) {
+        try {
+            JSONObject object = new JSONObject(config);
+            //toolbars
+            if (object.has("toolBars") && object.get("toolBars") instanceof JSONObject) {
+                initToolBars(object.getJSONObject("toolBars"));
+            }
+            //panels
+            if (object.has("panels") && object.get("panels") instanceof JSONObject) {
+                initPanelConfig(object.getJSONObject("panels"));
+            }
+            //menus
+            if (object.has("menus") && object.get("menus") instanceof JSONObject) {
+                //moreMenus
+                JSONObject menus = object.getJSONObject("menus");
+                if (menus.has("moreMenus") && menus.get("moreMenus") instanceof JSONObject) {
+                    initViewMoreConfig(menus.getJSONObject("moreMenus"));
+                }
+                //viewMenus
+                if (menus.has("viewMenus") && menus.get("viewMenus") instanceof JSONObject) {
+                    initViewSettingsConfig(menus.getJSONObject("viewMenus"));
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 
-    private void initBottomBarConfig() {
-        boolean enableBottomBar = getIntent().getBooleanExtra("enableBottomToolbar", true);
-        uiExtensionsManager.enableBottomToolbar(enableBottomBar);
+    private void initToolBars(JSONObject object) {
+        try {
+            boolean enableTopBar = JsonUtil.getBoolean(object, "enableTopToolbar", true);
+            uiExtensionsManager.enableTopToolbar(enableTopBar);
+            boolean enableBottomBar = JsonUtil.getBoolean(object, "enableBottomToolbar", true);
+            uiExtensionsManager.enableBottomToolbar(enableBottomBar);
 
-        BottomToolbarConfig config = (BottomToolbarConfig) getIntent().getSerializableExtra(BottomToolbarConfig.TAG);
-        if (null != config) {
-            IBarsHandler barsHandler = uiExtensionsManager.getBarManager();
+            if (object.has("topBar")) {
+                JSONObject topBarObject = object.getJSONObject("topBar");
+                IBarsHandler barsHandler = uiExtensionsManager.getBarManager();
 
-            if (!config.annot)
-                barsHandler.setVisibility(IBarsHandler.BarName.BOTTOM_BAR, BaseBar.TB_Position.Position_CENTER,
-                        ToolbarItemConfig.ITEM_BOTTOMBAR_COMMENT, getVisibility(config.annot));
-            if (!config.panel)
-                barsHandler.setVisibility(IBarsHandler.BarName.BOTTOM_BAR, BaseBar.TB_Position.Position_CENTER,
-                        ToolbarItemConfig.ITEM_BOTTOMBAR_LIST, getVisibility(config.panel));
-            if (!config.readmore)
-                barsHandler.setVisibility(IBarsHandler.BarName.BOTTOM_BAR, BaseBar.TB_Position.Position_CENTER,
-                        ToolbarItemConfig.ITEM_BOTTOMBAR_VIEW, getVisibility(config.readmore));
-            if (!config.signature)
-                barsHandler.setVisibility(IBarsHandler.BarName.BOTTOM_BAR, BaseBar.TB_Position.Position_CENTER,
-                        ToolbarItemConfig.ITEM_BOTTOMBAR_SIGN, getVisibility(config.signature));
+                boolean back = JsonUtil.getBoolean(topBarObject, "back", true);
+                boolean more = JsonUtil.getBoolean(topBarObject, "more", true);
+                boolean bookmark = JsonUtil.getBoolean(topBarObject, "bookmark", true);
+                boolean search = JsonUtil.getBoolean(topBarObject, "search", true);
+
+                if (!back)
+                    barsHandler.setVisibility(IBarsHandler.BarName.TOP_BAR, BaseBar.TB_Position.Position_LT,
+                            ToolbarItemConfig.ITEM_TOPBAR_BACK, getVisibility(back));
+                if (!bookmark)
+                    barsHandler.setVisibility(IBarsHandler.BarName.TOP_BAR, BaseBar.TB_Position.Position_RB,
+                            ToolbarItemConfig.ITEM_TOPBAR_READINGMARK, getVisibility(bookmark));
+                if (!search)
+                    barsHandler.setVisibility(IBarsHandler.BarName.TOP_BAR, BaseBar.TB_Position.Position_RB,
+                            ToolbarItemConfig.ITEM_TOPBAR_SEARCH, getVisibility(search));
+                if (!more)
+                    barsHandler.setVisibility(IBarsHandler.BarName.TOP_BAR, BaseBar.TB_Position.Position_RB,
+                            ToolbarItemConfig.ITEM_TOPBAR_MORE, getVisibility(more));
+            }
+
+            if (object.has("bottomBar")) {
+                JSONObject bottomBarObject = object.getJSONObject("bottomBar");
+                IBarsHandler barsHandler = uiExtensionsManager.getBarManager();
+
+                boolean annot = JsonUtil.getBoolean(bottomBarObject, "annot", true);
+                boolean panel = JsonUtil.getBoolean(bottomBarObject, "panel", true);
+                boolean readmore = JsonUtil.getBoolean(bottomBarObject, "readmore", true);
+                boolean signature = JsonUtil.getBoolean(bottomBarObject, "signature", true);
+
+                if (!annot)
+                    barsHandler.setVisibility(IBarsHandler.BarName.BOTTOM_BAR, BaseBar.TB_Position.Position_CENTER,
+                            ToolbarItemConfig.ITEM_BOTTOMBAR_COMMENT, getVisibility(annot));
+                if (!panel)
+                    barsHandler.setVisibility(IBarsHandler.BarName.BOTTOM_BAR, BaseBar.TB_Position.Position_CENTER,
+                            ToolbarItemConfig.ITEM_BOTTOMBAR_LIST, getVisibility(panel));
+                if (!readmore)
+                    barsHandler.setVisibility(IBarsHandler.BarName.BOTTOM_BAR, BaseBar.TB_Position.Position_CENTER,
+                            ToolbarItemConfig.ITEM_BOTTOMBAR_VIEW, getVisibility(readmore));
+                if (!signature)
+                    barsHandler.setVisibility(IBarsHandler.BarName.BOTTOM_BAR, BaseBar.TB_Position.Position_CENTER,
+                            ToolbarItemConfig.ITEM_BOTTOMBAR_SIGN, getVisibility(signature));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 
-    private void initPanelConfig() {
-        PanelConfig config = (PanelConfig) getIntent().getSerializableExtra(PanelConfig.TAG);
-        if (null != config) {
-            if (!config.annotation)
-                uiExtensionsManager.setPanelHidden(!config.annotation, PanelSpec.PanelType.Annotations);
-            if (!config.attachments)
-                uiExtensionsManager.setPanelHidden(!config.attachments, PanelSpec.PanelType.Attachments);
-            if (!config.outline)
-                uiExtensionsManager.setPanelHidden(!config.outline, PanelSpec.PanelType.Outline);
-            if (!config.readingBookmark)
-                uiExtensionsManager.setPanelHidden(!config.readingBookmark, PanelSpec.PanelType.ReadingBookmarks);
-            if (!config.signature)
-                uiExtensionsManager.setPanelHidden(!config.signature, PanelSpec.PanelType.Signatures);
-        }
+    private void initPanelConfig(JSONObject object) {
+        boolean annotation = JsonUtil.getBoolean(object, "annotation", true);
+        boolean attachments = JsonUtil.getBoolean(object, "attachments", true);
+        boolean outline = JsonUtil.getBoolean(object, "outline", true);
+        boolean readingBookmark = JsonUtil.getBoolean(object, "readingBookmark", true);
+        boolean signature = JsonUtil.getBoolean(object, "signature", true);
+
+        if (!annotation)
+            uiExtensionsManager.setPanelHidden(!annotation, PanelSpec.PanelType.Annotations);
+        if (!attachments)
+            uiExtensionsManager.setPanelHidden(!attachments, PanelSpec.PanelType.Attachments);
+        if (!outline)
+            uiExtensionsManager.setPanelHidden(!outline, PanelSpec.PanelType.Outline);
+        if (!readingBookmark)
+            uiExtensionsManager.setPanelHidden(!readingBookmark, PanelSpec.PanelType.ReadingBookmarks);
+        if (!signature)
+            uiExtensionsManager.setPanelHidden(!signature, PanelSpec.PanelType.Signatures);
     }
 
-    private void initViewSettingsConfig() {
-        ViewSettingsConfig config = (ViewSettingsConfig) getIntent().getSerializableExtra(ViewSettingsConfig.TAG);
-        if (null != config) {
-            IMultiLineBar settingsBar = uiExtensionsManager.getSettingBar();
+    private void initViewSettingsConfig(JSONObject object) {
+        boolean single = JsonUtil.getBoolean(object, "single", true);
+        boolean continuous = JsonUtil.getBoolean(object, "continuous", true);
+        boolean thumbnail = JsonUtil.getBoolean(object, "thumbnail", true);
+        boolean brightness = JsonUtil.getBoolean(object, "brightness", true);
+        boolean nightMode = JsonUtil.getBoolean(object, "nightMode", true);
+        boolean reflow = JsonUtil.getBoolean(object, "reflow", true);
+        boolean cropPage = JsonUtil.getBoolean(object, "cropPage", true);
+        boolean screenLock = JsonUtil.getBoolean(object, "screenLock", true);
+        boolean facingPage = JsonUtil.getBoolean(object, "facingPage", true);
+        boolean coverPage = JsonUtil.getBoolean(object, "coverPage", true);
+        boolean panZoom = JsonUtil.getBoolean(object, "panZoom", true);
+        boolean fitPage = JsonUtil.getBoolean(object, "fitPage", true);
+        boolean fitWidth = JsonUtil.getBoolean(object, "fitWidth", true);
+        boolean rotate = JsonUtil.getBoolean(object, "rotate", true);
 
-            if (!config.single)
-                settingsBar.setVisibility(IMultiLineBar.TYPE_SINGLEPAGE, getVisibility(config.single));
-            if (!config.continuous)
-                settingsBar.setVisibility(IMultiLineBar.TYPE_CONTINUOUSPAGE, getVisibility(config.continuous));
-            if (!config.thumbnail)
-                settingsBar.setVisibility(IMultiLineBar.TYPE_THUMBNAIL, getVisibility(config.thumbnail));
-            if (!config.brightness)
-                settingsBar.setVisibility(IMultiLineBar.TYPE_SYSLIGHT, getVisibility(config.brightness));
-            if (!config.nightMode)
-                settingsBar.setVisibility(IMultiLineBar.TYPE_DAYNIGHT, getVisibility(config.nightMode));
-            if (!config.reflow)
-                settingsBar.setVisibility(IMultiLineBar.TYPE_REFLOW, getVisibility(config.reflow));
-            if (!config.cropPage)
-                settingsBar.setVisibility(IMultiLineBar.TYPE_CROP, getVisibility(config.cropPage));
-            if (!config.screenLock)
-                settingsBar.setVisibility(IMultiLineBar.TYPE_LOCKSCREEN, getVisibility(config.screenLock));
-            if (!config.facingPage)
-                settingsBar.setVisibility(IMultiLineBar.TYPE_FACINGPAGE, getVisibility(config.facingPage));
-            if (!config.coverPage)
-                settingsBar.setVisibility(IMultiLineBar.TYPE_COVERPAGE, getVisibility(config.coverPage));
-            if (!config.panZoom)
-                settingsBar.setVisibility(IMultiLineBar.TYPE_PANZOOM, getVisibility(config.panZoom));
-            if (!config.fitPage)
-                settingsBar.setVisibility(IMultiLineBar.TYPE_FITPAGE, getVisibility(config.fitPage));
-            if (!config.fitWidth)
-                settingsBar.setVisibility(IMultiLineBar.TYPE_FITWIDTH, getVisibility(config.fitWidth));
-            if (!config.rotate)
-                settingsBar.setVisibility(IMultiLineBar.TYPE_ROTATEVIEW, getVisibility(config.rotate));
-        }
+        IMultiLineBar settingsBar = uiExtensionsManager.getSettingBar();
+        if (!single)
+            settingsBar.setVisibility(IMultiLineBar.TYPE_SINGLEPAGE, getVisibility(single));
+        if (!continuous)
+            settingsBar.setVisibility(IMultiLineBar.TYPE_CONTINUOUSPAGE, getVisibility(continuous));
+        if (!thumbnail)
+            settingsBar.setVisibility(IMultiLineBar.TYPE_THUMBNAIL, getVisibility(thumbnail));
+        if (!brightness)
+            settingsBar.setVisibility(IMultiLineBar.TYPE_SYSLIGHT, getVisibility(brightness));
+        if (!nightMode)
+            settingsBar.setVisibility(IMultiLineBar.TYPE_DAYNIGHT, getVisibility(nightMode));
+        if (!reflow)
+            settingsBar.setVisibility(IMultiLineBar.TYPE_REFLOW, getVisibility(reflow));
+        if (!cropPage)
+            settingsBar.setVisibility(IMultiLineBar.TYPE_CROP, getVisibility(cropPage));
+        if (!screenLock)
+            settingsBar.setVisibility(IMultiLineBar.TYPE_LOCKSCREEN, getVisibility(screenLock));
+        if (!facingPage)
+            settingsBar.setVisibility(IMultiLineBar.TYPE_FACINGPAGE, getVisibility(facingPage));
+        if (!coverPage)
+            settingsBar.setVisibility(IMultiLineBar.TYPE_COVERPAGE, getVisibility(coverPage));
+        if (!panZoom)
+            settingsBar.setVisibility(IMultiLineBar.TYPE_PANZOOM, getVisibility(panZoom));
+        if (!fitPage)
+            settingsBar.setVisibility(IMultiLineBar.TYPE_FITPAGE, getVisibility(fitPage));
+        if (!fitWidth)
+            settingsBar.setVisibility(IMultiLineBar.TYPE_FITWIDTH, getVisibility(fitWidth));
+        if (!rotate)
+            settingsBar.setVisibility(IMultiLineBar.TYPE_ROTATEVIEW, getVisibility(rotate));
     }
 
-    private void initViewMoreConfig() {
-        ViewMoreConfig config = (ViewMoreConfig) getIntent().getSerializableExtra(ViewMoreConfig.TAG);
-        if (null != config) {
-            IMenuView menuView = uiExtensionsManager.getMenuView();
+    private void initViewMoreConfig(JSONObject object) {
+        IMenuView menuView = uiExtensionsManager.getMenuView();
 
-            ViewMoreConfig.GroupFile groupFile = config.groupFile;
-            if (null != groupFile) {
-                if (!groupFile.crop)
-                    menuView.setItemVisibility(getVisibility(groupFile.crop), MoreMenuConfig.GROUP_FILE, MoreMenuConfig.ITEM_SNAPSHOT);
-                if (!groupFile.fileInfo)
-                    menuView.setItemVisibility(getVisibility(groupFile.fileInfo), MoreMenuConfig.GROUP_FILE, MoreMenuConfig.ITEM_DOCINFO);
-                if (!groupFile.reduceFileSize)
-                    menuView.setItemVisibility(getVisibility(groupFile.reduceFileSize), MoreMenuConfig.GROUP_FILE, MoreMenuConfig.ITEM_REDUCE_FILE_SIZE);
-                if (!groupFile.wirelessPrint)
-                    menuView.setItemVisibility(getVisibility(groupFile.wirelessPrint), MoreMenuConfig.GROUP_FILE, MoreMenuConfig.ITEM_PRINT_FILE);
+        try {
+            if (object.has("groupFile") && object.get("groupFile") instanceof JSONObject) {
+                JSONObject groupFile = object.getJSONObject("groupFile");
+                boolean crop = JsonUtil.getBoolean(groupFile, "crop", true);
+                boolean fileInfo = JsonUtil.getBoolean(groupFile, "fileInfo", true);
+                boolean reduceFileSize = JsonUtil.getBoolean(groupFile, "reduceFileSize", true);
+                boolean wirelessPrint = JsonUtil.getBoolean(groupFile, "wirelessPrint", true);
 
-                boolean isHideGroupFile = !groupFile.crop && !groupFile.fileInfo && !groupFile.reduceFileSize && !groupFile.wirelessPrint;
+                if (!crop)
+                    menuView.setItemVisibility(getVisibility(crop), MoreMenuConfig.GROUP_FILE, MoreMenuConfig.ITEM_SNAPSHOT);
+                if (!fileInfo)
+                    menuView.setItemVisibility(getVisibility(fileInfo), MoreMenuConfig.GROUP_FILE, MoreMenuConfig.ITEM_DOCINFO);
+                if (!reduceFileSize)
+                    menuView.setItemVisibility(getVisibility(reduceFileSize), MoreMenuConfig.GROUP_FILE, MoreMenuConfig.ITEM_REDUCE_FILE_SIZE);
+                if (!wirelessPrint)
+                    menuView.setItemVisibility(getVisibility(wirelessPrint), MoreMenuConfig.GROUP_FILE, MoreMenuConfig.ITEM_PRINT_FILE);
+
+                boolean isHideGroupFile = !crop && !fileInfo && !reduceFileSize && !wirelessPrint;
                 if (isHideGroupFile)
                     menuView.setGroupVisibility(View.GONE, MoreMenuConfig.GROUP_FILE);
             }
 
-            ViewMoreConfig.GroupProtect groupProtect = config.groupProtect;
-            if (null != groupProtect) {
-                if (!groupProtect.password) {
-                    menuView.setItemVisibility(getVisibility(groupProtect.password), MoreMenuConfig.GROUP_PROTECT, MoreMenuConfig.ITEM_PASSWORD);
-                    menuView.setItemVisibility(getVisibility(groupProtect.password), MoreMenuConfig.GROUP_PROTECT, MoreMenuConfig.ITEM_REMOVESECURITY_PASSWORD);
+            if (object.has("groupProtect") && object.get("groupProtect") instanceof JSONObject) {
+                JSONObject groupProtect = object.getJSONObject("groupProtect");
+                boolean password = JsonUtil.getBoolean(groupProtect, "password", true);
+                if (!password) {
+                    menuView.setItemVisibility(getVisibility(password), MoreMenuConfig.GROUP_PROTECT, MoreMenuConfig.ITEM_PASSWORD);
+                    menuView.setItemVisibility(getVisibility(password), MoreMenuConfig.GROUP_PROTECT, MoreMenuConfig.ITEM_REMOVESECURITY_PASSWORD);
                     menuView.setGroupVisibility(View.GONE, MoreMenuConfig.GROUP_PROTECT);
                 }
             }
 
-            ViewMoreConfig.GroupComment groupComment = config.groupComment;
-            if (null != groupComment) {
-                if (!groupComment.importComment)
-                    menuView.setItemVisibility(getVisibility(groupComment.importComment), MoreMenuConfig.GROUP_ANNOTATION, MoreMenuConfig.ITEM_ANNOTATION_IMPORT);
-                if (!groupComment.exportComment)
-                    menuView.setItemVisibility(getVisibility(groupComment.exportComment), MoreMenuConfig.GROUP_ANNOTATION, MoreMenuConfig.ITEM_ANNOTATION_EXPORT);
+            if (object.has("groupComment") && object.get("groupComment") instanceof JSONObject) {
+                JSONObject groupComment = object.getJSONObject("groupComment");
+                boolean importComment = JsonUtil.getBoolean(groupComment, "importComment", true);
+                boolean exportComment = JsonUtil.getBoolean(groupComment, "exportComment", true);
 
-                boolean isHideGroupComment = !groupComment.importComment && !groupComment.exportComment;
+                if (!importComment)
+                    menuView.setItemVisibility(getVisibility(importComment), MoreMenuConfig.GROUP_ANNOTATION, MoreMenuConfig.ITEM_ANNOTATION_IMPORT);
+                if (!exportComment)
+                    menuView.setItemVisibility(getVisibility(exportComment), MoreMenuConfig.GROUP_ANNOTATION, MoreMenuConfig.ITEM_ANNOTATION_EXPORT);
+
+                boolean isHideGroupComment = !importComment && !exportComment;
                 if (isHideGroupComment)
                     menuView.setGroupVisibility(View.GONE, MoreMenuConfig.GROUP_ANNOTATION);
             }
 
-            ViewMoreConfig.GroupForm groupForm = config.groupForm;
-            if (null != groupForm) {
-                if (!groupForm.createForm)
-                    menuView.setItemVisibility(getVisibility(groupForm.createForm), MoreMenuConfig.GROUP_FORM, MoreMenuConfig.ITEM_CREATE_FORM);
-                if (!groupForm.resetForm)
-                    menuView.setItemVisibility(getVisibility(groupForm.resetForm), MoreMenuConfig.GROUP_FORM, MoreMenuConfig.ITEM_RESET_FORM);
-                if (!groupForm.importForm)
-                    menuView.setItemVisibility(getVisibility(groupForm.importForm), MoreMenuConfig.GROUP_FORM, MoreMenuConfig.ITEM_IMPORT_FORM);
-                if (!groupForm.exportForm)
-                    menuView.setItemVisibility(getVisibility(groupForm.exportForm), MoreMenuConfig.GROUP_FORM, MoreMenuConfig.ITEM_EXPORT_FORM);
+            if (object.has("groupForm") && object.get("groupForm") instanceof JSONObject) {
+                JSONObject groupForm = object.getJSONObject("groupForm");
+                boolean createForm = JsonUtil.getBoolean(groupForm, "createForm", true);
+                boolean resetForm = JsonUtil.getBoolean(groupForm, "resetForm", true);
+                boolean importForm = JsonUtil.getBoolean(groupForm, "importForm", true);
+                boolean exportForm = JsonUtil.getBoolean(groupForm, "exportForm", true);
 
-                boolean isHideGroupFrom = !groupForm.createForm && !groupForm.resetForm && !groupForm.importForm && !groupForm.exportForm;
+                if (!createForm)
+                    menuView.setItemVisibility(getVisibility(createForm), MoreMenuConfig.GROUP_FORM, MoreMenuConfig.ITEM_CREATE_FORM);
+                if (!resetForm)
+                    menuView.setItemVisibility(getVisibility(resetForm), MoreMenuConfig.GROUP_FORM, MoreMenuConfig.ITEM_RESET_FORM);
+                if (!importForm)
+                    menuView.setItemVisibility(getVisibility(importForm), MoreMenuConfig.GROUP_FORM, MoreMenuConfig.ITEM_IMPORT_FORM);
+                if (!exportForm)
+                    menuView.setItemVisibility(getVisibility(exportForm), MoreMenuConfig.GROUP_FORM, MoreMenuConfig.ITEM_EXPORT_FORM);
+
+                boolean isHideGroupFrom = !createForm && !resetForm && !importForm && !exportForm;
                 if (isHideGroupFrom)
                     menuView.setGroupVisibility(View.GONE, MoreMenuConfig.GROUP_FORM);
             }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 

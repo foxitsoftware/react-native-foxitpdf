@@ -15,11 +15,6 @@ import {
 } from 'react-native';
 import FoxitPDF from '@foxitsoftware/react-native-foxitpdf';
 import uiextensions_config from './uiextensions_config.json';
-import top_toolbar_config from './top_toolbar_config.json';
-import bottom_toolbar_config from './bottom_toolbar_config.json';
-import panel_config from './panel_config.json';
-import view_settings_config from './view_settings_config.json';
-import view_more_config from './view_more_config.json';
 
 type Props = {};
 export default class App extends Component<Props> {
@@ -31,7 +26,7 @@ export default class App extends Component<Props> {
   }
 
   onPress() {
-    FoxitPDF.openPDF('/sample.pdf','',uiextensions_config,true,true,top_toolbar_config,bottom_toolbar_config,panel_config,view_settings_config,view_more_config);
+    FoxitPDF.openDocument('/sample.pdf','',uiextensions_config);
   }
 
   render() {
