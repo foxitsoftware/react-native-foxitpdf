@@ -7,7 +7,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "@foxitsoftware/react-native-foxitpdf": "^7.0.0",
+    "@foxitsoftware/react-native-foxitpdf": "/Users/yezhiqiang/Desktop/RDKDevelop/react_native/react-native-foxitpdf",
     "react": "16.8.6",
     "react-native": "0.60.5"
   },
@@ -23,5 +23,4 @@
   "jest": {
     "preset": "react-native"
   }
-
 }

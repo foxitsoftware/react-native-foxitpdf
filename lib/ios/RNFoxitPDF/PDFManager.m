@@ -6,7 +6,8 @@
 //  Copyright © 2018 Facebook. All rights reserved.
 //
 
-#import "PDFManager.h"
+#import <FoxitRDK/FSPDFViewControl.h>
+#import <uiextensionsDynamic/uiextensionsDynamic.h>
 #import <React/RCTBridgeModule.h>
 #import <React/RCTViewManager.h>
 
@@ -19,7 +20,7 @@ static NSString *initializeKey;
 @property (nonatomic, weak) UIExtensionsManager *extensionsManager;
 @end
 
-@interface RNTPDFManager () <RCTBridgeModule, UIExtensionsManagerDelegate, IDocEventListener>
+@interface RNTPDFManager : NSObject <RCTBridgeModule, UIExtensionsManagerDelegate, IDocEventListener>
 @property (nonatomic, strong) FSPDFViewCtrl* pdfViewCtrl;
 @property (nonatomic, strong) UIViewController *pdfViewController;
 @property (nonatomic, strong) PDFNavigationController* rootViewController;
@@ -81,36 +82,15 @@ RCT_EXPORT_METHOD(initialize:(NSString *)sn key:(NSString *)key){
 
 RCT_EXPORT_METHOD(openDocument:(NSString *)src
                   password:(NSString *)password
-                  extensionConfig:(NSDictionary *)extensionConfig
-                  enableTopToolbar:(BOOL)enableTopToolbar
-                  enableBottomToolbar:(BOOL)enableBottomToolbar
-                  topToolbarConfig:(NSDictionary *)topToolbarConfig
-                  bottomToolbarConfig:(NSDictionary *)bottomToolbarConfig
-                  panelConfig:(NSDictionary *)panelConfig
-                  viewSettingsConfig:(NSDictionary *)viewSettingsConfig
-                  viewMoreConfig:(NSDictionary *)viewMoreConfig) {
+                  uiConfig:(NSDictionary *)uiConfig) {
         [self openPDF:src
              password:password
-      extensionConfig:extensionConfig
-     enableTopToolbar:enableTopToolbar
-  enableBottomToolbar:enableBottomToolbar
-     topToolbarConfig:topToolbarConfig
-  bottomToolbarConfig:bottomToolbarConfig
-          panelConfig:panelConfig
-   viewSettingsConfig:viewSettingsConfig
-       viewMoreConfig:viewMoreConfig];
+             uiConfig:uiConfig];
 }
 
 RCT_EXPORT_METHOD(openPDF:(NSString *)src
                   password:(NSString *)password
-                  extensionConfig:(NSDictionary *)extensionConfig
-                  enableTopToolbar:(BOOL)enableTopToolbar
-                  enableBottomToolbar:(BOOL)enableBottomToolbar
-                  topToolbarConfig:(NSDictionary *)topToolbarConfig
-                  bottomToolbarConfig:(NSDictionary *)bottomToolbarConfig
-                  panelConfig:(NSDictionary *)panelConfig
-                  viewSettingsConfig:(NSDictionary *)viewSettingsConfig
-                  viewMoreConfig:(NSDictionary *)viewMoreConfig) {
+                  uiConfig:(NSDictionary *)uiConfig) {
 
     dispatch_async(dispatch_get_main_queue(), ^{
         
@@ -131,8 +111,8 @@ RCT_EXPORT_METHOD(openPDF:(NSString *)src
         self.rootViewController = [[PDFNavigationController alloc] initWithRootViewController:self.pdfViewController];
         self.rootViewController.navigationBarHidden = YES;
         
-        if ( extensionConfig != NULL) {
-            NSData* configData = [NSJSONSerialization dataWithJSONObject:extensionConfig
+        if ( uiConfig != NULL) {
+            NSData* configData = [NSJSONSerialization dataWithJSONObject:uiConfig
                                                                  options:NSJSONWritingPrettyPrinted
                                                                    error: nil];
             
@@ -146,18 +126,29 @@ RCT_EXPORT_METHOD(openPDF:(NSString *)src
     
         self.extensionsManager.delegate = self;
         
+        NSDictionary *toolBars = uiConfig[@"toolBars"];
+        
+        BOOL enableTopToolbar  = YES;
+        if (toolBars[@"enableTopToolbar"]) {
+            enableTopToolbar = [toolBars[@"enableTopToolbar"] boolValue];
+        }
+        
+        BOOL enableBottomToolbar = YES;
+        if (toolBars[@"enableBottomToolbar"]) {
+            enableBottomToolbar = [toolBars[@"enableBottomToolbar"] boolValue];
+        }
 
         [self.extensionsManager enableBottomToolbar:enableBottomToolbar];
         [self.extensionsManager enableTopToolbar:enableTopToolbar];
         
-        [self setPanelConfig:panelConfig];
-        [self setViewMoreConfig:viewMoreConfig];
-        [self setViewSettingsConfig:viewSettingsConfig];
-        [self setTopToolbarConfig:topToolbarConfig];
-        [self setBottomToolbarConfig:bottomToolbarConfig];
+        [self setPanelConfig:uiConfig[@"panels"]];
+        [self setViewMoreConfig:uiConfig[@"menus"][@"moreMenus"]];
+        [self setViewSettingsConfig:uiConfig[@"menus"][@"viewMenus"]];
+        [self setTopToolbarConfig:toolBars[@"topBar"]];
+        [self setBottomToolbarConfig:toolBars[@"bottomBar"]];
         
         self.pdfViewCtrl.extensionsManager = self.extensionsManager;
-        [self wrapTopToolbar];
+        
         self->topToolbarVerticalConstraints = @[];
         
         NSURL *targetURL = nil;
@@ -531,66 +522,6 @@ RCT_EXPORT_METHOD(openPDF:(NSString *)src
     }else{
         return NO;
     }
-}
-
-- (void)uiextensionsManager:(UIExtensionsManager *)uiextensionsManager setTopToolBarHidden:(BOOL)hidden {
-    UIToolbar *topToolbar = self.extensionsManager.topToolbar;
-    UIView *topToolbarWrapper = topToolbar.superview;
-    id topGuide = self.pdfViewController.topLayoutGuide;
-    assert(topGuide);
-    
-    [self.pdfViewCtrl removeConstraints:topToolbarVerticalConstraints];
-    if (!hidden) {
-        NSMutableArray *contraints = @[].mutableCopy;
-        [contraints addObjectsFromArray:
-         [NSLayoutConstraint constraintsWithVisualFormat:@"V:[topGuide]-0-[topToolbar(44)]"
-                                                 options:0
-                                                 metrics:nil
-                                                   views:NSDictionaryOfVariableBindings(topToolbar, topGuide)]];
-        [contraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[topToolbarWrapper]"
-                                                                                options:0
-                                                                                metrics:nil
-                                                                                  views:NSDictionaryOfVariableBindings(topToolbarWrapper)]];
-        topToolbarVerticalConstraints = contraints;
-        
-    } else {
-        topToolbarVerticalConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[topToolbarWrapper]-0-[topGuide]"
-                                                                                options:0
-                                                                                metrics:nil
-                                                                                  views:NSDictionaryOfVariableBindings(topToolbarWrapper, topGuide)];
-    }
-    [self.pdfViewCtrl addConstraints:topToolbarVerticalConstraints];
-    [UIView animateWithDuration:0.3
-                     animations:^{
-                         [self.pdfViewCtrl layoutIfNeeded];
-                     }];
-}
-
-- (void)wrapTopToolbar {
-    // let status bar be translucent. top toolbar is top layout guide (below status bar), so we need a wrapper to cover the status bar.
-    UIToolbar *topToolbar = self.extensionsManager.topToolbar;
-    [topToolbar setTranslatesAutoresizingMaskIntoConstraints:NO];
-    
-    UIView *topToolbarWrapper = [[UIToolbar alloc] init];
-    [topToolbarWrapper setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [self.pdfViewCtrl insertSubview:topToolbarWrapper belowSubview:topToolbar];
-    [topToolbarWrapper addSubview:topToolbar];
-    
-    [self.pdfViewCtrl addConstraints:
-     [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[topToolbarWrapper]-0-|"
-                                             options:0
-                                             metrics:nil
-                                               views:NSDictionaryOfVariableBindings(topToolbarWrapper)]];
-    [topToolbarWrapper addConstraints:
-     [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[topToolbar]-0-|"
-                                             options:0
-                                             metrics:nil
-                                               views:NSDictionaryOfVariableBindings(topToolbar)]];
-    [topToolbarWrapper addConstraints:
-     [NSLayoutConstraint constraintsWithVisualFormat:@"V:[topToolbar]-0-|"
-                                             options:0
-                                             metrics:nil
-                                               views:NSDictionaryOfVariableBindings(topToolbar)]];
 }
 
 // MARK: - IDocEventListener

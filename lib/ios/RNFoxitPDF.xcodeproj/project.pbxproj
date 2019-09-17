@@ -7,10 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		101F35EE213FD0CD009AE925 /* FoxitRDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 101F35EC213FD0CD009AE925 /* FoxitRDK.framework */; };
-		101F35EF213FD0CD009AE925 /* uiextensionsDynamic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 101F35ED213FD0CD009AE925 /* uiextensionsDynamic.framework */; };
-		103B024C21B681B300ABD9B4 /* PDFManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 103B024621B67D4200ABD9B4 /* PDFManager.h */; };
-		103B024D21B6823B00ABD9B4 /* PDFManager.h in Copy Files */ = {isa = PBXBuildFile; fileRef = 103B024621B67D4200ABD9B4 /* PDFManager.h */; };
+		1096800A232F961500E223B4 /* uiextensionsDynamic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 10968008232F961500E223B4 /* uiextensionsDynamic.framework */; };
+		1096800B232F961500E223B4 /* FoxitRDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 10968009232F961500E223B4 /* FoxitRDK.framework */; };
 		DF4A929E20A475AB00EF8795 /* PDFManager.m in Sources */ = {isa = PBXBuildFile; fileRef = DF4A929C20A475AB00EF8795 /* PDFManager.m */; };
 /* End PBXBuildFile section */
 
@@ -21,7 +19,6 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
-				103B024D21B6823B00ABD9B4 /* PDFManager.h in Copy Files */,
 			);
 			name = "Copy Files";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -29,10 +26,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		101F35EC213FD0CD009AE925 /* FoxitRDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FoxitRDK.framework; path = ../../../../../ios/libs/FoxitRDK.framework; sourceTree = "<group>"; };
-		101F35ED213FD0CD009AE925 /* uiextensionsDynamic.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = uiextensionsDynamic.framework; path = ../../../../../ios/libs/uiextensionsDynamic.framework; sourceTree = "<group>"; };
-		103B024621B67D4200ABD9B4 /* PDFManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PDFManager.h; sourceTree = "<group>"; };
-		DF4A928220A471D800EF8795 /* libFoxitPDF.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libFoxitPDF.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		10968008232F961500E223B4 /* uiextensionsDynamic.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = uiextensionsDynamic.framework; path = ../../example/ios/libs/uiextensionsDynamic.framework; sourceTree = "<group>"; };
+		10968009232F961500E223B4 /* FoxitRDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FoxitRDK.framework; path = ../../example/ios/libs/FoxitRDK.framework; sourceTree = "<group>"; };
+		DF4A928220A471D800EF8795 /* libRNFoxitPDF.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRNFoxitPDF.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DF4A929C20A475AB00EF8795 /* PDFManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PDFManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -41,19 +37,19 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				101F35EE213FD0CD009AE925 /* FoxitRDK.framework in Frameworks */,
-				101F35EF213FD0CD009AE925 /* uiextensionsDynamic.framework in Frameworks */,
+				1096800A232F961500E223B4 /* uiextensionsDynamic.framework in Frameworks */,
+				1096800B232F961500E223B4 /* FoxitRDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		101F35EB213FD0CD009AE925 /* Frameworks */ = {
+		10968007232F961500E223B4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				101F35EC213FD0CD009AE925 /* FoxitRDK.framework */,
-				101F35ED213FD0CD009AE925 /* uiextensionsDynamic.framework */,
+				10968009232F961500E223B4 /* FoxitRDK.framework */,
+				10968008232F961500E223B4 /* uiextensionsDynamic.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -61,27 +57,26 @@
 		DF4A927920A471D800EF8795 = {
 			isa = PBXGroup;
 			children = (
-				DF4A928420A471D800EF8795 /* FoxitPDF */,
+				DF4A928420A471D800EF8795 /* RNFoxitPDF */,
 				DF4A928320A471D800EF8795 /* Products */,
-				101F35EB213FD0CD009AE925 /* Frameworks */,
+				10968007232F961500E223B4 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
 		DF4A928320A471D800EF8795 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				DF4A928220A471D800EF8795 /* libFoxitPDF.a */,
+				DF4A928220A471D800EF8795 /* libRNFoxitPDF.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		DF4A928420A471D800EF8795 /* FoxitPDF */ = {
+		DF4A928420A471D800EF8795 /* RNFoxitPDF */ = {
 			isa = PBXGroup;
 			children = (
-				103B024621B67D4200ABD9B4 /* PDFManager.h */,
 				DF4A929C20A475AB00EF8795 /* PDFManager.m */,
 			);
-			path = FoxitPDF;
+			path = RNFoxitPDF;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -91,16 +86,15 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				103B024C21B681B300ABD9B4 /* PDFManager.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		DF4A928120A471D800EF8795 /* FoxitPDF */ = {
+		DF4A928120A471D800EF8795 /* RNFoxitPDF */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = DF4A928B20A471D800EF8795 /* Build configuration list for PBXNativeTarget "FoxitPDF" */;
+			buildConfigurationList = DF4A928B20A471D800EF8795 /* Build configuration list for PBXNativeTarget "RNFoxitPDF" */;
 			buildPhases = (
 				103B024B21B681AC00ABD9B4 /* Headers */,
 				DF4A927E20A471D800EF8795 /* Sources */,
@@ -111,9 +105,9 @@
 			);
 			dependencies = (
 			);
-			name = FoxitPDF;
+			name = RNFoxitPDF;
 			productName = FoxitPDF;
-			productReference = DF4A928220A471D800EF8795 /* libFoxitPDF.a */;
+			productReference = DF4A928220A471D800EF8795 /* libRNFoxitPDF.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */
@@ -131,7 +125,7 @@
 					};
 				};
 			};
-			buildConfigurationList = DF4A927D20A471D800EF8795 /* Build configuration list for PBXProject "FoxitPDF" */;
+			buildConfigurationList = DF4A927D20A471D800EF8795 /* Build configuration list for PBXProject "RNFoxitPDF" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -143,7 +137,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				DF4A928120A471D800EF8795 /* FoxitPDF */,
+				DF4A928120A471D800EF8795 /* RNFoxitPDF */,
 			);
 		};
 /* End PBXProject section */
@@ -276,17 +270,11 @@
 				CODE_SIGN_STYLE = Automatic;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/../../../../../ios/libs",
+					"\"$(SRCROOT)/../../example/ios/libs\"",
 				);
-				HEADER_SEARCH_PATHS = (
-					"$(SRCROOT)/../../react-native/React/**",
-					"$(PROJECT_DIR)/../../../../ios/libs/uiextensions_src",
-				);
+				HEADER_SEARCH_PATHS = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/../../../../../ios/libs",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -301,17 +289,11 @@
 				CODE_SIGN_STYLE = Automatic;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/../../../../../ios/libs",
+					"\"$(SRCROOT)/../../example/ios/libs\"",
 				);
-				HEADER_SEARCH_PATHS = (
-					"$(SRCROOT)/../../react-native/React/**",
-					"$(PROJECT_DIR)/../../../../ios/libs/uiextensions_src",
-				);
+				HEADER_SEARCH_PATHS = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/../../../../../ios/libs",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -323,7 +305,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		DF4A927D20A471D800EF8795 /* Build configuration list for PBXProject "FoxitPDF" */ = {
+		DF4A927D20A471D800EF8795 /* Build configuration list for PBXProject "RNFoxitPDF" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DF4A928920A471D800EF8795 /* Debug */,
@@ -332,7 +314,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		DF4A928B20A471D800EF8795 /* Build configuration list for PBXNativeTarget "FoxitPDF" */ = {
+		DF4A928B20A471D800EF8795 /* Build configuration list for PBXNativeTarget "RNFoxitPDF" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DF4A928C20A471D800EF8795 /* Debug */,

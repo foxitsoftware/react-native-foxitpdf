@@ -8,7 +8,7 @@ require 'json'
 package = JSON.parse(File.read(File.join(__dir__, 'package.json')))
 
 Pod::Spec.new do |s|
-  s.name           = 'FoxitPDF'
+  s.name           = 'RNFoxitPDF'
   s.version        = package['version']
   s.summary        = package['description']
   s.description    = package['description']
@@ -17,9 +17,8 @@ Pod::Spec.new do |s|
   s.license        = "MIT"
   s.source         = { :git => 'https://github.com/foxitsoftware/react-native-foxitpdf.git' }
   s.platform       = :ios, '9.0'
-  s.source_files   = "lib/ios/FoxitPDF/*.{h,m}"
-  s.header_dir     = "FoxitPDF"
-  s.resource_bundles = {
-    'FoxitPDF' => ['lib/ios/FoxitPDF/uiextensions_config.json'],
-  }
+  s.source_files   = "lib/ios/RNFoxitPDF/*.{h,m}"
+  s.header_dir     = "RNFoxitPDF"
+  s.dependency 'React'
+  s.dependency 'FoxitPDF'
 end

@@ -43,3 +43,4 @@ bundles/
 example/ios/libs
 lib/ios/FoxitPDF.xcodeproj/project.xcworkspace/xcshareddata
 /example/android/libs
+example/ios/Pods
