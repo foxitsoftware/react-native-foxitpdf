@@ -30,6 +30,8 @@ Please use foxitpdfsdk_(version_no)_ios.zip from https://developers.foxitsoftwar
 
 ```
 pod spec create FoxitPDF
+```
+```
 <PROJECT_ROOT>/ios/libs/FoxitPDF.podspec
 ```
 FoxitPDF.podspec example 
