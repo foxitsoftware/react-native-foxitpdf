@@ -27,7 +27,9 @@ npm install @foxitsoftware/react-native-foxitpdf
 Please use foxitpdfsdk_(version_no)_ios.zip from https://developers.foxitsoftware.com/pdf-sdk/ios/
 
 2.Create a `FoxitPDF.podspec` file and place it in the `libs` folder
+
 ```
+pod spec create FoxitPDF
 <PROJECT_ROOT>/ios/libs/FoxitPDF.podspec
 ```
 FoxitPDF.podspec example 
