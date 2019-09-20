@@ -61,7 +61,7 @@ ss.dependency 'FoxitPDF/FoxitRDK'
 end
 end
 ```
-3. Add `FoxitPDF` to `<PROJECT_ROOT>/ios/libs/Podfile` 
+3. Add `FoxitPDF` to `<PROJECT_ROOT>/ios/Podfile` 
 ```ruby
 pod 'FoxitPDF', :path=>'./libs/FoxitPDF.podspec'
 ```
