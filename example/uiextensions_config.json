@@ -27,7 +27,7 @@
             "image": true,
             "audio": true,
             "video": true,
-            "redact": true
+            "redaction": true
         },
         "thumbnail": true,
         "attachment": true,
@@ -176,7 +176,7 @@
         },
         "signature": {
         "color" : "#000000",
-        "thickness" : 4
+        "thickness" : 8
         }
     },
     "panels": {
