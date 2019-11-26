@@ -12,7 +12,6 @@
 #import <React/RCTViewManager.h>
 
 static FSErrorCode errorCode = FSErrUnknown;
-static FSFileListViewController *fileListVC;
 static NSString *initializeSN;
 static NSString *initializeKey;
 
@@ -49,7 +48,6 @@ static NSString *initializeKey;
             initializeSN = sn;
             initializeKey = key;
         }
-        if (!fileListVC) fileListVC = [[FSFileListViewController alloc] init];
     }
     return errorCode;
 }
@@ -109,6 +107,7 @@ RCT_EXPORT_METHOD(openPDF:(NSString *)src
         
         self.pdfViewController.view = self.pdfViewCtrl;
         self.rootViewController = [[PDFNavigationController alloc] initWithRootViewController:self.pdfViewController];
+        self.rootViewController.modalPresentationStyle = UIModalPresentationFullScreen;
         self.rootViewController.navigationBarHidden = YES;
         
         if ( uiConfig != NULL) {
@@ -163,6 +162,7 @@ RCT_EXPORT_METHOD(openPDF:(NSString *)src
             [self.pdfViewCtrl openDoc:targetURL.path password:password completion:^(FSErrorCode error) {
                 if (error == FSErrSuccess) {
                     if (!weakSelf.rootViewController.presentingViewController) {
+                        
                         [[[UIApplication sharedApplication].delegate window].rootViewController presentViewController:weakSelf.rootViewController animated:YES completion:^{
 
                         }];
@@ -199,7 +199,9 @@ RCT_EXPORT_METHOD(openPDF:(NSString *)src
     [alert addAction:defaultAction];
     
     UIViewController *rootController = UIApplication.sharedApplication.delegate.window.rootViewController;
-    [rootController presentViewController:alert animated:YES completion:nil];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [rootController presentViewController:alert animated:YES completion:nil];
+    });
     
 }
 
