@@ -162,8 +162,8 @@ RCT_EXPORT_METHOD(openPDF:(NSString *)src
             [self.pdfViewCtrl openDoc:targetURL.path password:password completion:^(FSErrorCode error) {
                 if (error == FSErrSuccess) {
                     if (!weakSelf.rootViewController.presentingViewController) {
-                        
-                        [[[UIApplication sharedApplication].delegate window].rootViewController presentViewController:weakSelf.rootViewController animated:YES completion:^{
+                        weakSelf.rootViewController.modalPresentationStyle = UIModalPresentationFullScreen;
+                        [[weakSelf getForegroundActiveWindow].rootViewController presentViewController:weakSelf.rootViewController animated:YES completion:^{
 
                         }];
                     }
@@ -183,6 +183,19 @@ RCT_EXPORT_METHOD(openPDF:(NSString *)src
             };
         }
     });
+}
+
+- (UIWindow *)getForegroundActiveWindow{
+    #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 130000
+    if (@available(iOS 13.0, *)) {
+        for (UIWindowScene *wScene in [UIApplication sharedApplication].connectedScenes){
+            if (wScene.activationState == UISceneActivationStateForegroundActive){
+                return wScene.windows.firstObject;
+            }
+        }
+    }
+    #endif
+    return [[[UIApplication sharedApplication] delegate] window];
 }
 
 -(void)showError:(NSString *)errMsg {
@@ -218,22 +231,6 @@ RCT_EXPORT_METHOD(openPDF:(NSString *)src
         return nil;
     }
     return [NSURL fileURLWithPath:filePath];
-}
-
-- (FSClientInfo *)getClientInfo {
-    FSClientInfo *client_info = [[FSClientInfo alloc] init];
-    client_info.device_id = [[UIDevice currentDevice] identifierForVendor].UUIDString;
-    client_info.device_name = [UIDevice currentDevice].name;
-    client_info.device_model = [[UIDevice currentDevice] model];
-    client_info.mac_address = @"mac_address";
-    client_info.os = [NSString stringWithFormat:@"%@ %@",
-                      [[UIDevice currentDevice] systemName], [[UIDevice currentDevice] systemVersion]];
-    client_info.product_name = @"RDK";
-    client_info.product_vendor = @"Foxit";
-    client_info.product_version = @"5.2.0";
-    client_info.product_language = [[NSLocale preferredLanguages] objectAtIndex:0];
-    
-    return client_info;
 }
 
 //panelConfig
@@ -507,7 +504,8 @@ RCT_EXPORT_METHOD(openPDF:(NSString *)src
                                if (weakSelf.rootViewController.presentingViewController) {
                                     [weakSelf.rootViewController dismissViewControllerAnimated:NO completion:nil];
                                }
-                               [[[UIApplication sharedApplication].delegate window].rootViewController presentViewController:weakSelf.rootViewController animated:NO completion:^{
+                               weakSelf.rootViewController.modalPresentationStyle = UIModalPresentationFullScreen;
+                               [[weakSelf getForegroundActiveWindow].rootViewController presentViewController:weakSelf.rootViewController animated:NO completion:^{
 
                                }];
                            } else if (error == FSErrDeviceLimitation) {
