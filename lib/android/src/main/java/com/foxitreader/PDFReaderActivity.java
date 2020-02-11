@@ -22,7 +22,6 @@ import com.foxit.uiextensions.controls.propertybar.IMultiLineBar;
 import com.foxit.uiextensions.controls.toolbar.BaseBar;
 import com.foxit.uiextensions.controls.toolbar.IBarsHandler;
 import com.foxit.uiextensions.controls.toolbar.ToolbarItemConfig;
-import com.foxit.uiextensions.modules.connectpdf.account.AccountModule;
 import com.foxit.uiextensions.utils.AppTheme;
 import com.foxit.uiextensions.utils.JsonUtil;
 import com.foxit.uiextensions.utils.UIToast;
@@ -82,7 +81,6 @@ public class PDFReaderActivity extends FragmentActivity {
         uiExtensionsManager.onCreate(this, pdfViewCtrl, savedInstanceState);
         pdfViewCtrl.setUIExtensionsManager(uiExtensionsManager);
         pdfViewCtrl.setAttachedActivity(this);
-        AccountModule.getInstance().onCreate(this, savedInstanceState);
 
         if (!TextUtils.isEmpty(ui_config)) {
             initConfig(ui_config);
@@ -398,7 +396,6 @@ public class PDFReaderActivity extends FragmentActivity {
         if (uiExtensionsManager != null) {
             uiExtensionsManager.onDestroy(this);
         }
-        AccountModule.getInstance().onDestroy(this);
         super.onDestroy();
     }
 

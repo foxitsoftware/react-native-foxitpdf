@@ -13,6 +13,8 @@ import com.foxit.sdk.common.Constants;
 import com.foxit.sdk.common.Library;
 import com.foxit.uiextensions.config.Config;
 
+import androidx.annotation.NonNull;
+
 public class ReactPDFManager extends ReactContextBaseJavaModule {
 
     private static final String REACT_CLASS = "PDFManager";
@@ -26,6 +28,7 @@ public class ReactPDFManager extends ReactContextBaseJavaModule {
         super(reactContext);
     }
 
+    @NonNull
     @Override
     public String getName() {
         return REACT_CLASS;

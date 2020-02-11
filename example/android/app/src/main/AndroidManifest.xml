@@ -19,13 +19,6 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup,icon,theme,label,name">
-        <meta-data
-            android:name="foxit_sn"
-            android:value="xxx"/>
-        <meta-data
-            android:name="foxit_key"
-            android:value="xxx"/>
-
         <activity
             android:name=".MainActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
