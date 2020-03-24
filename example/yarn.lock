@@ -675,6 +675,11 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
+"@foxitsoftware/react-native-foxitpdf@^7.2.0":
+  version "7.2.0"
+  resolved "https://registry.yarnpkg.com/@foxitsoftware/react-native-foxitpdf/-/react-native-foxitpdf-7.2.0.tgz#338e74a120c7643876c679f53242a5b9c980ba69"
+  integrity sha512-Qea7wblG68kO1qIRlXbtvKNkVo3ZKxH1ctGUSDYaugWOhjs7Giw0i88V4DptW+ALRqgMygh9WlxXWVNbIzS+SA==
+
 "@hapi/address@2.x.x":
   version "2.1.4"
   resolved "https://registry.yarnpkg.com/@hapi/address/-/address-2.1.4.tgz#5d67ed43f3fd41a69d4b9ff7b56e7c0d1d0a81e5"
@@ -1220,9 +1225,9 @@ acorn-walk@^6.0.1:
   integrity sha512-7evsyfH1cLOCdAzZAd43Cic04yKydNx0cF+7tiA19p1XnLLPU4dpCQOqpjqwokFe//vS0QqfqqjCS2JkiIs0cA==
 
 acorn@^6.0.1:
-  version "6.4.0"
-  resolved "https://registry.yarnpkg.com/acorn/-/acorn-6.4.0.tgz#b659d2ffbafa24baf5db1cdbb2c94a983ecd2784"
-  integrity sha512-gac8OEcQ2Li1dxIEWGZzsp2BitJxwkwcOm0zHAJLcPJaVvm58FRnk6RkuLRpU1EujipU2ZFODv2P9DLMfnV8mw==
+  version "6.4.1"
+  resolved "https://registry.yarnpkg.com/acorn/-/acorn-6.4.1.tgz#531e58ba3f51b9dacb9a6646ca4debf5b14ca474"
+  integrity sha512-ZVA9k326Nwrj3Cj9jlh3wGFutC2ZornPNARZwsNYqQYgN0EsV2d53w5RN/co65Ohn4sUAUtb1rSUAOD6XN9idA==
 
 acorn@^7.1.0:
   version "7.1.0"
