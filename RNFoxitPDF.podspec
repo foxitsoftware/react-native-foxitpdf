@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   s.homepage       = "https://github.com/foxitsoftware/react-native-foxitpdf#readme"
   s.license        = "MIT"
   s.source         = { :git => 'https://github.com/foxitsoftware/react-native-foxitpdf.git' }
-  s.platform       = :ios, '9.0'
+  s.platform       = :ios, '10.0'
   s.source_files   = "lib/ios/RNFoxitPDF/*.{h,m}"
   s.header_dir     = "RNFoxitPDF"
   s.dependency 'React'
