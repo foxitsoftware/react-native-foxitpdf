@@ -54,7 +54,7 @@ cd <PROJECT_ROOT>/ios && pod install
                 url "$rootDir/../node_modules/react-native/android"
             }
 +            flatDir {
-+               dirs project(':@foxitsoftware_react-native-foxitpdf').file("$rootDir/libs")
++               dirs project(':foxitsoftware_react-native-foxitpdf').file("$rootDir/libs")           
 +           }
         }
     }
