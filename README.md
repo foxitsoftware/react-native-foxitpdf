@@ -37,7 +37,7 @@ cd <PROJECT_ROOT>/ios && pod install
 
 ## Integration for Android
 
-1. Download foxit_mobile_pdf_sdk_android_en.zip from [https://developers.foxitsoftware.com/pdf-sdk/android/] (Please use Foxit PDF SDK for Android 7.3.0 )
+1. Download foxit_mobile_pdf_sdk_android_en.zip from [https://developers.foxitsoftware.com/pdf-sdk/android/] (Please use Foxit PDF SDK for Android 7.4.0 )
 
 2. Unzip `foxitpdfsdk_(version_no)_android.zip` and copy libs folder into the component android folder.
 /xxx/platforms/android/
