@@ -32,6 +32,7 @@
         "thumbnail": true,
         "attachment": true,
         "signature": true,
+        "fillSign": true,
         "search": true,
         "navigation": true,
         "form": true,
@@ -175,32 +176,32 @@
             }
         },
         "form": {
-            "textField": {
-                "textColor": "#000000",
-                "textFace": "Courier",
-                "textSize": 0
-            },
-            "checkBox": {
-                "textColor": "#000000"
-            },
-            "radioButton": {
-                "textColor": "#000000"
-            },
-            "comboBox": {
-                "textColor": "#000000",
-                "textFace": "Courier",
-                "textSize": 0,
-                "customText": false
-           },
-            "listBox": {
-                "textColor": "#000000",
-                "textFace": "Courier",
-                "textSize": 0,
-                "multipleSelection": false
-            }
+          "textField": {
+            "textColor": "#000000",
+            "textFace": "Courier",
+            "textSize": 0
+          },
+          "checkBox": {
+            "textColor": "#000000"
+          },
+          "radioButton": {
+            "textColor": "#000000"
+          },
+          "comboBox": {
+            "textColor": "#000000",
+            "textFace": "Courier",
+            "textSize": 0,
+            "customText": false
+          },
+          "listBox": {
+            "textColor": "#000000",
+            "textFace": "Courier",
+            "textSize": 0,
+            "multipleSelection": false
+          }
         },
         "signature": {
-            "color" : "#000000",
+        "color" : "#000000",
             "thickness" : 8
         }
     },
