@@ -23,7 +23,7 @@
             "polygon": true,
             "cloud": true,
             "polyline": true,
-            "distance": true,
+            "measure": true,
             "image": true,
             "audio": true,
             "video": true,
@@ -60,17 +60,21 @@
         "highlightFormColor":"#200066cc",
         "fullscreen" : true,
         "annotations": {
-            "continuouslyAdd" : false,
+            "continuouslyAdd" : true,
             "highlight": {
                 "color" : "#ffff00",
                 "opacity" : 1.0
+            },
+            "areaHighlight": {
+                  "color": "#ffff00",
+                  "opacity": 1.0
             },
             "underline": {
                 "color" : "#66cc33",
                 "opacity" : 1.0
             },
             "squiggly": {
-                "color" : "#ff6633",
+                "color" : "#993399",
                 "opacity" : 1.0
             },
             "strikeout": {
@@ -146,12 +150,12 @@
                 "textSize" : 18.0
             },
             "note": {
-                "color" : "#ff6633",
+                "color" : "#ff0000",
                 "opacity" : 1.0,
                 "icon" : "Comment"
             },
             "attachment": {
-                "color" : "#ff6633",
+                "color" : "#ff0000",
                 "opacity" : 1.0,
                 "icon" : "Pushpin"
             },
@@ -159,7 +163,7 @@
                 "rotation" : 0,
                 "opacity" : 1.0
             },
-            "distance": {
+            "measure": {
                 "color" : "#ff0000",
                 "opacity" : 1.0,
                 "thickness" : 2,
@@ -215,56 +219,60 @@
     "toolBars": {
         "enableTopToolbar": true,
         "enableBottomToolbar": true,
-        "topBar": {
+        "toolItems": {
             "more": true,
             "back": true,
             "bookmark": true,
-            "search": true
-        },
-        "bottomBar": {
-            "annot": true,
+            "search": true,
             "panel": true,
-            "readmore": true,
-            "signature": true
+            "thumbnail": true,
+            "home": true,
+            "edit": true,
+            "comment": true,
+            "drawing": true,
+            "view": true,
+            "form": true,
+            "fillSign": true
         }
     },
     "menus": {
         "moreMenus": {
-            "groupFile": {
-                "fileInfo" : true,
-                "reduceFileSize" : true,
-                "wirelessPrint" : true,
-                "crop" : true
+            "fileInfo": true,
+            "protect": {
+                "redaction": true,
+                "encryption": true,
+                "trustedCertificates": true
             },
-            "groupProtect": {
-                "password" : true
-            },
-            "groupComment": {
+            "commentsAndFields": {
                 "importComment" : true,
-                "exportComment" : true
-            },
-            "groupForm": {
-                "createForm" : true,
+                "exportComment" : true,
+                "summarizeComment" : true,
                 "resetForm" : true,
                 "importForm" : true,
                 "exportForm" : true
-           }
+            },
+            "saveAs": true,
+            "reduceFileSize": true,
+            "print": true,
+            "flatten": true,
+            "crop": true
         },
         "viewMenus": {
             "single": true,
-            "continuous": true,
             "facingPage": true,
             "coverPage": true,
-            "thumbnail": true,
-            "reflow": true,
-            "cropPage": true,
-            "screenLock": true,
-            "brightness": true,
-            "nightMode": true,
-            "panZoom": true,
+            "continuous": true,
+            "day": true,
+            "night": true,
+            "pageColor": true,
             "fitPage": true,
             "fitWidth": true,
-            "rotate": true
+            "reflow": true,
+            "cropPage": true,
+            "speak": true,
+            "autoFilp": true,
+            "rotate": true,
+            "panZoom": true
         }
     }
 }
