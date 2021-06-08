@@ -48,7 +48,7 @@ public class ReactPDFManager extends ReactContextBaseJavaModule {
     @ReactMethod
     public void initialize(String foxit_sn, String foxit_key) {
         try {
-            if (isLibraryInited == false) {
+            if (!isLibraryInited) {
                 mErrorCode = Library.initialize(foxit_sn, foxit_key);
                 isLibraryInited = true;
             } else if (!mLastSn.equals(foxit_sn) || !mLastKey.equals(foxit_key)) {
