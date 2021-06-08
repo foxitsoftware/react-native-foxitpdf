@@ -37,7 +37,7 @@ cd <PROJECT_ROOT>/ios && pod install
 
 ## Integration for Android
 
-1. Download foxit_mobile_pdf_sdk_android_en.zip from [https://developers.foxitsoftware.com/pdf-sdk/android/] (Please use Foxit PDF SDK for Android 7.5.0 )
+1. Download foxit_mobile_pdf_sdk_android_en.zip from [https://developers.foxitsoftware.com/pdf-sdk/android/] (Please use the latest version)
 
 2. Unzip `foxitpdfsdk_(version_no)_android.zip` and copy libs folder into the component android folder.
 /xxx/platforms/android/
@@ -93,21 +93,13 @@ In your root `android/app/build.gradle`:
     ```
 ```  
 
-4. Add `uses-permission` ,`PDFReaderActivity` and `tools:replace` to your `android/app/src/main/AndroidManifest.xml`.
+4. Add `tools:replace` to your `android/app/src/main/AndroidManifest.xml`.
 ```diff
    <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 +             xmlns:tools="http://schemas.android.com/tools"
               package="com.foxitreact">
    
-+      <uses-permission android:name="android.permission.INTERNET"/>
-+      <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
-+      <uses-permission android:name="android.permission.VIBRATE"/>
-+      <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-+      <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-+      <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-+      <uses-permission android:name="android.permission.RUN_INSTRUMENTATION"/>
-+      <uses-permission android:name="android.permission.CAMERA"/>
-+      <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+       <uses-permission android:name="android.permission.INTERNET"/>
    
        <application
            android:name=".MainApplication"
@@ -118,27 +110,20 @@ In your root `android/app/build.gradle`:
            android:theme="@style/AppTheme"
 +          tools:replace="android:allowBackup,icon,theme,label,name">
            
-+          <activity
-+              android:name="com.foxitreader.PDFReaderActivity"
-+              android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-+              android:screenOrientation="fullSensor"/>
            <activity
                android:name=".MainActivity"
-               android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+               android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
                android:label="@string/app_name"
+	       android:launchMode="singleTask"
                android:windowSoftInputMode="adjustResize">
                <intent-filter>
                    <action android:name="android.intent.action.MAIN"/>
                    <category android:name="android.intent.category.LAUNCHER"/>
                </intent-filter>
            </activity>
-           <activity android:name="com.facebook.react.devsupport.DevSettingsActivity"/>
        </application>
    </manifest>
 ```
-
-5. Please update you Android Gradle plugin to `3.1.0+`, and update the version of Gradle to `4.4+`, you can refer to [https://developer.android.com/studio/releases/gradle-plugin].
-
 
 ## General Usage
 
