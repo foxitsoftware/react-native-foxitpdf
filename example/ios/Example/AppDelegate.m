@@ -65,10 +65,14 @@ static void InitializeFlipper(UIApplication *application) {
 
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
   RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge
-                                                   moduleName:@"Example"
+                                                   moduleName:@"example"
                                             initialProperties:nil];
 
-  rootView.backgroundColor = [[UIColor alloc] initWithRed:1.0f green:1.0f blue:1.0f alpha:1];
+  if (@available(iOS 13.0, *)) {
+      rootView.backgroundColor = [UIColor systemBackgroundColor];
+  } else {
+      rootView.backgroundColor = [UIColor whiteColor];
+  }
 
   self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
   UIViewController *rootViewController = [UIViewController new];
@@ -78,17 +82,6 @@ static void InitializeFlipper(UIApplication *application) {
   return YES;
 }
 
--(void)showError:(NSString *)errMsg {
-  UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Error message"
-                                                                 message:errMsg
-                                                          preferredStyle:UIAlertControllerStyleAlert];
-  UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
-                                                        handler:^(UIAlertAction * action) {
-                                                        }];
-  [alert addAction:defaultAction];
-  UIViewController *rootController = UIApplication.sharedApplication.delegate.window.rootViewController;
-  [rootController presentViewController:alert animated:YES completion:nil];
-}
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
 {
 #if DEBUG

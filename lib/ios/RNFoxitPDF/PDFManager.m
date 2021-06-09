@@ -15,26 +15,23 @@ static FSErrorCode errorCode = FSErrUnknown;
 static NSString *initializeSN;
 static NSString *initializeKey;
 
-@interface PDFNavigationController : UINavigationController
+@interface PDFViewController : UIViewController
 @property (nonatomic, weak) UIExtensionsManager *extensionsManager;
 @end
 
 @interface RNTPDFManager : NSObject <RCTBridgeModule, UIExtensionsManagerDelegate, IDocEventListener>
-@property (nonatomic, strong) FSPDFViewCtrl* pdfViewCtrl;
-@property (nonatomic, strong) UIViewController *pdfViewController;
-@property (nonatomic, strong) PDFNavigationController* rootViewController;
-@property (nonatomic, strong) UIExtensionsManager* extensionsManager;
+@property (nonatomic, strong) FSPDFViewCtrl *pdfViewCtrl;
+@property (nonatomic, strong) PDFViewController *pdfViewController;
+@property (nonatomic, strong) UINavigationController *rootViewController;
+@property (nonatomic, strong) UIExtensionsManager *extensionsManager;
 @end
 
 @implementation RNTPDFManager {
 
-    NSDictionary* _topToolbarConfig;
-    NSDictionary* _bottomToolbarConfig;
+    NSDictionary* _toolbarConfig;
     NSDictionary* _panelConfig;
     NSDictionary* _viewSettingsConfig;
     NSDictionary* _viewMoreConfig;
-    NSArray *topToolbarVerticalConstraints;
-
 }
 
 + (FSErrorCode)initialize:(NSString *)sn
@@ -102,11 +99,11 @@ RCT_EXPORT_METHOD(openPDF:(NSString *)src
         [self.pdfViewCtrl setRMSAppClientId:@"972b6681-fa03-4b6b-817b-c8c10d38bd20" redirectURI:@"com.foxitsoftware.com.mobilepdf-for-ios://authorize"];
         [self.pdfViewCtrl registerDocEventListener:self];
     
-        self.pdfViewController = [[UIViewController alloc] init];
+        self.pdfViewController = [[PDFViewController alloc] init];
         self.pdfViewController.automaticallyAdjustsScrollViewInsets = NO;
         
         self.pdfViewController.view = self.pdfViewCtrl;
-        self.rootViewController = [[PDFNavigationController alloc] initWithRootViewController:self.pdfViewController];
+        self.rootViewController = [[UINavigationController alloc] initWithRootViewController:self.pdfViewController];
         self.rootViewController.modalPresentationStyle = UIModalPresentationFullScreen;
         self.rootViewController.navigationBarHidden = YES;
         
@@ -120,8 +117,7 @@ RCT_EXPORT_METHOD(openPDF:(NSString *)src
             
             self.extensionsManager = [[UIExtensionsManager alloc] initWithPDFViewControl:self.pdfViewCtrl];
         }
-
-        self.rootViewController.extensionsManager = self.extensionsManager;
+        self.pdfViewController.extensionsManager = self.extensionsManager;
     
         self.extensionsManager.delegate = self;
         
@@ -143,12 +139,9 @@ RCT_EXPORT_METHOD(openPDF:(NSString *)src
         [self setPanelConfig:uiConfig[@"panels"]];
         [self setViewMoreConfig:uiConfig[@"menus"][@"moreMenus"]];
         [self setViewSettingsConfig:uiConfig[@"menus"][@"viewMenus"]];
-        [self setTopToolbarConfig:toolBars[@"topBar"]];
-        [self setBottomToolbarConfig:toolBars[@"bottomBar"]];
+        [self setToolbarConfig:toolBars[@"toolItems"]];
         
         self.pdfViewCtrl.extensionsManager = self.extensionsManager;
-        
-        self->topToolbarVerticalConstraints = @[];
         
         NSURL *targetURL = nil;
         if (targetURL == nil) {
@@ -163,7 +156,7 @@ RCT_EXPORT_METHOD(openPDF:(NSString *)src
                 if (error == FSErrSuccess) {
                     if (!weakSelf.rootViewController.presentingViewController) {
                         weakSelf.rootViewController.modalPresentationStyle = UIModalPresentationFullScreen;
-                        [[weakSelf getForegroundActiveWindow].rootViewController presentViewController:weakSelf.rootViewController animated:YES completion:^{
+                        [[weakSelf topMostViewController] presentViewController:weakSelf.rootViewController animated:YES completion:^{
 
                         }];
                     }
@@ -185,13 +178,39 @@ RCT_EXPORT_METHOD(openPDF:(NSString *)src
     });
 }
 
+- (UIViewController*) topMostViewController {
+    UIViewController *presentingViewController = [self getForegroundActiveWindow].rootViewController;
+    while (presentingViewController.presentedViewController != nil) {
+        presentingViewController = presentingViewController.presentedViewController;
+    }
+    return presentingViewController;
+}
+
 - (UIWindow *)getForegroundActiveWindow{
+
+    UIWindow *originalKeyWindow = nil;
     #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 130000
     if (@available(iOS 13.0, *)) {
-        for (UIWindowScene *wScene in [UIApplication sharedApplication].connectedScenes){
-            if (wScene.activationState == UISceneActivationStateForegroundActive){
-                return wScene.windows.firstObject;
+        NSSet<UIScene *> *connectedScenes = [UIApplication sharedApplication].connectedScenes;
+        for (UIScene *scene in connectedScenes) {
+            if ([scene isKindOfClass:[UIWindowScene class]]) {
+                UIWindowScene *windowScene = (UIWindowScene *)scene;
+                if (windowScene.activationState == UISceneActivationStateUnattached){
+                    originalKeyWindow = windowScene.windows.firstObject;
+                }
+                if (scene.activationState == UISceneActivationStateForegroundActive) {
+                    for (UIWindow *window in windowScene.windows) {
+                        if (window.isKeyWindow) {
+                            originalKeyWindow = window;
+                            break;
+                        }
+                    }
+                }
             }
+
+        }
+        if (originalKeyWindow) {
+            return originalKeyWindow;
         }
     }
     #endif
@@ -211,9 +230,8 @@ RCT_EXPORT_METHOD(openPDF:(NSString *)src
     
     [alert addAction:defaultAction];
     
-    UIViewController *rootController = UIApplication.sharedApplication.delegate.window.rootViewController;
     dispatch_async(dispatch_get_main_queue(), ^{
-        [rootController presentViewController:alert animated:YES completion:nil];
+        [[self topMostViewController] presentViewController:alert animated:YES completion:nil];
     });
     
 }
@@ -272,82 +290,73 @@ RCT_EXPORT_METHOD(openPDF:(NSString *)src
 }
 
 //viewMoreConfig
-- (void) setViewMoreConfig: (NSDictionary *) config
+- (void) setViewMoreConfig: (NSDictionary *) moreMenus
 {
-    _viewMoreConfig = config;
+    _viewMoreConfig = moreMenus;
     
     if (_viewMoreConfig != NULL) {
-        NSDictionary *groupConfig = [_viewMoreConfig objectForKey:@"groupFile"];
-        
-        if (groupConfig != NULL) {
-            [self.extensionsManager.more setMoreViewItemHiddenWithGroup:TAG_GROUP_FILE hidden:NO];
-            id val = [groupConfig objectForKey:@"fileInfo"];
-            if (val) {
-                [self.extensionsManager.more setMoreViewItemHiddenWithGroup:TAG_GROUP_FILE andItemTag:TAG_ITEM_FILEINFO hidden:![val boolValue]];
+        id val = [moreMenus objectForKey:@"protect"];
+        if (val && [val isKindOfClass:[NSDictionary class]]) {
+            id redaction = [val objectForKey:@"redaction"];
+            if (redaction) {
+                [self.extensionsManager.more setMoreViewItemHiddenWithGroup:TAG_GROUP_PROTECT andItemTag:TAG_ITEM_REDACTION hidden:![redaction boolValue]];
             }
-            val = [groupConfig objectForKey:@"reduceFileSize"];
-            if (val) {
-                [self.extensionsManager.more setMoreViewItemHiddenWithGroup:TAG_GROUP_FILE andItemTag:TAG_ITEM_REDUCEFILESIZE hidden:![val boolValue]];
+            id encryption = [val objectForKey:@"encryption"];
+            if (encryption) {
+                [self.extensionsManager.more setMoreViewItemHiddenWithGroup:TAG_GROUP_PROTECT andItemTag:TAG_ITEM_PASSWORD hidden:![encryption boolValue]];
             }
-            val = [groupConfig objectForKey:@"wirelessPrint"];
-            if (val) {
-                [self.extensionsManager.more setMoreViewItemHiddenWithGroup:TAG_GROUP_FILE andItemTag:TAG_ITEM_WIRELESSPRINT hidden:![val boolValue]];
-            }
-            val = [groupConfig objectForKey:@"crop"];
-            if (val) {
-                [self.extensionsManager.more setMoreViewItemHiddenWithGroup:TAG_GROUP_FILE andItemTag:TAG_ITEM_SCREENCAPTURE hidden:![val boolValue]];
-            }
-            
-        }
-        
-        groupConfig = [_viewMoreConfig objectForKey:@"groupProtect"] ;
-        
-        if (groupConfig != NULL) {
-            [self.extensionsManager.more setMoreViewItemHiddenWithGroup:TAG_GROUP_PROTECT hidden:NO];
-            id val = [groupConfig objectForKey:@"password"];
-            if (val) {
-                [self.extensionsManager.more setMoreViewItemHiddenWithGroup:TAG_GROUP_PROTECT andItemTag:TAG_ITEM_PASSWORD hidden:![val boolValue]];
+            id trustedCertificates = [val objectForKey:@"trustedCertificates"];
+            if (trustedCertificates) {
+                [self.extensionsManager.more setMoreViewItemHiddenWithGroup:TAG_GROUP_PROTECT andItemTag:TAG_ITEM_CERTIFICATE hidden:![trustedCertificates boolValue]];
             }
         }
-        
-        groupConfig = [_viewMoreConfig objectForKey:@"groupComment"] ;
-        
-        if (groupConfig != NULL) {
-            [self.extensionsManager.more setMoreViewItemHiddenWithGroup:TAG_GROUP_COMMENT hidden:NO];
-            id val = [groupConfig objectForKey:@"importComment"];
-            if (val) {
-                [self.extensionsManager.more setMoreViewItemHiddenWithGroup:TAG_GROUP_COMMENT andItemTag:TAG_ITEM_IMPORTCOMMENT hidden:![val boolValue]];
+        val = [moreMenus objectForKey:@"commentsAndFields"];
+        if (val && [val isKindOfClass:[NSDictionary class]]) {
+            id importComment = [val objectForKey:@"importComment"];
+            if (importComment) {
+                [self.extensionsManager.more setMoreViewItemHiddenWithGroup:TAG_GROUP_COMMENT_FIELD andItemTag:TAG_ITEM_IMPORTCOMMENT hidden:![importComment boolValue]];
             }
-            val = [groupConfig objectForKey:@"exportComment"];
-            if (val) {
-                [self.extensionsManager.more setMoreViewItemHiddenWithGroup:TAG_GROUP_COMMENT andItemTag:TAG_ITEM_EXPORTCOMMENT hidden:![val boolValue]];
+            id exportComment = [val objectForKey:@"exportComment"];
+            if (exportComment) {
+                [self.extensionsManager.more setMoreViewItemHiddenWithGroup:TAG_GROUP_COMMENT_FIELD andItemTag:TAG_ITEM_EXPORTCOMMENT hidden:![exportComment boolValue]];
             }
-        }
-        
-        groupConfig = [_viewMoreConfig objectForKey:@"groupForm"] ;
-        
-        if (groupConfig != NULL) {
-            [self.extensionsManager.more setMoreViewItemHiddenWithGroup:TAG_GROUP_FORM hidden:NO];
-            id val = [groupConfig objectForKey:@"createForm"];
-            if (val) {
-                [self.extensionsManager.more setMoreViewItemHiddenWithGroup:TAG_GROUP_FORM andItemTag:TAG_ITEM_CREATEFORM hidden:![val boolValue]];
+            id summarizeComment = [val objectForKey:@"summarizeComment"];
+            if (summarizeComment) {
+                [self.extensionsManager.more setMoreViewItemHiddenWithGroup:TAG_GROUP_COMMENT_FIELD andItemTag:TAG_ITEM_SUMARIZECOMMENT hidden:![summarizeComment boolValue]];
             }
-            
-            val = [groupConfig objectForKey:@"resetForm"];
-            if (val) {
-                [self.extensionsManager.more setMoreViewItemHiddenWithGroup:TAG_GROUP_FORM andItemTag:TAG_ITEM_RESETFORM hidden:![val boolValue]];
+            id resetForm = [val objectForKey:@"resetForm"];
+            if (resetForm) {
+                [self.extensionsManager.more setMoreViewItemHiddenWithGroup:TAG_GROUP_COMMENT_FIELD andItemTag:TAG_ITEM_RESETFORM hidden:![resetForm boolValue]];
             }
-            
-            val = [groupConfig objectForKey:@"importForm"];
-            if (val) {
-                [self.extensionsManager.more setMoreViewItemHiddenWithGroup:TAG_GROUP_FORM andItemTag:TAG_ITEM_IMPORTFORM hidden:![val boolValue]];
+            id importForm = [val objectForKey:@"importForm"];
+            if (importForm) {
+                [self.extensionsManager.more setMoreViewItemHiddenWithGroup:TAG_GROUP_COMMENT_FIELD andItemTag:TAG_ITEM_IMPORTFORM hidden:![importForm boolValue]];
             }
-            val = [groupConfig objectForKey:@"exportForm"];
-            if (val) {
-                [self.extensionsManager.more setMoreViewItemHiddenWithGroup:TAG_GROUP_FORM andItemTag:TAG_ITEM_EXPORTFORM hidden:![val boolValue]];
+            id exportForm = [val objectForKey:@"exportForm"];
+            if (exportForm) {
+                [self.extensionsManager.more setMoreViewItemHiddenWithGroup:TAG_GROUP_COMMENT_FIELD andItemTag:TAG_ITEM_EXPORTFORM hidden:![exportForm boolValue]];
             }
         }
-        
+        val = [moreMenus objectForKey:@"saveAs"];
+        if (val) {
+            [self.extensionsManager.more setIndividualMenuItemHiddenWithItemTag:TAG_ITEM_SAVE_AS hidden:![val boolValue]];
+        }
+        val = [moreMenus objectForKey:@"reduceFileSize"];
+        if (val) {
+            [self.extensionsManager.more setIndividualMenuItemHiddenWithItemTag:TAG_ITEM_REDUCEFILESIZE hidden:![val boolValue]];
+        }
+        val = [moreMenus objectForKey:@"print"];
+        if (val) {
+            [self.extensionsManager.more setIndividualMenuItemHiddenWithItemTag:TAG_ITEM_WIRELESSPRINT hidden:![val boolValue]];
+        }
+        val = [moreMenus objectForKey:@"flatten"];
+        if (val) {
+            [self.extensionsManager.more setIndividualMenuItemHiddenWithItemTag:TAG_ITEM_FLATTEN hidden:![val boolValue]];
+        }
+        val = [moreMenus objectForKey:@"crop"];
+        if (val) {
+            [self.extensionsManager.more setIndividualMenuItemHiddenWithItemTag:TAG_ITEM_SCREENCAPTURE hidden:![val boolValue]];
+        }
     }
 }
 
@@ -377,38 +386,24 @@ RCT_EXPORT_METHOD(openPDF:(NSString *)src
             [self.extensionsManager.settingBar setItem:COVERPAGE hidden:![val boolValue]];
         }
         
-        val = [_viewSettingsConfig objectForKey:@"thumbnail"] ;
-        if (val != NULL) {
-            [self.extensionsManager.settingBar setItem:THUMBNAIL hidden:![val boolValue]];
-        }
-        
         val = [_viewSettingsConfig objectForKey:@"reflow"] ;
         if (val != NULL) {
             [self.extensionsManager.settingBar setItem:REFLOW hidden:![val boolValue]];
         }
         
-        val = [_viewSettingsConfig objectForKey:@"cropPage"] ;
+        val = [_viewSettingsConfig objectForKey:@"day"] ;
         if (val != NULL) {
-            [self.extensionsManager.settingBar setItem:CROPPAGE hidden:![val boolValue]];
+            [self.extensionsManager.settingBar setItem:DAYMODE hidden:![val boolValue]];
         }
         
-        val = [_viewSettingsConfig objectForKey:@"screenLock"] ;
-        if (val != NULL) {
-            [self.extensionsManager.settingBar setItem:LOCKSCREEN hidden:![val boolValue]];
-        }
-        
-        val = [_viewSettingsConfig objectForKey:@"brightness"] ;
-        if (val != NULL) {
-            [self.extensionsManager.settingBar setItem:BRIGHTNESS hidden:![val boolValue]];
-        }
-        val = [_viewSettingsConfig objectForKey:@"nightMode"] ;
+        val = [_viewSettingsConfig objectForKey:@"night"] ;
         if (val != NULL) {
             [self.extensionsManager.settingBar setItem:NIGHTMODE hidden:![val boolValue]];
         }
         
-        val = [_viewSettingsConfig objectForKey:@"panZoom"] ;
+        val = [_viewSettingsConfig objectForKey:@"pageColor"] ;
         if (val != NULL) {
-            [self.extensionsManager.settingBar setItem:PANZOOM hidden:![val boolValue]];
+            [self.extensionsManager.settingBar setItem:PAGECOLOR hidden:![val boolValue]];
         }
         
         val = [_viewSettingsConfig objectForKey:@"fitPage"] ;
@@ -421,75 +416,110 @@ RCT_EXPORT_METHOD(openPDF:(NSString *)src
             [self.extensionsManager.settingBar setItem:FITWIDTH hidden:![val boolValue]];
         }
         
+        val = [_viewSettingsConfig objectForKey:@"cropPage"] ;
+        if (val != NULL) {
+            [self.extensionsManager.settingBar setItem:CROPPAGE hidden:![val boolValue]];
+        }
+        
+        val = [_viewSettingsConfig objectForKey:@"speak"] ;
+        if (val != NULL) {
+            [self.extensionsManager.settingBar setItem:SPEECH hidden:![val boolValue]];
+        }
+        
+        val = [_viewSettingsConfig objectForKey:@"autoFilp"] ;
+        if (val != NULL) {
+            [self.extensionsManager.settingBar setItem:AUTOFLIP hidden:![val boolValue]];
+        }
+        
         val = [_viewSettingsConfig objectForKey:@"rotate"] ;
         if (val != NULL) {
             [self.extensionsManager.settingBar setItem:ROTATE hidden:![val boolValue]];
         }
         
+        val = [_viewSettingsConfig objectForKey:@"panZoom"] ;
+        if (val != NULL) {
+            [self.extensionsManager.settingBar setItem:PANZOOM hidden:![val boolValue]];
+        }
+        
     }
 }
 
-- (void) setTopToolbarConfig: (NSDictionary *) config
+- (void) setToolbarConfig: (NSDictionary *) config
 {
-    _topToolbarConfig = config;
+    _toolbarConfig = config;
     
-    if (_topToolbarConfig != NULL) {
-        id val = [_topToolbarConfig objectForKey:@"more"] ;
-        
+    if (config != NULL) {
+        id val = [config objectForKey:@"more"];
         if (val != NULL) {
-            [self.extensionsManager setToolbarItemHiddenWithTag:FS_TOPBAR_ITEM_MORE_TAG hidden:![val boolValue]];
+            [self.extensionsManager setToolbarItemHiddenWithTag:FS_TOOLBAR_ITEM_TAG_MORE hidden:![val boolValue]];
         }
         
-        val = [_topToolbarConfig objectForKey:@"back"] ;
-        
+        val = [config objectForKey:@"back"] ;
         if (val != NULL) {
-            [self.extensionsManager setToolbarItemHiddenWithTag:FS_TOPBAR_ITEM_BACK_TAG hidden:![val boolValue]];
+            [self.extensionsManager setToolbarItemHiddenWithTag:FS_TOOLBAR_ITEM_TAG_BACK hidden:![val boolValue]];
         }
         
-        val = [_topToolbarConfig objectForKey:@"bookmark"] ;
-        
+        val = [config objectForKey:@"bookmark"] ;
         if (val != NULL) {
-            [self.extensionsManager setToolbarItemHiddenWithTag:FS_TOPBAR_ITEM_BOOKMARK_TAG hidden:![val boolValue]];
+            [self.extensionsManager setToolbarItemHiddenWithTag:FS_TOOLBAR_ITEM_TAG_READING_BOOKMARK hidden:![val boolValue]];
         }
         
-        val = [_topToolbarConfig objectForKey:@"search"] ;
-        
+        val = [config objectForKey:@"search"] ;
         if (val != NULL) {
-            [self.extensionsManager setToolbarItemHiddenWithTag:FS_TOPBAR_ITEM_SEARCH_TAG hidden:![val boolValue]];
+            [self.extensionsManager setToolbarItemHiddenWithTag:FS_TOOLBAR_ITEM_TAG_SEARCH hidden:![val boolValue]];
+        }
+        
+        val = [config objectForKey:@"panel"] ;
+        if (val) {
+            [self.extensionsManager setToolbarItemHiddenWithTag:FS_TOOLBAR_ITEM_TAG_PANEL hidden:![val boolValue]];
+        }
+        
+        val = [config objectForKey:@"thumbnail"] ;
+        if (val) {
+            [self.extensionsManager setToolbarItemHiddenWithTag:FS_TOOLBAR_ITEM_TAG_THUMBNAIL hidden:![val boolValue]];
+        }
+        
+        val = [config objectForKey:@"home"] ;
+        if (val) {
+            [self.extensionsManager setToolbarItemHiddenWithTag:FS_TOOLBAR_ITEM_TAG_HOME hidden:![val boolValue]];
+        }
+        
+        val = [config objectForKey:@"edit"] ;
+        if (val) {
+            [self.extensionsManager setToolbarItemHiddenWithTag:FS_TOOLBAR_ITEM_TAG_EDIT hidden:![val boolValue]];
+        }
+        
+        val = [config objectForKey:@"comment"] ;
+        if (val) {
+            [self.extensionsManager setToolbarItemHiddenWithTag:FS_TOOLBAR_ITEM_TAG_COMMENT hidden:![val boolValue]];
+        }
+        
+        val = [config objectForKey:@"drawing"] ;
+        if (val) {
+            [self.extensionsManager setToolbarItemHiddenWithTag:FS_TOOLBAR_ITEM_TAG_DRAWING hidden:![val boolValue]];
+        }
+        
+        val = [config objectForKey:@"view"] ;
+        if (val) {
+            if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+                [self.extensionsManager setToolbarItemHiddenWithTag:FS_TOOLBAR_ITEM_TAG_VIEW_SETTINGS hidden:![val boolValue]];
+            }else{
+                [self.extensionsManager setToolbarItemHiddenWithTag:FS_TOOLBAR_ITEM_TAG_VIEW hidden:![val boolValue]];
+            }
+        }
+        
+        val = [config objectForKey:@"form"] ;
+        if (val) {
+            [self.extensionsManager setToolbarItemHiddenWithTag:FS_TOOLBAR_ITEM_TAG_FORM hidden:![val boolValue]];
+        }
+        
+        val = [config objectForKey:@"fillSign"] ;
+        if (val) {
+            [self.extensionsManager setToolbarItemHiddenWithTag:FS_TOOLBAR_ITEM_TAG_SIGN hidden:![val boolValue]];
         }
     }
 }
 
-- (void) setBottomToolbarConfig: (NSDictionary *) config
-{
-    _bottomToolbarConfig = config;
-    
-    if (_bottomToolbarConfig != NULL) {
-        id val = [_bottomToolbarConfig objectForKey:@"annot"] ;
-        
-        if (val != NULL) {
-            [self.extensionsManager setToolbarItemHiddenWithTag:FS_BOTTOMBAR_ITEM_ANNOT_TAG hidden:![val boolValue]];
-        }
-        
-        val = [_bottomToolbarConfig objectForKey:@"panel"] ;
-        
-        if (val != NULL) {
-            [self.extensionsManager setToolbarItemHiddenWithTag:FS_BOTTOMBAR_ITEM_PANEL_TAG hidden:![val boolValue]];
-        }
-        
-        val = [_bottomToolbarConfig objectForKey:@"readmore"] ;
-        
-        if (val != NULL) {
-            [self.extensionsManager setToolbarItemHiddenWithTag:FS_BOTTOMBAR_ITEM_READMODE_TAG hidden:![val boolValue]];
-        }
-        
-        val = [_bottomToolbarConfig objectForKey:@"signature"] ;
-        
-        if (val != NULL) {
-            [self.extensionsManager setToolbarItemHiddenWithTag:FS_BOTTOMBAR_ITEM_SIGNATURE_TAG hidden:![val boolValue]];
-        }
-    }
-}
 
 // MARK: - UIExtensionsManagerDelegate
 #pragma mark - UIExtensionsManagerDelegate
@@ -505,7 +535,7 @@ RCT_EXPORT_METHOD(openPDF:(NSString *)src
                                     [weakSelf.rootViewController dismissViewControllerAnimated:NO completion:nil];
                                }
                                weakSelf.rootViewController.modalPresentationStyle = UIModalPresentationFullScreen;
-                               [[weakSelf getForegroundActiveWindow].rootViewController presentViewController:weakSelf.rootViewController animated:NO completion:^{
+                               [[weakSelf topMostViewController] presentViewController:weakSelf.rootViewController animated:NO completion:^{
 
                                }];
                            } else if (error == FSErrDeviceLimitation) {
@@ -542,13 +572,17 @@ RCT_EXPORT_METHOD(openPDF:(NSString *)src
 
 @end
 
-@implementation PDFNavigationController
+@implementation PDFViewController
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return !self.extensionsManager.isScreenLocked;
 }
 
 - (BOOL)shouldAutorotate {
     return !self.extensionsManager.isScreenLocked;
+}
+
+- (BOOL)prefersStatusBarHidden {
+    return self.extensionsManager.prefersStatusBarHidden;
 }
 
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations {

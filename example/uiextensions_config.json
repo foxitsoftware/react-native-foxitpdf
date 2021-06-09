@@ -237,7 +237,6 @@
     },
     "menus": {
         "moreMenus": {
-            "fileInfo": true,
             "protect": {
                 "redaction": true,
                 "encryption": true,
