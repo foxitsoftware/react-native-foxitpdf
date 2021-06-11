@@ -209,7 +209,7 @@ const styles = StyleSheet.create({
 
 	FoxitPDF.openDocument(String, String) // path and password
 ## Versions
->[v8.0.0](https://github.com/foxitsoftware/react-native-foxitpdf/tree/release/8.0)
+>[v8.0.0](https://github.com/foxitsoftware/react-native-foxitpdf/tree/v8.0)
 
 >[v7.5.0](https://github.com/foxitsoftware/react-native-foxitpdf/tree/release/7.5)
 
