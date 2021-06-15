@@ -148,7 +148,7 @@ In the openDocument function parameter, add the path to the file you wish to ope
 
 If you are using iOS version: Add the name of the PDF file, but make sure it is located under app Document folder
 
-If you are using Android version: `Please input the absolute path of the file in the devices, e.g., FoxitPDF.openDocument('/mnt/sdcard/xxx/xxx.pdf')`
+If you are using Android version: `Please input the absolute path of the file in the devices, e.g., FoxitPDF.openDocument('/storage/emulated/0/xxx/xxx.pdf')`
 
 
 
