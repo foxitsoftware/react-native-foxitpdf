@@ -21,7 +21,13 @@
         android:requestLegacyExternalStorage="true">
         <activity
             android:name="com.foxitreader.PDFReaderActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-            android:screenOrientation="fullSensor" />
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|smallestScreenSize"
+            android:screenOrientation="fullSensor" >
+
+            <layout
+                android:minHeight="700dp"
+                android:minWidth="520dp"
+                android:gravity="center" />
+        </activity>
     </application>
 </manifest>

@@ -35,6 +35,7 @@ import com.foxit.uiextensions.controls.toolbar.BaseBar;
 import com.foxit.uiextensions.controls.toolbar.IBarsHandler;
 import com.foxit.uiextensions.controls.toolbar.ToolbarItemConfig;
 import com.foxit.uiextensions.modules.more.MoreMenuConstants;
+import com.foxit.uiextensions.utils.ActManager;
 import com.foxit.uiextensions.utils.AppDisplay;
 import com.foxit.uiextensions.utils.AppTheme;
 import com.foxit.uiextensions.utils.JsonUtil;
@@ -67,6 +68,7 @@ public class PDFReaderActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         AppTheme.setThemeFullScreen(this);
         AppTheme.setThemeNeedMenuKey(this);
+        ActManager.getInstance().setCurrentActivity(this);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         // extensionsConfig
@@ -184,7 +186,7 @@ public class PDFReaderActivity extends FragmentActivity {
                     barsHandler.setItemVisibility(IBarsHandler.BarName.TOP_BAR, BaseBar.TB_Position.Position_RB,
                             ToolbarItemConfig.ITEM_TOPBAR_MORE, getVisibility(more));
                 if (!bookmark) {
-                    if (AppDisplay.getInstance(getApplicationContext()).isPad())
+                    if (AppDisplay.isPad())
                         barsHandler.setItemVisibility(IBarsHandler.BarName.TOP_BAR, BaseBar.TB_Position.Position_RB,
                                 ToolbarItemConfig.ITEM_TOPBAR_READINGMARK, getVisibility(bookmark));
                     else
@@ -192,7 +194,7 @@ public class PDFReaderActivity extends FragmentActivity {
                                 ToolbarItemConfig.ITEM_BOTTOMBAR_BOOKMARK, getVisibility(bookmark));
                 }
                 if (!panel) {
-                    if (AppDisplay.getInstance(getApplicationContext()).isPad())
+                    if (AppDisplay.isPad())
                         barsHandler.setItemVisibility(IBarsHandler.BarName.TOP_BAR, BaseBar.TB_Position.Position_LT,
                                 ToolbarItemConfig.ITEM_TOPBAR_PANEL, getVisibility(panel));
                     else
@@ -200,7 +202,7 @@ public class PDFReaderActivity extends FragmentActivity {
                                 ToolbarItemConfig.ITEM_BOTTOMBAR_LIST, getVisibility(panel));
                 }
                 if (!thumbnail) {
-                    if (AppDisplay.getInstance(getApplicationContext()).isPad())
+                    if (AppDisplay.isPad())
                         barsHandler.setItemVisibility(IBarsHandler.BarName.TOP_BAR, BaseBar.TB_Position.Position_RB,
                                 ToolbarItemConfig.ITEM_TOPBAR_THUMBNAIL, getVisibility(panel));
                     else
@@ -228,7 +230,7 @@ public class PDFReaderActivity extends FragmentActivity {
                 if (!fillSign)
                     uiExtensionsManager.getMainFrame().removeTab(ToolbarItemConfig.ITEM_FILLSIGN_TAB);
                 if (!view) {
-                    if (AppDisplay.getInstance(getApplicationContext()).isPad())
+                    if (AppDisplay.isPad())
                         uiExtensionsManager.getMainFrame().removeTab(ToolbarItemConfig.ITEM_VIEW_TAB);
                     else
                         barsHandler.setItemVisibility(IBarsHandler.BarName.BOTTOM_BAR, BaseBar.TB_Position.Position_CENTER,
