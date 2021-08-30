@@ -53,8 +53,11 @@ cd <PROJECT_ROOT>/ios && pod install
                 // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
                 url "$rootDir/../node_modules/react-native/android"
             }
-+            flatDir {
++           flatDir {
 +               dirs project(':foxitsoftware_react-native-foxitpdf').file("$rootDir/libs")           
++           }
++           maven {
++                url 'https://pkgs.dev.azure.com/MicrosoftDeviceSDK/DuoSDK-Public/_packaging/Duo-SDK-Feed/maven/v1'
 +           }
         }
     }
