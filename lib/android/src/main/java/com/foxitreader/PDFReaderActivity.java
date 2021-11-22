@@ -228,7 +228,7 @@ public class PDFReaderActivity extends FragmentActivity {
                 if (!bookmark) {
                     if (AppDisplay.isPad())
                         barsHandler.setItemVisibility(IBarsHandler.BarName.TOP_BAR, BaseBar.TB_Position.Position_RB,
-                                ToolbarItemConfig.ITEM_TOPBAR_READINGMARK, getVisibility(bookmark));
+                                ToolbarItemConfig.ITEM_TOPBAR_BOOKMARK, getVisibility(bookmark));
                     else
                         barsHandler.setItemVisibility(IBarsHandler.BarName.BOTTOM_BAR, BaseBar.TB_Position.Position_CENTER,
                                 ToolbarItemConfig.ITEM_BOTTOMBAR_BOOKMARK, getVisibility(bookmark));
