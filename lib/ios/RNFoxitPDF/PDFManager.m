@@ -86,7 +86,11 @@ RCT_EXPORT_METHOD(openDocument:(NSString *)src
 RCT_EXPORT_METHOD(openPDF:(NSString *)src
                   password:(NSString *)password
                   uiConfig:(NSDictionary *)uiConfig) {
-
+    if (uiConfig == NULL) {
+        NSString *configPath = [[NSBundle bundleForClass:[self class]]  pathForResource:@"uiextensions_config" ofType:@"json"];
+        NSData *configData = [NSData dataWithContentsOfFile:configPath];
+        uiConfig = [NSJSONSerialization JSONObjectWithData:configData options:NSJSONReadingMutableContainers error:nil];
+    }
     dispatch_async(dispatch_get_main_queue(), ^{
         
 

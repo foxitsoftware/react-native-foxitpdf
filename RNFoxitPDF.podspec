@@ -18,6 +18,7 @@ Pod::Spec.new do |s|
   s.source         = { :git => 'https://github.com/foxitsoftware/react-native-foxitpdf.git' }
   s.platform       = :ios, '11.0'
   s.source_files   = "lib/ios/RNFoxitPDF/*.{h,m}"
+  s.resources      = "lib/ios/Resources/*"
   s.header_dir     = "RNFoxitPDF"
   s.dependency 'React'
   s.dependency 'FoxitPDF'
