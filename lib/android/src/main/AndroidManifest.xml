@@ -34,5 +34,12 @@
                 android:minWidth="520dp"
                 android:gravity="center" />
         </activity>
+
+        <receiver android:name="com.foxit.uiextensions.annots.multimedia.PhoneStateBroadCastReceiver" android:exported="false" >
+            <intent-filter>
+                <action android:name="android.intent.action.PHONE_STATE" />
+                <action android:name="android.intent.action.NEW_OUTGOING_CALL" />
+            </intent-filter>
+        </receiver>
     </application>
 </manifest>

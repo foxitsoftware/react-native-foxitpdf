@@ -2,7 +2,6 @@
     "modules": {
         "readingbookmark": true,
         "outline": true,
-//        "annotations":true,
         "annotations": {
             "highlight": true,
             "underline": true,
@@ -28,7 +27,7 @@
             "image": true,
             "audio": true,
             "video": true,
-            "redaction":true
+            "redaction": true
         },
         "thumbnail": true,
         "attachment": true,
@@ -42,149 +41,238 @@
         "multipleSelection": true
     },
     "permissions": {
-         "runJavaScript": true,
-         "copyText": true,
-         "disableLink": false
+        "runJavaScript" : true,
+        "copyText" : true,
+        "disableLink" : false
     },
     "uiSettings": {
-      "pageMode": "Single", //("Single"/"Facing"/"CoverLeft"/"CoverMiddle"/"CoverRight"/"Reflow"
-                            // Note: /"CoverLeft"/"CoverMiddle"/"CoverRight" currently only support CoverRight)
-      "continuous": false,  // True means continuous pages, false means discontinuous pages. Invalid for "Reflow" mode
-      "reflowBackgroundColor": "#FFFFFF", // option
-      "zoomMode": "FitWidth", //("FitWidth"/"FitPage")
-      "colorMode": "Normal", //("Normal"/"Night"/"Map")
-      "mapForegroundColor": "#5d5b71", //Effective only when colorMode is "Map" and "Night" mode is not.
-      "mapBackgroundColor": "#00001b", //Effective only when colorMode is "Map" and "Night" mode is not.
-      "disableFormNavigationBar": false,
-      "highlightForm": true,
-      "highlightFormColor": "#200066cc", //Set the highlight color with alpha
-      "highlightLink": true,
-      "highlightLinkColor": "#16007fff", //Set the highlight color with alpha
-      "fullscreen": true, // Enter the full screen immediately after opening. If the user clicks on the page, the toolbar will be displayed. After 5 seconds, if it is in full screen mode, the toolbar and other auxiliary toolbar buttons will be hidden automatically.
-      "annotations": {
-               "continuouslyAdd": true,
-                "highlight": {
-                  "color": "#ffff00", "opacity": 1.0 //opacity: 0.0f - 1.0f, Use default configuration if out of range.
-                },
-                "areaHighlight": {
-                  "color": "#ffff00", "opacity": 1.0 //opacity: 0.0f - 1.0f, Use default configuration if out of range.
-                },
-                "underline": {
-                  "color": "#66cc33", "opacity": 1.0
-                },
-                "squiggly": {
-                  "color": "#993399", "opacity": 1.0
-                },
-                "strikeout": {
-                  "color": "#ff0000", "opacity": 1.0
-                },
-                "insert": {
-                  "color": "#993399", "opacity": 1.0
-                },
-                "replace": {
-                  "color": "#0000ff", "opacity": 1.0
-                },
-                "line": {
-                  "color": "#ff0000", "opacity": 1.0, "thickness": 2 //thickness: 1 - 12, Use default configuration if out of range.
-                },
-                "rectangle": {
-                  "color": "#ff0000", "opacity": 1.0, "thickness": 2
-                },
-                "oval": {
-                  "color": "#ff0000", "opacity": 1.0, "thickness": 2
-                },
-                "arrow": {
-                  "color": "#ff0000", "opacity": 1.0, "thickness": 2
-                },
-                "pencil": {
-                  "color": "#ff0000", "opacity": 1.0, "thickness": 2
-                },
-                "polygon": {
-                  "color": "#ff0000", "opacity": 1.0, "thickness": 2
-                },
-                "cloud": {
-                  "color": "#ff0000", "opacity": 1.0, "thickness": 2
-                },
-                "polyline": {
-                  "color": "#ff0000", "opacity": 1.0, "thickness": 2
-                },
-                "typewriter": {
-                  "textColor": "#0000ff",
-                  "opacity": 1.0,
-                  "textFace": "Courier", // textFace:"Courier"/"Helvetica"/"Times"
-                  "textSize": 18 // testSize > 0
-                },
-                "textbox": {
-                  "color": "#ff0000",
-                  "textColor": "#0000ff",
-                  "opacity": 1.0,
-                  "textFace": "Courier", // textFace:"Courier"/"Helvetica"/"Times"
-                  "textSize": 18
-                },
-                "callout": {
-                  "color": "#ff0000",
-                  "textColor": "#0000ff",
-                  "opacity": 1.0,
-                  "textFace": "Courier", // textFace:"Courier"/"Helvetica"/"Times"
-                  "textSize": 18
-                },
-                "note": {
-                  "color": "#ff0000",
-                  "opacity": 1.0,
-                  "icon": "Comment" //icon：Comment/Key/Note/Help/NewParagraph/Paragraph/Insert
-                },
-                "attachment": {
-                  "color": "#ff0000",
-                  "opacity": 1.0,
-                  "icon": "PushPin" //icon：Graph/PushPin/Paperclip/Tag
-                },
-                "image": {
-                  "rotation": 0, //rotation: 0/90/180/270.
+        "pageMode":"Single",
+        "continuous":false,
+        "colorMode" : "Normal",
+        "zoomMode" : "FitWidth",
+        "mapForegroundColor" : "#5d5b71",
+        "mapBackgroundColor" : "#00001b",
+        "reflowBackgroundColor":"#ffffff",
+        "disableFormNavigationBar" : false,
+        "highlightForm" : true,
+        "highlightLink" : true,
+        "highlightLinkColor" : "#16007fff",
+        "highlightFormColor":"#200066cc",
+        "fullscreen" : true,
+        "annotations": {
+            "continuouslyAdd" : true,
+            "highlight": {
+                "color" : "#ffff00",
+                "opacity" : 1.0
+            },
+            "areaHighlight": {
+                  "color": "#ffff00",
                   "opacity": 1.0
-                },
-                "measure": {
-                   "color": "#ff0000",
-                   "opacity": 1.0,
-                   "thickness": 2,
-                   "scaleFromUnit": "inch",//Unit: pt/inch/ft/yd/p/mm/cm/m
-                   "scaleToUnit": "inch",//Unit: pt/inch/ft/yd/p/mm/cm/m
-                   "scaleFromValue": 1,
-                   "scaleToValue": 1
-                },
-                "redaction": {
-                   "fillColor": "#000000",
-                   "textColor": "#ff0000",
-                   "textFace": "Courier", // textFace:"Courier"/"Helvetica"/"Times"
-                   "textSize": 12
-                }
-      },
-      "form": {
-        "textField": {
-          "textColor": "#000000",
-          "textFace": "Courier", // textFace:"Courier"/"Helvetica"/"Times"
-          "textSize": 0 // 0 means auto-adjust font size (textSize >= 0)
+            },
+            "underline": {
+                "color" : "#66cc33",
+                "opacity" : 1.0
+            },
+            "squiggly": {
+                "color" : "#993399",
+                "opacity" : 1.0
+            },
+            "strikeout": {
+                "color" : "#ff0000",
+                "opacity" : 1.0
+            },
+            "insert": {
+                "color" : "#993399",
+                "opacity" : 1.0
+            },
+            "replace": {
+                "color" : "#0000ff",
+                "opacity" : 1.0
+            },
+            "line": {
+                "color" : "#ff0000",
+                "opacity" : 1.0,
+                "thickness" : 2
+            },
+            "rectangle": {
+                "color" : "#ff0000",
+                "opacity" : 1.0,
+                "thickness" : 2
+            },
+            "oval": {
+                "color" : "#ff0000",
+                "opacity" : 1.0,
+                "thickness" : 2
+            },
+            "arrow": {
+                "color" : "#ff0000",
+                "opacity" : 1.0,
+                "thickness" : 2
+            },
+            "pencil": {
+                "color" : "#ff0000",
+                "opacity" : 1.0,
+                "thickness" : 2,
+                "showPenOnlySwitch": true
+            },
+            "polygon": {
+                "color" : "#ff0000",
+                "opacity" : 1.0,
+                "thickness" : 2
+            },
+            "cloud": {
+                "color" : "#ff0000",
+                "opacity" : 1.0,
+                "thickness" : 2
+            },
+            "polyline": {
+                "color" : "#ff0000",
+                "opacity" : 1.0,
+                "thickness" : 2
+            },
+            "typewriter": {
+                "textColor" : "#0000ff",
+                "opacity" : 1.0,
+                "textFace" : "Courier",
+                "textSize" : 18.0
+            },
+            "textbox": {
+                "color" : "#ff0000",
+                "textColor": "#0000ff",
+                "opacity" : 1.0,
+                "textFace" : "Courier",
+                "textSize" : 18.0
+            },
+            "callout": {
+                "color": "#ff0000",
+                "textColor": "#0000ff",
+                "opacity" : 1.0,
+                "textFace" : "Courier",
+                "textSize" : 18.0
+            },
+            "note": {
+                "color" : "#ff0000",
+                "opacity" : 1.0,
+                "icon" : "Comment"
+            },
+            "attachment": {
+                "color" : "#ff0000",
+                "opacity" : 1.0,
+                "icon" : "Pushpin"
+            },
+            "image": {
+                "rotation" : 0,
+                "opacity" : 1.0
+            },
+            "measure": {
+                "color" : "#ff0000",
+                "opacity" : 1.0,
+                "thickness" : 2,
+                "scaleFromUnit" : "inch",
+                "scaleToUnit" : "inch",
+                "scaleFromValue" : 1,
+                "scaleToValue" : 1
+            },
+            "redaction": {
+                "fillColor" : "#000000",
+                "textColor": "#ff0000",
+                "textFace" : "Courier",
+                "textSize" : 12
+            }
         },
-        "checkBox": {
-          "textColor": "#000000"
+        "form": {
+          "textField": {
+            "textColor": "#000000",
+            "textFace": "Courier",
+            "textSize": 0
+          },
+          "checkBox": {
+            "textColor": "#000000"
+          },
+          "radioButton": {
+            "textColor": "#000000"
+          },
+          "comboBox": {
+            "textColor": "#000000",
+            "textFace": "Courier",
+            "textSize": 0,
+            "customText": false
+          },
+          "listBox": {
+            "textColor": "#000000",
+            "textFace": "Courier",
+            "textSize": 0,
+            "multipleSelection": false
+          }
         },
-        "radioButton": {
-          "textColor": "#000000"
-        },
-        "comboBox": {
-          "textColor": "#000000",
-          "textFace": "Courier", // textFace:"Courier"/"Helvetica"/"Times"
-          "textSize": 0, // 0 means auto-adjust font size (textSize >= 0)
-          "customText": false
-        },
-        "listBox": {
-          "textColor": "#000000",
-          "textFace": "Courier", // textFace:"Courier"/"Helvetica"/"Times"
-          "textSize": 0, // 0 means auto-adjust font size (textSize >= 0)
-          "multipleSelection": false
+        "signature": {
+        "color" : "#000000",
+            "thickness" : 8
         }
-      },
-      "signature": {
-            "color": "#000000", "thickness": 8
-      }
+    },
+    "panels": {
+        "readingBookmark": true,
+        "outline": true,
+        "annotation": true,
+        "attachments": true,
+        "signature": true
+    },
+    "toolBars": {
+        "enableTopToolbar": true,
+        "enableBottomToolbar": true,
+        "toolItems": {
+            "more": true,
+            "back": true,
+            "bookmark": true,
+            "search": true,
+            "panel": true,
+            "thumbnail": true,
+            "home": true,
+            "edit": true,
+            "comment": true,
+            "drawing": true,
+            "view": true,
+            "form": true,
+            "fillSign": true
+        }
+    },
+    "menus": {
+        "moreMenus": {
+            "protect": {
+                "redaction": true,
+                "encryption": true,
+                "trustedCertificates": true
+            },
+            "commentsAndFields": {
+                "importComment" : true,
+                "exportComment" : true,
+                "summarizeComment" : true,
+                "resetForm" : true,
+                "importForm" : true,
+                "exportForm" : true
+            },
+            "saveAs": true,
+            "reduceFileSize": true,
+            "print": true,
+            "flatten": true,
+            "crop": true
+        },
+        "viewMenus": {
+            "single": true,
+            "facingPage": true,
+            "coverPage": true,
+            "continuous": true,
+            "day": true,
+            "night": true,
+            "pageColor": true,
+            "fitPage": true,
+            "fitWidth": true,
+            "reflow": true,
+            "cropPage": true,
+            "speak": true,
+            "autoFilp": true,
+            "rotate": true,
+            "panZoom": true
+        }
     }
 }

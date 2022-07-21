@@ -257,6 +257,7 @@ public class PDFReaderActivity extends FragmentActivity {
                 boolean view = JsonUtil.getBoolean(topBarObject, "view", true);
                 boolean form = JsonUtil.getBoolean(topBarObject, "form", true);
                 boolean fillSign = JsonUtil.getBoolean(topBarObject, "fillSign", true);
+                boolean protect = JsonUtil.getBoolean(topBarObject, "protect", true);
                 if (!home)
                     uiExtensionsManager.getMainFrame().removeTab(ToolbarItemConfig.ITEM_HOME_TAB);
                 if (!edit)
@@ -275,6 +276,10 @@ public class PDFReaderActivity extends FragmentActivity {
                     else
                         barsHandler.setItemVisibility(IBarsHandler.BarName.BOTTOM_BAR, BaseBar.TB_Position.Position_CENTER,
                                 ToolbarItemConfig.ITEM_BOTTOMBAR_VIEW, getVisibility(panel));
+                }
+                if (!protect) {
+                    if (AppDisplay.isPad())
+                        uiExtensionsManager.getMainFrame().removeTab(ToolbarItemConfig.ITEM_PROTECT_TAB);
                 }
             }
         } catch (JSONException e) {
