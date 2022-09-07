@@ -221,9 +221,14 @@ const styles = StyleSheet.create({
 
 	FoxitPDF.initialize(String, String); // foxit_sn and foxit_key
 
-**Open a pdf document**
+**Open a pdf document from local**
 
 	FoxitPDF.openDocument(String, String) // path and password
+
+**Open a pdf document from url**
+
+	FoxitPDF.openDocFromUrl(String, String) // path and password
+	
 ## Versions
 >[v8.3.0](https://github.com/foxitsoftware/react-native-foxitpdf/tree/v8.3)
 
