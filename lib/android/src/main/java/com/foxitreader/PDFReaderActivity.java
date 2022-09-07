@@ -62,7 +62,6 @@ public class PDFReaderActivity extends FragmentActivity {
 
     private PDFViewCtrl pdfViewCtrl = null;
     private UIExtensionsManager uiExtensionsManager = null;
-    private String mFilePath;
 
     public static final int REQUEST_OPEN_DOCUMENT_TREE = 0xF001;
     public static final int REQUEST_SELECT_DEFAULT_FOLDER = 0xF002;
@@ -83,7 +82,6 @@ public class PDFReaderActivity extends FragmentActivity {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         AppStorageManager.setOpenTreeRequestCode(REQUEST_OPEN_DOCUMENT_TREE);
 
-        mFilePath = getIntent().getExtras().getString("path");
         // extensionsConfig
         String extetnisonsConfig = getIntent().getStringExtra(Config.class.getName());
         String ui_config = null;
@@ -110,7 +108,6 @@ public class PDFReaderActivity extends FragmentActivity {
         uiExtensionsManager.onCreate(this, pdfViewCtrl, savedInstanceState);
         pdfViewCtrl.setUIExtensionsManager(uiExtensionsManager);
         pdfViewCtrl.setAttachedActivity(this);
-
         if (!TextUtils.isEmpty(ui_config)) {
             initConfig(ui_config);
         }
@@ -162,13 +159,18 @@ public class PDFReaderActivity extends FragmentActivity {
     }
 
     private void openDocument() {
-        Intent intent = getIntent();
-        String password = intent.getExtras().getString("password");
+        String path = getIntent().getExtras().getString(ReactConstants.KEY_PATH);
+        String password = getIntent().getExtras().getString(ReactConstants.KEY_PASSWORD);
+        int open_type = getIntent().getIntExtra(ReactConstants.KEY_OPEN_TYPE, ReactConstants.OPEN_FROM_LOCAL);
         byte[] bytes = null;
         if (!TextUtils.isEmpty(password)) {
             bytes = password.getBytes();
         }
-        uiExtensionsManager.openDocument(mFilePath, bytes);
+        if (open_type == ReactConstants.OPEN_FROM_LOCAL) {
+            uiExtensionsManager.openDocument(path, bytes);
+        } else {
+            pdfViewCtrl.openDocFromUrl(path, bytes, null, null);
+        }
     }
 
     private void initConfig(String config) {
