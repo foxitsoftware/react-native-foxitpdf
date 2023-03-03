@@ -116,8 +116,9 @@ In your root `android/app/build.gradle`:
            <activity
                android:name=".MainActivity"
                android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
+               android:exported="true"
                android:label="@string/app_name"
-	       android:launchMode="singleTask"
+               android:launchMode="singleTask"
                android:windowSoftInputMode="adjustResize">
                <intent-filter>
                    <action android:name="android.intent.action.MAIN"/>
@@ -212,6 +213,8 @@ const styles = StyleSheet.create({
 
 	FoxitPDF.openDocument(String, String) // path and password
 ## Versions
+>[v8.4.0](https://github.com/foxitsoftware/react-native-foxitpdf/tree/v8.4)
+
 >[v8.3.0](https://github.com/foxitsoftware/react-native-foxitpdf/tree/v8.3)
 
 >[v8.2.0](https://github.com/foxitsoftware/react-native-foxitpdf/tree/v8.2)

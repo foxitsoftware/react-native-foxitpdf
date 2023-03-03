@@ -20,22 +20,25 @@
             <action android:name="android.intent.action.TTS_SERVICE" />
         </intent>
     </queries>
-    
+
     <application
         android:preserveLegacyExternalStorage="true"
         android:requestLegacyExternalStorage="true">
         <activity
             android:name="com.foxitreader.PDFReaderActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|smallestScreenSize"
-            android:screenOrientation="fullSensor" >
+            android:exported="true"
+            android:screenOrientation="fullSensor">
 
             <layout
-                android:minHeight="700dp"
+                android:gravity="center"
                 android:minWidth="520dp"
-                android:gravity="center" />
+                android:minHeight="700dp" />
         </activity>
 
-        <receiver android:name="com.foxit.uiextensions.annots.multimedia.PhoneStateBroadCastReceiver" android:exported="false" >
+        <receiver
+            android:name="com.foxit.uiextensions.annots.multimedia.PhoneStateBroadCastReceiver"
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.PHONE_STATE" />
                 <action android:name="android.intent.action.NEW_OUTGOING_CALL" />
