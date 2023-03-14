@@ -267,7 +267,7 @@ const styles = StyleSheet.create({
 
 ## License
 
-     Copyright (c) 2022 Foxit Corporation
+     Copyright (c) 2023 Foxit Corporation
 
      Licensed under the The MIT License (MIT) (the "License");
      you may not use this file except in compliance with the License.
