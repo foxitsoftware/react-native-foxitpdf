@@ -64,15 +64,20 @@ public class ReactPDFManager extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void openPDF(String src, String password, ReadableMap ui_config) {
-        openDoc(src, password, ui_config);
+        openDoc(ReactConstants.OPEN_FROM_LOCAL, src, password, ui_config);
     }
 
     @ReactMethod
     public void openDocument(String path, String password, ReadableMap ui_config) {
-        openDoc(path, password, ui_config);
+        openDoc(ReactConstants.OPEN_FROM_LOCAL, path, password, ui_config);
     }
 
-    private void openDoc(String path, String password, ReadableMap ui_config) {
+    @ReactMethod
+    public void openDocFromUrl(String url, String password, ReadableMap ui_config) {
+        openDoc(ReactConstants.OPEN_FROM_URL, url, password, ui_config);
+    }
+
+    private void openDoc(int type, String path, String password, ReadableMap ui_config) {
         ReactApplicationContext reactContext = this.getReactApplicationContext();
         if (mErrorCode != Constants.e_ErrSuccess) {
             String errorMsg = (mErrorCode == Constants.e_ErrInvalidLicense) ? "The license is invalid!" : "Failed to initialize the library!";
@@ -87,8 +92,9 @@ public class ReactPDFManager extends ReactContextBaseJavaModule {
 
         Intent intent = new Intent(reactContext, PDFReaderActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra("path", path);
-        intent.putExtra("password", password);
+        intent.putExtra(ReactConstants.KEY_OPEN_TYPE, type);
+        intent.putExtra(ReactConstants.KEY_PATH, path);
+        intent.putExtra(ReactConstants.KEY_PASSWORD, password);
         if (null != ui_config) {
             intent.putExtra(Config.class.getName(), ui_config.toString());
         }

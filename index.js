@@ -5,16 +5,20 @@ import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource'
 var PDFManager = NativeModules.PDFManager;
 
 export default class FoxitPDF {
-  static openPDF(src, password, uiConfig)  {
-       PDFManager.openPDF(src,password,uiConfig);
+  static openPDF(path, password, uiConfig)  {
+       PDFManager.openPDF(path, password, uiConfig);
   }
 
   static initialize(SN, key){
        PDFManager.initialize(SN, key);
   }
 
-  static openDocument(src, password, uiConfig)  {
-       PDFManager.openPDF(src,password,uiConfig);
+  static openDocument(path, password, uiConfig)  {
+       PDFManager.openDocument(path, password, uiConfig);
+  }
+
+  static openDocFromUrl(url, password, uiConfig)  {
+       PDFManager.openDocFromUrl(url, password, uiConfig);
   }
 
 }

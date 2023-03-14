@@ -1,6 +1,6 @@
 # react-native-foxitpdf [![npm version](https://img.shields.io/npm/v/@foxitsoftware/react-native-foxitpdf.svg?style=flat)](https://www.npmjs.com/package/@foxitsoftware/react-native-foxitpdf)
 
-react-native-foxitpdf is Foxit's first React Native PDF component for iOS and Android. It uses Foxit PDF SDK for Android/iOS technology to view, render and edit PDFs easily. 
+react-native-foxitpdf is Foxit's first React Native PDF component for iOS and Android. It uses Foxit PDF SDK for Android/iOS technology to view, render and edit PDFs easily, and it can open pdf files on local or url.
 
 - [Installation](#installation)
 - [Integration for iOS](#integration-for-ios)
@@ -143,7 +143,7 @@ import FoxitPDF from '@foxitsoftware/react-native-foxitpdf';
 FoxitPDF.initialize("foxit_sn","foxit_key");
 ```
 
-3.Once the component is initialized, call the function below to open document:
+3.Once the component is initialized, call the function below to open document from local path:
 ```js
 FoxitPDF.openDocument('sample.pdf');
 ```
@@ -154,6 +154,15 @@ If you are using iOS version: Add the name of the PDF file, but make sure it is 
 
 If you are using Android version: `Please input the absolute path of the file in the devices, e.g., FoxitPDF.openDocument('/storage/emulated/0/xxx/xxx.pdf')`
 
+
+4.Call the function below to open document from URL：
+```js
+FoxitPDF.openDocFromUrl(url);
+```
+e.g.
+```js
+FoxitPDF.openDocFromUrl('https://developers.foxitsoftware.com/resources/pdf-sdk/FoxitPDFSDK_QuickGuide(PDFium).pdf');
+```
 
 
 In `App.js`:
@@ -180,7 +189,11 @@ export default class App extends Component<Props> {
   }
 
   onPress() {
+   //open doc from local path
     FoxitPDF.openDocument('/sample.pdf');
+    
+    // open doc from url
+    //FoxitPDF.openDocFromUrl('');
   }
 
   render() {
@@ -209,9 +222,14 @@ const styles = StyleSheet.create({
 
 	FoxitPDF.initialize(String, String); // foxit_sn and foxit_key
 
-**Open a pdf document**
+**Open a pdf document from local**
 
 	FoxitPDF.openDocument(String, String) // path and password
+
+**Open a pdf document from url**
+
+	FoxitPDF.openDocFromUrl(String, String) // path and password
+	
 ## Versions
 >[v8.4.0](https://github.com/foxitsoftware/react-native-foxitpdf/tree/v8.4)
 

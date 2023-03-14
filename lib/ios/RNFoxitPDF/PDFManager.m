@@ -83,6 +83,61 @@ RCT_EXPORT_METHOD(openDocument:(NSString *)src
              uiConfig:uiConfig];
 }
 
+RCT_EXPORT_METHOD(openDocFromUrl:(NSString *)url
+                  password:(NSString *)password
+                  uiConfig:(NSDictionary *)uiConfig
+                  /*errorBlock:(RCTResponseErrorBlock)errorBlock*/) {
+    if (uiConfig == NULL) {
+        NSString *configPath = [[NSBundle bundleForClass:[self class]]  pathForResource:@"uiextensions_config" ofType:@"json"];
+        NSData *configData = [NSData dataWithContentsOfFile:configPath];
+        uiConfig = [NSJSONSerialization JSONObjectWithData:configData options:NSJSONReadingMutableContainers error:nil];
+    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        [self uiConfig:uiConfig];
+        
+        NSURL *targetURL = [NSURL URLWithString:url];
+        if (targetURL == nil) {
+            [self showError:@"file not found in Document directory!"];
+        }else{
+            __weak typeof(self) weakSelf = self;
+            [self.pdfViewCtrl openDocFromURL:targetURL password:password cacheOption:nil httpRequestProperties:nil completion:^(FSErrorCode errorCode) {
+                NSError *error;
+                NSDictionary *userInfo;
+                if (errorCode == FSErrSuccess) {
+                    if (!weakSelf.rootViewController.presentingViewController) {
+                        weakSelf.rootViewController.modalPresentationStyle = UIModalPresentationFullScreen;
+                        [[weakSelf topMostViewController] presentViewController:weakSelf.rootViewController animated:YES completion:^{
+
+                        }];
+                    }
+                } else if (errorCode == FSErrDeviceLimitation) {
+                    [weakSelf showError:@"Exceeded the limit on the number of devices allowed"];
+                    userInfo = [NSDictionary dictionaryWithObject:@"Exceeded the limit on the number of devices allowed" forKey:NSLocalizedDescriptionKey];
+                } else if (errorCode == FSErrCanNotGetUserToken) {
+                    [weakSelf showError:@"Please Sign in first"];
+                    userInfo = [NSDictionary dictionaryWithObject:@"Please Sign in first" forKey:NSLocalizedDescriptionKey];
+                } else if (errorCode == FSErrInvalidLicense) {
+                    [weakSelf showError:@"You are not authorized to use this add-on module， please contact us for upgrading your license. "];
+                    userInfo = [NSDictionary dictionaryWithObject:@"You are not authorized to use this add-on module， please contact us for upgrading your license. " forKey:NSLocalizedDescriptionKey];
+                } else {
+                    [weakSelf showError:@"Failed to open the document"];
+                    userInfo = [NSDictionary dictionaryWithObject:@"Failed to open the document" forKey:NSLocalizedDescriptionKey];
+
+                }
+                if (userInfo) {
+                    error = [NSError errorWithDomain:@"FSErrorCode" code:errorCode userInfo:userInfo];
+                }
+                /*errorBlock(error);*/
+            }];
+            
+            self.extensionsManager.goBack = ^{
+                [weakSelf.rootViewController dismissViewControllerAnimated:YES completion:nil];
+            };
+        }
+    });
+}
+
 RCT_EXPORT_METHOD(openPDF:(NSString *)src
                   password:(NSString *)password
                   uiConfig:(NSDictionary *)uiConfig) {
@@ -93,59 +148,7 @@ RCT_EXPORT_METHOD(openPDF:(NSString *)src
     }
     dispatch_async(dispatch_get_main_queue(), ^{
         
-
-        if (errorCode != FSErrSuccess) {
-            [self showError:@"Check your sn or key"];
-            return;
-        }
-        
-        self.pdfViewCtrl = [[FSPDFViewCtrl alloc] initWithFrame:[UIScreen mainScreen].bounds];
-        [self.pdfViewCtrl setRMSAppClientId:@"972b6681-fa03-4b6b-817b-c8c10d38bd20" redirectURI:@"com.foxitsoftware.com.mobilepdf-for-ios://authorize"];
-        [self.pdfViewCtrl registerDocEventListener:self];
-    
-        self.pdfViewController = [[PDFViewController alloc] init];
-        self.pdfViewController.automaticallyAdjustsScrollViewInsets = NO;
-        
-        self.pdfViewController.view = self.pdfViewCtrl;
-        self.rootViewController = [[UINavigationController alloc] initWithRootViewController:self.pdfViewController];
-        self.rootViewController.modalPresentationStyle = UIModalPresentationFullScreen;
-        self.rootViewController.navigationBarHidden = YES;
-        
-        if ( uiConfig != NULL) {
-            NSData* configData = [NSJSONSerialization dataWithJSONObject:uiConfig
-                                                                 options:NSJSONWritingPrettyPrinted
-                                                                   error: nil];
-            
-            self.extensionsManager = [[UIExtensionsManager alloc] initWithPDFViewControl:self.pdfViewCtrl configuration:configData];
-        } else {
-            
-            self.extensionsManager = [[UIExtensionsManager alloc] initWithPDFViewControl:self.pdfViewCtrl];
-        }
-        self.pdfViewController.extensionsManager = self.extensionsManager;
-    
-        self.extensionsManager.delegate = self;
-        
-        NSDictionary *toolBars = uiConfig[@"toolBars"];
-        
-        BOOL enableTopToolbar  = YES;
-        if (toolBars[@"enableTopToolbar"]) {
-            enableTopToolbar = [toolBars[@"enableTopToolbar"] boolValue];
-        }
-        
-        BOOL enableBottomToolbar = YES;
-        if (toolBars[@"enableBottomToolbar"]) {
-            enableBottomToolbar = [toolBars[@"enableBottomToolbar"] boolValue];
-        }
-
-        [self.extensionsManager enableBottomToolbar:enableBottomToolbar];
-        [self.extensionsManager enableTopToolbar:enableTopToolbar];
-        
-        [self setPanelConfig:uiConfig[@"panels"]];
-        [self setViewMoreConfig:uiConfig[@"menus"][@"moreMenus"]];
-        [self setViewSettingsConfig:uiConfig[@"menus"][@"viewMenus"]];
-        [self setToolbarConfig:toolBars[@"toolItems"]];
-        
-        self.pdfViewCtrl.extensionsManager = self.extensionsManager;
+        [self uiConfig:uiConfig];
         
         NSURL *targetURL = nil;
         if (targetURL == nil) {
@@ -180,6 +183,61 @@ RCT_EXPORT_METHOD(openPDF:(NSString *)src
             };
         }
     });
+}
+
+- (void)uiConfig:(NSDictionary *)uiConfig{
+    if (errorCode != FSErrSuccess) {
+        [self showError:@"Check your sn or key"];
+        return;
+    }
+    
+    self.pdfViewCtrl = [[FSPDFViewCtrl alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    [self.pdfViewCtrl setRMSAppClientId:@"972b6681-fa03-4b6b-817b-c8c10d38bd20" redirectURI:@"com.foxitsoftware.com.mobilepdf-for-ios://authorize"];
+    [self.pdfViewCtrl registerDocEventListener:self];
+
+    self.pdfViewController = [[PDFViewController alloc] init];
+    self.pdfViewController.automaticallyAdjustsScrollViewInsets = NO;
+    
+    self.pdfViewController.view = self.pdfViewCtrl;
+    self.rootViewController = [[UINavigationController alloc] initWithRootViewController:self.pdfViewController];
+    self.rootViewController.modalPresentationStyle = UIModalPresentationFullScreen;
+    self.rootViewController.navigationBarHidden = YES;
+    
+    if ( uiConfig != NULL) {
+        NSData* configData = [NSJSONSerialization dataWithJSONObject:uiConfig
+                                                             options:NSJSONWritingPrettyPrinted
+                                                               error: nil];
+        
+        self.extensionsManager = [[UIExtensionsManager alloc] initWithPDFViewControl:self.pdfViewCtrl configuration:configData];
+    } else {
+        
+        self.extensionsManager = [[UIExtensionsManager alloc] initWithPDFViewControl:self.pdfViewCtrl];
+    }
+    self.pdfViewController.extensionsManager = self.extensionsManager;
+
+    self.extensionsManager.delegate = self;
+    
+    NSDictionary *toolBars = uiConfig[@"toolBars"];
+    
+    BOOL enableTopToolbar  = YES;
+    if (toolBars[@"enableTopToolbar"]) {
+        enableTopToolbar = [toolBars[@"enableTopToolbar"] boolValue];
+    }
+    
+    BOOL enableBottomToolbar = YES;
+    if (toolBars[@"enableBottomToolbar"]) {
+        enableBottomToolbar = [toolBars[@"enableBottomToolbar"] boolValue];
+    }
+
+    [self.extensionsManager enableBottomToolbar:enableBottomToolbar];
+    [self.extensionsManager enableTopToolbar:enableTopToolbar];
+    
+    [self setPanelConfig:uiConfig[@"panels"]];
+    [self setViewMoreConfig:uiConfig[@"menus"][@"moreMenus"]];
+    [self setViewSettingsConfig:uiConfig[@"menus"][@"viewMenus"]];
+    [self setToolbarConfig:toolBars[@"toolItems"]];
+    
+    self.pdfViewCtrl.extensionsManager = self.extensionsManager;
 }
 
 - (UIViewController*) topMostViewController {
