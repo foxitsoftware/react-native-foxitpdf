@@ -59,6 +59,7 @@
         "highlightLinkColor" : "#16007fff",
         "highlightFormColor":"#200066cc",
         "fullscreen" : true,
+        "showPenOnlySwitch": true,
         "annotations": {
             "continuouslyAdd" : true,
             "highlight": {
@@ -112,8 +113,7 @@
             "pencil": {
                 "color" : "#ff0000",
                 "opacity" : 1.0,
-                "thickness" : 2,
-                "showPenOnlySwitch": true
+                "thickness" : 2
             },
             "polygon": {
                 "color" : "#ff0000",

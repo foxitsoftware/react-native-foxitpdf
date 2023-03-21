@@ -59,6 +59,7 @@
         "highlightLinkColor" : "#16007fff",
         "highlightFormColor":"#200066cc",
         "fullscreen" : true,
+        "showPenOnlySwitch": true,
         "annotations": {
             "continuouslyAdd" : true,
             "highlight": {
