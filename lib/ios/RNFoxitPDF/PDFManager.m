@@ -652,3 +652,34 @@ RCT_EXPORT_METHOD(openPDF:(NSString *)src
 }
 
 @end
+
+@implementation NSObject (fix_bug)
+
++ (UIWindow *)fs_getForegroundAnyKeyWindow{
+    
+    UIWindow *originalKeyWindow = nil;
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_13_0
+    if (@available(iOS 13.0, *)) {
+        NSSet<UIScene *> *connectedScenes = [UIApplication sharedApplication].connectedScenes;
+        for (UIScene *scene in connectedScenes) {
+            if ([scene isKindOfClass:[UIWindowScene class]]) {
+                UIWindowScene *windowScene = (UIWindowScene *)scene;
+                
+                for (UIWindow *window in windowScene.windows) {
+                    if (window) {
+                        originalKeyWindow = window;
+                        if (window.hidden) continue;
+                        break;
+                    }
+                }
+            }
+        }
+        if (originalKeyWindow) {
+            return originalKeyWindow;
+        }
+    }
+#endif
+    return [[[UIApplication sharedApplication] delegate] window];
+}
+
+@end
