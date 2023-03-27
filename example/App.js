@@ -1,8 +1,7 @@
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native
- *
- * @format
+ * @flow
  */
 
 import React, { Component } from 'react';
@@ -14,7 +13,6 @@ import {
   NativeModules,
   TouchableOpacity,
 } from 'react-native';
-
 import FoxitPDF from '@foxitsoftware/react-native-foxitpdf';
 import uiextensions_config from './uiextensions_config.json';
 
