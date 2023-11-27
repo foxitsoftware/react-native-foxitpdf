@@ -13,14 +13,15 @@ package com.foxitreader;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.StrictMode;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -40,9 +41,6 @@ import com.foxit.uiextensions.controls.toolbar.ToolbarItemConfig;
 import com.foxit.uiextensions.modules.more.MoreMenuConstants;
 import com.foxit.uiextensions.utils.ActManager;
 import com.foxit.uiextensions.utils.AppDisplay;
-import com.foxit.uiextensions.utils.AppFileUtil;
-import com.foxit.uiextensions.utils.AppResource;
-import com.foxit.uiextensions.utils.AppStorageManager;
 import com.foxit.uiextensions.utils.AppTheme;
 import com.foxit.uiextensions.utils.JsonUtil;
 import com.foxit.uiextensions.utils.UIToast;
@@ -59,19 +57,15 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 public class PDFReaderActivity extends FragmentActivity {
-
-    private PDFViewCtrl pdfViewCtrl = null;
-    private UIExtensionsManager uiExtensionsManager = null;
-
-    public static final int REQUEST_OPEN_DOCUMENT_TREE = 0xF001;
-    public static final int REQUEST_SELECT_DEFAULT_FOLDER = 0xF002;
-
-    public static final int REQUEST_EXTERNAL_STORAGE_MANAGER = 111;
-    public static final int REQUEST_EXTERNAL_STORAGE = 222;
+    private static final int REQUEST_ALL_FILES_ACCESS_PERMISSION = 111;
+    private static final int REQUEST_EXTERNAL_STORAGE = 222;
     private static final String[] PERMISSIONS_STORAGE = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
+
+    private PDFViewCtrl pdfViewCtrl = null;
+    private UIExtensionsManager uiExtensionsManager = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +74,6 @@ public class PDFReaderActivity extends FragmentActivity {
         AppTheme.setThemeNeedMenuKey(this);
         ActManager.getInstance().setCurrentActivity(this);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        AppStorageManager.setOpenTreeRequestCode(REQUEST_OPEN_DOCUMENT_TREE);
 
         // extensionsConfig
         String extetnisonsConfig = getIntent().getStringExtra(Config.class.getName());
@@ -112,50 +105,27 @@ public class PDFReaderActivity extends FragmentActivity {
             initConfig(ui_config);
         }
 
-        if (Build.VERSION.SDK_INT >= 30 && !AppFileUtil.isExternalStorageLegacy()) {
-            AppStorageManager storageManager = AppStorageManager.getInstance(this);
-            boolean needPermission = storageManager.needManageExternalStoragePermission();
-            if (!AppStorageManager.isExternalStorageManager() && needPermission) {
-                storageManager.requestExternalStorageManager(this, REQUEST_EXTERNAL_STORAGE_MANAGER);
-            } else if (!needPermission) {
-                checkStorageState();
-            } else {
-                openDocument();
-            }
-        } else if (Build.VERSION.SDK_INT >= 23) {
-            checkStorageState();
-        } else {
-            openDocument();
-        }
-
         if (Build.VERSION.SDK_INT >= 24) {
             StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
             StrictMode.setVmPolicy(builder.build());
         }
         setContentView(uiExtensionsManager.getContentView());
-    }
 
-    private void checkStorageState() {
-        int permission = ContextCompat.checkSelfPermission(this.getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        if (permission != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, PERMISSIONS_STORAGE, REQUEST_EXTERNAL_STORAGE);
-        } else {
-            selectDefaultFolderOrNot();
-        }
-    }
-
-    private void selectDefaultFolderOrNot() {
-        if (AppFileUtil.needScopedStorageAdaptation()) {
-            if (TextUtils.isEmpty(AppStorageManager.getInstance(this).getDefaultFolder())) {
-                AppFileUtil.checkCallDocumentTreeUriPermission(this, REQUEST_SELECT_DEFAULT_FOLDER,
-                        Uri.parse(AppFileUtil.getExternalRootDocumentTreeUriPath()));
-                UIToast.getInstance(getApplicationContext()).show("Please select the default folder,you can create one when it not exists.");
-            } else {
-                openDocument();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            if (!Environment.isExternalStorageManager()) {
+                Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+                intent.setData(Uri.parse("package:" + getApplicationContext().getPackageName()));
+                startActivityForResult(intent, REQUEST_ALL_FILES_ACCESS_PERMISSION);
+                return;
             }
-        } else {
-            openDocument();
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            int permission = ContextCompat.checkSelfPermission(this.getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            if (permission != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, PERMISSIONS_STORAGE, REQUEST_EXTERNAL_STORAGE);
+                return;
+            }
         }
+        openDocument();
     }
 
     private void openDocument() {
@@ -442,10 +412,14 @@ public class PDFReaderActivity extends FragmentActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQUEST_EXTERNAL_STORAGE) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                selectDefaultFolderOrNot();
+                openDocument();
             } else {
                 UIToast.getInstance(getApplicationContext()).show(getString(R.string.fx_permission_denied));
                 finish();
+            }
+        } else {
+            if (uiExtensionsManager != null) {
+                uiExtensionsManager.handleRequestPermissionsResult(requestCode, permissions, grantResults);
             }
         }
     }
@@ -509,32 +483,15 @@ public class PDFReaderActivity extends FragmentActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_EXTERNAL_STORAGE_MANAGER) {
-            AppFileUtil.updateIsExternalStorageManager();
-            if (!AppFileUtil.isExternalStorageManager()) {
-                checkStorageState();
-            } else {
-                openDocument();
-            }
-        } else if (requestCode == AppStorageManager.getOpenTreeRequestCode() || requestCode == REQUEST_SELECT_DEFAULT_FOLDER) {
-            if (resultCode == Activity.RESULT_OK) {
-                if (data == null || data.getData() == null) return;
-                Uri uri = data.getData();
-                int modeFlags = data.getFlags() & (Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-                getContentResolver().takePersistableUriPermission(uri, modeFlags);
-                AppStorageManager storageManager = AppStorageManager.getInstance(getApplicationContext());
-                if (TextUtils.isEmpty(storageManager.getDefaultFolder())) {
-                    String defaultPath = AppFileUtil.toPathFromDocumentTreeUri(uri);
-                    storageManager.setDefaultFolder(defaultPath);
+        if (requestCode == REQUEST_ALL_FILES_ACCESS_PERMISSION) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                if (Environment.isExternalStorageManager()) {
                     openDocument();
                 }
-            } else {
-                UIToast.getInstance(getApplicationContext()).show(AppResource.getString(getApplicationContext(), R.string.fx_permission_denied));
-                finish();
             }
+        } else {
+            uiExtensionsManager.handleActivityResult(this, requestCode, resultCode, data);
         }
-
-        uiExtensionsManager.handleActivityResult(this, requestCode, resultCode, data);
     }
 
 }
