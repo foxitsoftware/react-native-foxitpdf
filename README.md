@@ -44,56 +44,20 @@ cd <PROJECT_ROOT>/ios && pod install
 
 3. In your root `android/build.gradle`:
 ```diff
-    allprojects {
-        repositories {
-            mavenLocal()
-+           google()
-            jcenter()
-            maven {
-                // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
-                url "$rootDir/../node_modules/react-native/android"
-            }
+    buildscript {
+        ...
+    }
+        
++   allprojects {
++       repositories {
 +           flatDir {
 +               dirs project(':foxitsoftware_react-native-foxitpdf').file("$rootDir/libs")           
 +           }
 +           maven {
 +                url 'https://pkgs.dev.azure.com/MicrosoftDeviceSDK/DuoSDK-Public/_packaging/Duo-SDK-Feed/maven/v1'
 +           }
-        }
-    }
-```  
-
-In your root `android/app/build.gradle`:
-```diff
-    ```
-    android {
-         ```
-         defaultConfig {
-             applicationId "xxx.xxx.xxx"
-             minSdkVersion rootProject.ext.minSdkVersion
-             targetSdkVersion rootProject.ext.targetSdkVersion
-             versionCode 1
-             versionName "1.0"
-+            multiDexEnabled true
-         }
-         ```
-    }
-    
-    ```
-    dependencies {
-        implementation fileTree(dir: "libs", include: ["*.jar"])
-        implementation "com.facebook.react:react-native:+"  // From node_modules
-+       implementation 'androidx.multidex:multidex:2.0.1'
-    
-        if (enableHermes) {
-          def hermesPath = "../../node_modules/hermesvm/android/";
-          debugImplementation files(hermesPath + "hermes-debug.aar")
-          releaseImplementation files(hermesPath + "hermes-release.aar")
-        } else {
-          implementation jscFlavor
-        }
-    }
-    ```
++        }
++   }
 ```  
 
 4. Add `tools:replace` to your `android/app/src/main/AndroidManifest.xml`.
