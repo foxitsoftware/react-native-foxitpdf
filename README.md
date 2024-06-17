@@ -40,7 +40,7 @@ cd <PROJECT_ROOT>/ios && pod install
 1. Download foxit_mobile_pdf_sdk_android_en.zip from [https://developers.foxitsoftware.com/pdf-sdk/android/] (Please use the latest version)
 
 2. Unzip `foxitpdfsdk_(version_no)_android.zip` and copy libs folder into the component android folder.
-/xxx/platforms/android/
+<PROJECT_ROOT>/android/
 
 3. In your root `android/build.gradle`:
 ```diff
