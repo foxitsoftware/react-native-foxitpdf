@@ -95,7 +95,7 @@ cd <PROJECT_ROOT>/ios && pod install
 
 ## General Usage
 
-In your App.js file, you can import the component using the following code:
+In your App.tsx file, you can import the component using the following code:
 
 1.Import FoxitPDF
 ```js
@@ -129,7 +129,7 @@ FoxitPDF.openDocFromUrl('https://developers.foxitsoftware.com/resources/pdf-sdk/
 ```
 
 
-In `App.js`:
+In `App.tsx`:
 ```javascript
 import React, { Component } from 'react';
 import {
