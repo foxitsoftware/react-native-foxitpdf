@@ -26,6 +26,7 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.foxit.sdk.PDFViewCtrl;
 import com.foxit.uiextensions.UIExtensionsManager;
@@ -414,7 +415,8 @@ public class PDFReaderActivity extends FragmentActivity {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 openDocument();
             } else {
-                UIToast.getInstance(getApplicationContext()).show(getString(R.string.fx_permission_denied));
+                Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
+//                UIToast.getInstance(getApplicationContext()).show(getString(R.string.fx_permission_denied));
                 finish();
             }
         } else {
