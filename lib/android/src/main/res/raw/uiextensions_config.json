@@ -45,6 +45,9 @@
         "copyText" : true,
         "disableLink" : false
     },
+    "optimizations": {
+      "optimizeEmbeddedFontsForAnnots": false
+    },
     "uiSettings": {
         "pageMode":"Single",
         "continuous":false,
@@ -61,6 +64,7 @@
         "fullscreen" : true,
         "showPenOnlySwitch": true,
         "enableTopbarDraggable": 2,
+        "enableHandwritingRecognition": false,
         "annotations": {
             "continuouslyAdd" : true,
             "highlight": {
@@ -118,17 +122,22 @@
                 "opacity" : 1.0,
                 "thickness" : 2
             },
+            "highlighter": {
+                "color" : "#ffff00",
+                "opacity" : 0.5,
+                "thickness" : 12
+            },
             "polygon": {
                 "color" : "#ff0000",
                 "opacity" : 1.0,
                 "thickness" : 2,
-                "fillColor" : null
+                "fillColor": null
             },
             "cloud": {
                 "color" : "#ff0000",
                 "opacity" : 1.0,
                 "thickness" : 2,
-                "fillColor" : null
+                "fillColor": null
             },
             "polyline": {
                 "color" : "#ff0000",
@@ -212,7 +221,7 @@
         },
         "signature": {
         "color" : "#000000",
-            "thickness" : 8
+        "thickness" : 4
         }
     },
     "panels": {
