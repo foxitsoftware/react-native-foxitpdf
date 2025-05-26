@@ -74,7 +74,7 @@ public class PDFReaderActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         AppTheme.setThemeNeedMenuKey(this);
-        SystemUiHelper.getInstance().setStatusBarColor(getWindow(), getResources().getColor(ThemeConfig.getInstance(this).getPrimaryColor()));
+        SystemUiHelper.getInstance().setStatusBarColor(getWindow(), ThemeConfig.getInstance(this).getPrimaryColor());
         ActManager.getInstance().setCurrentActivity(this);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
