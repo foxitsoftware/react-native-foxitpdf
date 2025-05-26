@@ -40,10 +40,12 @@ import com.foxit.uiextensions.controls.toolbar.BaseBar;
 import com.foxit.uiextensions.controls.toolbar.IBarsHandler;
 import com.foxit.uiextensions.controls.toolbar.ToolbarItemConfig;
 import com.foxit.uiextensions.modules.more.MoreMenuConstants;
+import com.foxit.uiextensions.theme.ThemeConfig;
 import com.foxit.uiextensions.utils.ActManager;
 import com.foxit.uiextensions.utils.AppDisplay;
 import com.foxit.uiextensions.utils.AppTheme;
 import com.foxit.uiextensions.utils.JsonUtil;
+import com.foxit.uiextensions.utils.SystemUiHelper;
 import com.foxit.uiextensions.utils.UIToast;
 
 import org.json.JSONException;
@@ -71,8 +73,8 @@ public class PDFReaderActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        AppTheme.setThemeFullScreen(this);
         AppTheme.setThemeNeedMenuKey(this);
+        SystemUiHelper.getInstance().setStatusBarColor(getWindow(), getResources().getColor(ThemeConfig.getInstance(this).getPrimaryColor()));
         ActManager.getInstance().setCurrentActivity(this);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
